@@ -38,6 +38,7 @@ public class CameraControl : MonoBehaviour
 
     public GameObject target;
     public CameraView cameraView = new CameraView();
+    private Transform cameraRigTr;
     private Transform cameraTr;
     private Transform targetNeckTr;
 
@@ -91,8 +92,10 @@ public class CameraControl : MonoBehaviour
 
     void Start()
     {
+        //get transform of camera Rig
+        cameraRigTr = GetComponent<Transform>();
         //get transform of camera (child relationShip);
-        cameraTr = GetComponent<Transform>();
+        cameraTr = transform.Find("PlayerCamera");
 
         targetNeckTr = GameObject.Find("Neck").transform;
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
@@ -103,7 +106,7 @@ public class CameraControl : MonoBehaviour
             userInput = new UserInputManager();
         foreach (var camView in cameraViewList)
         {
-            camView.Init(target.transform, cameraTr, userInput);
+            camView.Init(target.transform, cameraRigTr, cameraTr, targetNeckTr, userInput);
         }
 
         currentView = cameraViewList[0];
@@ -111,13 +114,13 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
-        currentView.RotateView(target.transform, cameraTr, targetNeckTr);
+        currentView.RotateView(target.transform, cameraRigTr, cameraTr, targetNeckTr);
         UpdateCursorLock();
     }
 
     void LateUpdate()
     {
-        currentView.SetCameraPos(target.transform, cameraTr);
+        currentView.SetCameraPos(target.transform, cameraRigTr);
 
     }
     #endregion

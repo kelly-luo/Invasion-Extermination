@@ -14,8 +14,10 @@ public class FirstPersonView: ICameraMove
     public bool IsCursorLocked { get; set; } = true;
     public IUserInputManager UserInput { get; set; }
 
-    private Quaternion characterRot;
+    private Quaternion targetRot;
+    private Quaternion cameraRigRot;
     private Quaternion cameraRot;
+    private Quaternion neckRot;
 
     #region Camera Setting
     public float OffSetX { get; set; }
@@ -30,47 +32,130 @@ public class FirstPersonView: ICameraMove
         OffSetZ = offSetZ;
     }
 
-    public void Init(Transform target, Transform camera,IUserInputManager userInput)
+    public void Init(Transform target, Transform cameraRig, Transform camera, Transform neck, IUserInputManager userInput)
     {
-        characterRot = target.localRotation;
+        targetRot = target.localRotation;
+        cameraRigRot = cameraRig.localRotation;
         cameraRot = camera.localRotation;
+        neckRot = neck.localRotation;
         UserInput = userInput;
     }
 
     //as you can see this code is lot like mouseLook code 
     //It is because mouselook code is too fundamental
-    public void RotateView(Transform target, Transform camera,Transform neckTransform)
+    public void RotateView(Transform target, Transform cameraRig, Transform camera, Transform neck)
     {
         float yRot = UserInput.GetAxis("Mouse X") * XSensitivity;
         float xRot = UserInput.GetAxis("Mouse Y") * YSensitivity;
 
-        characterRot *= Quaternion.Euler(0f, 0f , yRot);
-        cameraRot *= Quaternion.Euler(xRot, 0f, 0f);
+        cameraRigRot *= Quaternion.Euler(0, yRot, 0f);
+        cameraRot *= Quaternion.Euler(-xRot, 0f, 0f);
 
         if (IsClampOnRotatingXAxis)
             cameraRot = ClampOnRotatingXAxis(cameraRot);
 
         if(IsSmooth)
         {
-            target.localRotation = Quaternion.Slerp(target.localRotation, characterRot,
+            cameraRig.localRotation = Quaternion.Slerp(cameraRig.localRotation, cameraRigRot,
                 SmoothTime * Time.deltaTime);
             camera.localRotation = Quaternion.Slerp(camera.localRotation, cameraRot,
                 SmoothTime * Time.deltaTime);
         }
         else
         {
-            //target.localRotation = characterRot;
+            cameraRig.localRotation = cameraRigRot;
             camera.localRotation = cameraRot;
         }
 
-        var quater = characterRot; 
-        //var quater = characterRot * cameraRot;
+
+        RotateNeckAndTarget(target, neck, yRot, xRot);
 
 
-        //quater *= Quaternion.Euler(0, 0, -quater.eulerAngles.z);
+    }
 
-        neckTransform.localRotation = quater;
+    private void RotateNeckAndTarget(Transform target, Transform neck, float yRot, float xRot)
+    {
+        //you might be wondering why did i use - on yRot and xRot and changed the x to z axis and y to z axis
+        //it is because the I found that local Transform of a Neck bone in model was reversed. 
+        var nextAngle = neckRot.eulerAngles.x + -yRot;
+        if (nextAngle < 180)
+        {
+            if (nextAngle > 55)
+            {
+                var leftAngle = (nextAngle - 55);
+                var angleUpToLimit = -yRot - leftAngle;
+                neckRot *= Quaternion.Euler(angleUpToLimit, 0f, -xRot);
+                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);    
 
+                target.localRotation *= Quaternion.Euler(0, yRot, 0f);
+
+            }
+            else
+            {
+                neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
+                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+            }
+        }
+        else if (nextAngle > 180)
+        {
+            if (nextAngle < 305)
+            {
+                var leftAngle = (nextAngle - 305);
+                var angleUpToLimit = -yRot - leftAngle;
+                neckRot *= Quaternion.Euler(angleUpToLimit, 0f, -xRot);
+                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+
+                target.localRotation *= Quaternion.Euler(0, yRot, 0f);
+
+            }
+            else
+            {
+                neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
+                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+            }
+        }
+
+        neck.localRotation = neckRot;
+
+        //if (neckRot.eulerAngles.x +)
+
+        //    float angleY = 2.0f * Mathf.Rad2Deg * Mathf.Atan(neckRot.x);// fix this 
+        //angleY = Mathf.Clamp(angleY, -45, 45);
+        //Debug.Log(yRot);
+        //if (angleY <= -45f)
+        //{
+        //    if (yRot > 0f)
+        //    {
+        //        neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
+        //        neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+        //    }
+        //    else
+        //    {
+
+        //        target.localRotation *= Quaternion.Euler(0, yRot, 0f);
+        //    }
+
+        //}
+        //else if (angleY >= 45f)
+        //{
+        //    if (yRot < 0f)
+        //    {
+        //        neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
+        //        neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+        //    }
+        //    else
+        //    {
+        //        target.localRotation *= Quaternion.Euler(0, yRot, 0f);
+
+        //    }
+        //}
+        //else
+        //{
+
+        //    neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
+        //    neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+        //}
+        //neck.localRotation = neckRot;
     }
 
     private Quaternion ClampOnRotatingXAxis(Quaternion q)
@@ -96,8 +181,8 @@ public class FirstPersonView: ICameraMove
         throw new System.NotImplementedException();
     }
 
-    public void SetCameraPos(Transform target, Transform camera)
+    public void SetCameraPos(Transform target, Transform cameraRig)
     {
-        camera.position = new Vector3(target.position.x + OffSetX, target.position.y + OffSetY, target.position.z + OffSetZ);
+        cameraRig.position = new Vector3(target.position.x + OffSetX, target.position.y + OffSetY, target.position.z + OffSetZ);
     }
 }

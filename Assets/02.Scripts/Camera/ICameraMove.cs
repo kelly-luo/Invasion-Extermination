@@ -4,10 +4,10 @@ using UnityEngine;
 
 public interface ICameraMove
 {
-    void Init(Transform target, Transform camera, IUserInputManager userInput);
+    void Init(Transform target, Transform cameraRig, Transform camera, Transform neck, IUserInputManager userInput);
 
-    void RotateView(Transform target, Transform camera ,Transform neckTransform);
+    void RotateView(Transform target, Transform cameraRig, Transform camera, Transform neck);
 
-    void SetCameraPos(Transform target, Transform camera);
+    void SetCameraPos(Transform target, Transform cameraRig);
 }
  

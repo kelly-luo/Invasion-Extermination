@@ -9,6 +9,12 @@ public class ThirdPersonView : ICameraMove
 
     public IUserInputManager UserInput { get; set; }
 
+    private Transform target;
+    private Transform neck;
+    private Transform head;
+    private Transform cameraRig;
+    private Transform camera;
+
     private Quaternion characterRot;
     private Quaternion cameraRot;
     private Vector3 cameraLocalPos;
@@ -29,16 +35,22 @@ public class ThirdPersonView : ICameraMove
         Distance = distance;
     }
 
-    public void Init(Transform target, Transform cameraRig, Transform camera, Transform neck, IUserInputManager userInput)
+    public void Init(Transform target, Transform neck, Transform head, Transform cameraRig, Transform camera,  IUserInputManager userInput)
     {
-        characterRot = target.localRotation;
-        cameraRot = camera.localRotation;
-        cameraLocalPos = camera.localPosition;
+        this.target = target;
+        this.neck = neck;
+        this.head = head;
+        this.cameraRig = cameraRig;
+        this.camera = camera;
 
-        UserInput = userInput;
+        this.characterRot = target.localRotation;
+        this.cameraRot = camera.localRotation;
+        this.cameraLocalPos = camera.localPosition;
+
+        this.UserInput = userInput;
     }
 
-    public void RotateView(Transform target, Transform cameraRig, Transform camera, Transform neck)
+    public void RotateView()
     {
         float xRot = UserInput.GetAxis("Mouse X") * XSensitivity;
         float yRot = UserInput.GetAxis("Mouse Y") * YSensitivity;

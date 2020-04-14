@@ -2,22 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirstPersonView: ICameraMove
+public class FirstPersonView : ICameraMove
 {
     public bool IsClampOnRotatingXAxis { get; set; } = true;
     public float MaxAngleOnRotatingXAxis { get; set; } = 90f;
     public float MinAngleOnRotatingXAxis { get; set; } = -90f;
     public bool IsSmooth { get; set; } = false;
-    public float SmoothTime { get; set; } = 5f; 
+    public float SmoothTime { get; set; } = 5f;
     public float XSensitivity { get; set; } = 2f;
     public float YSensitivity { get; set; } = 2f;
     public bool IsCursorLocked { get; set; } = true;
     public IUserInputManager UserInput { get; set; }
 
+    private Transform target;
+    private Transform neck;
+    private Transform head;
+    private Transform cameraRig;
+    private Transform camera;
+
     private Quaternion targetRot;
     private Quaternion cameraRigRot;
     private Quaternion cameraRot;
     private Quaternion neckRot;
+    private Quaternion headRot;
 
     #region Camera Setting
     public float OffSetX { get; set; }
@@ -32,18 +39,28 @@ public class FirstPersonView: ICameraMove
         OffSetZ = offSetZ;
     }
 
-    public void Init(Transform target, Transform cameraRig, Transform camera, Transform neck, IUserInputManager userInput)
+    public void Init(Transform target, Transform neck, Transform head, Transform cameraRig, Transform camera, IUserInputManager userInput)
     {
+        this.target = target;
+        this.neck = neck;
+        this.head = head;
+        this.cameraRig = cameraRig;
+        this.camera = camera;
+
         targetRot = target.localRotation;
+        neckRot = neck.localRotation;
+        headRot = Quaternion.Euler(0f, 0f, 0f);
+
         cameraRigRot = cameraRig.localRotation;
         cameraRot = camera.localRotation;
-        neckRot = neck.localRotation;
         UserInput = userInput;
+
+
     }
 
     //as you can see this code is lot like mouseLook code 
     //It is because mouselook code is too fundamental
-    public void RotateView(Transform target, Transform cameraRig, Transform camera, Transform neck)
+    public void RotateView()
     {
         float yRot = UserInput.GetAxis("Mouse X") * XSensitivity;
         float xRot = UserInput.GetAxis("Mouse Y") * YSensitivity;
@@ -54,7 +71,7 @@ public class FirstPersonView: ICameraMove
         if (IsClampOnRotatingXAxis)
             cameraRot = ClampOnRotatingXAxis(cameraRot);
 
-        if(IsSmooth)
+        if (IsSmooth)
         {
             cameraRig.localRotation = Quaternion.Slerp(cameraRig.localRotation, cameraRigRot,
                 SmoothTime * Time.deltaTime);
@@ -68,32 +85,40 @@ public class FirstPersonView: ICameraMove
         }
 
 
-        RotateNeckAndTarget(target, neck, yRot, xRot);
+        RotateHeadAndTarget(yRot);
+        RotateNeck(xRot);
 
-
+        Debug.Log("Head rotation" + head.localRotation.eulerAngles.x);
     }
 
-    private void RotateNeckAndTarget(Transform target, Transform neck, float yRot, float xRot)
+    private void RotateNeck(float xRot)
     {
-        //you might be wondering why did i use - on yRot and xRot and changed the x to z axis and y to z axis
+        //you might be wondering why did i put the x on z axis and 
         //it is because the I found that local Transform of a Neck bone in model was reversed. 
-        var nextAngle = neckRot.eulerAngles.x + -yRot;
+        neck.localRotation = Quaternion.Euler(0f, 0f, cameraRot.eulerAngles.x);
+
+    }
+    //this method need to be more clean
+    private void RotateHeadAndTarget (float yRot)
+    {
+        var nextAngle = headRot.eulerAngles.y + yRot;
         if (nextAngle < 180)
         {
             if (nextAngle > 55)
             {
                 var leftAngle = (nextAngle - 55);
-                var angleUpToLimit = -yRot - leftAngle;
-                neckRot *= Quaternion.Euler(angleUpToLimit, 0f, -xRot);
-                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);    
+                var angleUpToLimit = yRot - leftAngle;
+
+                headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
+                head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
 
                 target.localRotation *= Quaternion.Euler(0, yRot, 0f);
 
             }
             else
             {
-                neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
-                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+                headRot *= Quaternion.Euler(0f, yRot, -0f);
+                head.localRotation *= Quaternion.Euler(0, yRot, 0);
             }
         }
         else if (nextAngle > 180)
@@ -101,21 +126,19 @@ public class FirstPersonView: ICameraMove
             if (nextAngle < 305)
             {
                 var leftAngle = (nextAngle - 305);
-                var angleUpToLimit = -yRot - leftAngle;
-                neckRot *= Quaternion.Euler(angleUpToLimit, 0f, -xRot);
-                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+                var angleUpToLimit = yRot - leftAngle;
+                headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
+                head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
 
                 target.localRotation *= Quaternion.Euler(0, yRot, 0f);
 
             }
             else
             {
-                neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
-                neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
+                headRot *= Quaternion.Euler(0, yRot, 0);
+                head.localRotation *= Quaternion.Euler(0, yRot, 0);
             }
         }
-
-        neck.localRotation = neckRot;
 
         //if (neckRot.eulerAngles.x +)
 

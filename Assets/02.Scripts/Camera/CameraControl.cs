@@ -8,13 +8,15 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
+    [Serializable]
     public class CameraView
     {
         #region Camera Setting
         [Header("First Person View Camera Setting")]
-        public float offSetX = 0.0f;
-        public float offSetY = 2.0f;
-        public float offSetZ = 0.0f;
+
+        public float offSetX=0;
+        public float offSetY=0;
+        public float offSetZ =0;
 
         [Header("Thrid Person View Camera Setting")]
         //offSet (Y) of target
@@ -37,10 +39,13 @@ public class CameraControl : MonoBehaviour
 
 
     public GameObject target;
-    public CameraView cameraView = new CameraView();
+    private Transform targetNeckTr;
+    private Transform targetHeadTr;
+
+    public CameraView cameraView;
     private Transform cameraRigTr;
     private Transform cameraTr;
-    private Transform targetNeckTr;
+
 
     private List<ICameraMove> cameraViewList = new List<ICameraMove>();
     private IUserInputManager userInput;
@@ -98,23 +103,26 @@ public class CameraControl : MonoBehaviour
         cameraTr = transform.Find("PlayerCamera");
 
         targetNeckTr = GameObject.Find("Neck").transform;
+        targetHeadTr = GameObject.Find("Head").transform;
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
         //get the Instance in the cameraView Class and put it in the cameraViewList
+        
         this.GetCameraViewList();
         // Dependency injected class for unity Input API (For Unit Testing)
         if (userInput == null)
             userInput = new UserInputManager();
         foreach (var camView in cameraViewList)
         {
-            camView.Init(target.transform, cameraRigTr, cameraTr, targetNeckTr, userInput);
+            camView.Init(target.transform, targetNeckTr, targetHeadTr,cameraRigTr, cameraTr, userInput);
         }
 
         currentView = cameraViewList[0];
+
     }
 
     void Update()
     {
-        currentView.RotateView(target.transform, cameraRigTr, cameraTr, targetNeckTr);
+        currentView.RotateView();
         UpdateCursorLock();
     }
 

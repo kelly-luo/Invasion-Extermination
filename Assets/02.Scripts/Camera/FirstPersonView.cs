@@ -5,8 +5,10 @@ using UnityEngine;
 public class FirstPersonView : ICameraMove
 {
     public bool IsClampOnRotatingXAxis { get; set; } = true;
-    public float MaxAngleOnRotatingXAxis { get; set; } = 90f;
+    public float MaxAngleOnRotatingXAxis { get; set; } = 80f;
     public float MinAngleOnRotatingXAxis { get; set; } = -90f;
+    public float MaxAngleOnHeadRotation { get; set; } = 65f;
+    public float MinAngleOnHeadRotation { get; set; } = -65f;
     public bool IsSmooth { get; set; } = false;
     public float SmoothTime { get; set; } = 5f;
     public float XSensitivity { get; set; } = 2f;
@@ -104,10 +106,10 @@ public class FirstPersonView : ICameraMove
         var nextAngle = headRot.eulerAngles.y + yRot;
         if (nextAngle < 180)
         {
-            if (nextAngle > 55)
+            if (nextAngle > MaxAngleOnHeadRotation)
             {
-                var leftAngle = (nextAngle - 55);
-                var angleUpToLimit = yRot - leftAngle;
+                var leftoverAngle = (nextAngle - MaxAngleOnHeadRotation);
+                var angleUpToLimit = yRot - leftoverAngle;
 
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
@@ -117,16 +119,16 @@ public class FirstPersonView : ICameraMove
             }
             else
             {
-                headRot *= Quaternion.Euler(0f, yRot, -0f);
+                headRot *= Quaternion.Euler(0f, yRot, 0f);
                 head.localRotation *= Quaternion.Euler(0, yRot, 0);
             }
         }
         else if (nextAngle > 180)
         {
-            if (nextAngle < 305)
+            if (nextAngle < (360 + MinAngleOnHeadRotation))
             {
-                var leftAngle = (nextAngle - 305);
-                var angleUpToLimit = yRot - leftAngle;
+                var leftoverAngle = (nextAngle - (360 + MinAngleOnHeadRotation));
+                var angleUpToLimit = yRot - leftoverAngle;
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
 

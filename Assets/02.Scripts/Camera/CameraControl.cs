@@ -9,14 +9,14 @@ using UnityEngine;
 public class CameraControl : MonoBehaviour
 {
     [Serializable]
-    public class CameraView
+    public class CameraViews
     {
         #region Camera Setting
         [Header("First Person View Camera Setting")]
 
-        public float offSetX=0;
-        public float offSetY=0;
-        public float offSetZ =0;
+        public float offSetX = 0f;
+        public float offSetY = 1.65f;
+        public float offSetZ = 0.2f;
 
         [Header("Thrid Person View Camera Setting")]
         //offSet (Y) of target
@@ -29,20 +29,20 @@ public class CameraControl : MonoBehaviour
         public FirstPersonView firstPersonView;
         public ThirdPersonView thirdPersonView;
 
-        public CameraView()
+        public void initView()
         {
             firstPersonView = new FirstPersonView(offSetX, offSetY, offSetZ);
             thirdPersonView = new ThirdPersonView(targetOffSet, height, distance);
         }
-      
+
     }
 
 
     public GameObject target;
     private Transform targetNeckTr;
     private Transform targetHeadTr;
-
-    public CameraView cameraView;
+    
+    public CameraViews cameraView;
     private Transform cameraRigTr;
     private Transform cameraTr;
 
@@ -106,7 +106,7 @@ public class CameraControl : MonoBehaviour
         targetHeadTr = GameObject.Find("Head").transform;
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
         //get the Instance in the cameraView Class and put it in the cameraViewList
-        
+        cameraView.initView();
         this.GetCameraViewList();
         // Dependency injected class for unity Input API (For Unit Testing)
         if (userInput == null)

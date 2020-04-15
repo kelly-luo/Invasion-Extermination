@@ -553,9 +553,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1616689217}
   cameraView:
-    offSetX: 5
-    offSetY: 1.6
-    offSetZ: 3
+    offSetX: 0
+    offSetY: 1.65
+    offSetZ: 0
     targetOffSet: 2
     height: 0
     distance: 4

@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonView : ICameraMove
+public class ThirdPersonView : ICameraView
 {
     public float XSensitivity { get; set; } = 5f;
     public float YSensitivity { get; set; } = 5f;
 
     public IUserInputManager UserInput { get; set; }
+    public Quaternion HeadRot
+    {
+        get { return headRot; }
+        set { headRot = value; }
+    }
 
     private Transform target;
     private Transform neck;
@@ -17,6 +22,8 @@ public class ThirdPersonView : ICameraMove
 
     private Quaternion characterRot;
     private Quaternion cameraRot;
+    private Quaternion headRot;
+
     private Vector3 cameraLocalPos;
 
     #region Camera Setting
@@ -30,9 +37,9 @@ public class ThirdPersonView : ICameraMove
 
     public ThirdPersonView (float targetOffSet = 2.0f, float height = 0f, float distance = 4.0f)
     {
-        TargetOffSet = targetOffSet;
-        Height = height;
-        Distance = distance;
+        this.TargetOffSet = targetOffSet;
+        this.Height = height;
+        this.Distance = distance;
     }
 
     public void Init(Transform target, Transform neck, Transform head, Transform cameraRig, Transform camera,  IUserInputManager userInput)

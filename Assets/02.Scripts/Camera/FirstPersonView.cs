@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirstPersonView : ICameraMove
+public class FirstPersonView : ICameraView
 {
     public bool IsClampOnRotatingXAxis { get; set; } = true;
     public float MaxAngleOnRotatingXAxis { get; set; } = 80f;
@@ -15,6 +15,11 @@ public class FirstPersonView : ICameraMove
     public float YSensitivity { get; set; } = 2f;
     public bool IsCursorLocked { get; set; } = true;
     public IUserInputManager UserInput { get; set; }
+    public Quaternion HeadRot
+    {
+        get { return headRot; }
+        set { headRot = value; }
+    }
 
     private Transform target;
     private Transform neck;
@@ -40,6 +45,7 @@ public class FirstPersonView : ICameraMove
         OffSetY = offSetY;
         OffSetZ = offSetZ;
     }
+
 
     public void Init(Transform target, Transform neck, Transform head, Transform cameraRig, Transform camera, IUserInputManager userInput)
     {

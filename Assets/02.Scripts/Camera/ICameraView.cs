@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICameraMove
+public interface ICameraView
 {
+    Quaternion HeadRot { get ; set; }
+
     void Init(Transform target, Transform neck, Transform head,Transform cameraRig, Transform camera, IUserInputManager userInput);
 
     void RotateView();

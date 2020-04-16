@@ -556,9 +556,9 @@ MonoBehaviour:
     offSetX: 0
     offSetY: 1.65
     offSetZ: 0
-    targetOffSet: 2
+    targetOffSet: 1.65
     height: 0
-    distance: 4
+    distance: 2
 --- !u!4 &1599198043
 Transform:
   m_ObjectHideFlags: 0

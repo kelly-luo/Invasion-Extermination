@@ -8,5 +8,7 @@ public interface IUserInputManager
 
     bool GetKeyUp(KeyCode key);
 
+    bool GetKeyDown(KeyCode key);
+
     bool GetMouseButtonUp(int button);
 }

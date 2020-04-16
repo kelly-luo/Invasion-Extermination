@@ -21,13 +21,19 @@ public class CameraControl : MonoBehaviour
         public int ViewListIdx
         {
             get { return viewListIdx; }
-            private set 
+            private set // This NEED TO REFACTOR 
             {
                 //get HeadRot from old view
                 var currentHeadRot = cameraViewList[viewListIdx].HeadRot;
-                viewListIdx = ((viewListIdx + value) % cameraViewList.Count);
+                var currentCameraRigRot = cameraViewList[viewListIdx].CameraRigRot;
+                var currentCameraRot = cameraViewList[viewListIdx].CameraRot;
+                viewListIdx = ((value) % cameraViewList.Count);
                 //set HeadRot to new wiew
+                Debug.Log("float count" + cameraViewList.Count);
+                Debug.Log("float " + viewListIdx);
                 cameraViewList[viewListIdx].HeadRot = currentHeadRot;
+                cameraViewList[viewListIdx].CameraRigRot = currentCameraRigRot;
+                cameraViewList[viewListIdx].CameraRot = currentCameraRot;
             }
         }
 
@@ -40,7 +46,7 @@ public class CameraControl : MonoBehaviour
 
         [Header("Thrid Person View Camera Setting")]
         //offSet (Y) of target
-        public float targetOffSet = 2.0f;
+        public float targetOffSet = 1.65f;
         //height different between a target(player)
         public float height = 0.0f;
         //distance between a target(Player) 
@@ -67,7 +73,7 @@ public class CameraControl : MonoBehaviour
 
         public ICameraView NextView()
         {
-            ++ViewListIdx;
+            ViewListIdx = ViewListIdx + 1;
             return CurrentView;
         }
 
@@ -124,18 +130,23 @@ public class CameraControl : MonoBehaviour
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
         //get the Instance in the cameraView Class and put it in the cameraViewList
         cameraMode.InitView(target.transform, targetNeckTr, targetHeadTr, cameraRigTr, cameraTr, userInput);
-        
+
     }
 
     void Update()
     {
         cameraMode.CurrentView.RotateView();
+        // this is just tesing key to change the view point.
+        if(userInput.GetKeyDown(KeyCode.F5))
+        {
+            cameraMode.NextView();
+        }
         UpdateCursorLock();
     }
 
     void LateUpdate()
     {
-        cameraMode.CurrentView.SetCameraPos(target.transform, cameraRigTr);
+        cameraMode.CurrentView.SetCameraPos();
 
     }
     #endregion

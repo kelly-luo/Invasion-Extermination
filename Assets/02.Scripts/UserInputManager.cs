@@ -14,8 +14,14 @@ public class UserInputManager : IUserInputManager
         return Input.GetKeyUp(key);
     }
 
+    public bool GetKeyDown(KeyCode key)
+    {
+        return Input.GetKeyDown(key);
+    }
+
     public bool GetMouseButtonUp(int button)
     {
         return Input.GetMouseButton(button);
     }
+
 }

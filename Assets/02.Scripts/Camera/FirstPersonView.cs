@@ -7,18 +7,28 @@ public class FirstPersonView : ICameraView
     public bool IsClampOnRotatingXAxis { get; set; } = true;
     public float MaxAngleOnRotatingXAxis { get; set; } = 80f;
     public float MinAngleOnRotatingXAxis { get; set; } = -90f;
-    public float MaxAngleOnHeadRotation { get; set; } = 65f;
-    public float MinAngleOnHeadRotation { get; set; } = -65f;
+    public float MaxAngleOnHeadRotation { get; set; } = 90f;
+    public float MinAngleOnHeadRotation { get; set; } = -90f;
     public bool IsSmooth { get; set; } = false;
     public float SmoothTime { get; set; } = 5f;
     public float XSensitivity { get; set; } = 2f;
     public float YSensitivity { get; set; } = 2f;
-    public bool IsCursorLocked { get; set; } = true;
     public IUserInputManager UserInput { get; set; }
+
     public Quaternion HeadRot
     {
         get { return headRot; }
         set { headRot = value; }
+    }
+    public Quaternion CameraRigRot
+    {
+        get { return cameraRigRot; }
+        set { cameraRigRot = value; }
+    }
+    public Quaternion CameraRot
+    {
+        get { return cameraRot; }
+        set { cameraRot = value; }
     }
 
     private Transform target;
@@ -41,9 +51,9 @@ public class FirstPersonView : ICameraView
 
     public FirstPersonView(float offSetX = 0, float offSetY = 1.7f, float offSetZ = 0f)
     {
-        OffSetX = offSetX;
-        OffSetY = offSetY;
-        OffSetZ = offSetZ;
+        this.OffSetX = offSetX;
+        this.OffSetY = offSetY;
+        this.OffSetZ = offSetZ;
     }
 
 
@@ -55,13 +65,13 @@ public class FirstPersonView : ICameraView
         this.cameraRig = cameraRig;
         this.camera = camera;
 
-        targetRot = target.localRotation;
-        neckRot = neck.localRotation;
-        headRot = Quaternion.Euler(0f, 0f, 0f);
+        this.targetRot = target.localRotation;
+        this.neckRot = neck.localRotation;
+        this.headRot = Quaternion.Euler(0f, 0f, 0f);
 
-        cameraRigRot = cameraRig.localRotation;
-        cameraRot = camera.localRotation;
-        UserInput = userInput;
+        this.cameraRigRot = cameraRig.localRotation;
+        this.cameraRot = camera.localRotation;
+        this.UserInput = userInput;
 
 
     }
@@ -96,7 +106,6 @@ public class FirstPersonView : ICameraView
         RotateHeadAndTarget(yRot);
         RotateNeck(xRot);
 
-        Debug.Log("Head rotation" + head.localRotation.eulerAngles.x);
     }
 
     private void RotateNeck(float xRot)
@@ -109,9 +118,12 @@ public class FirstPersonView : ICameraView
     //this method need to be more clean
     private void RotateHeadAndTarget (float yRot)
     {
+        //NextAngle is amount of angle change in head rotation
         var nextAngle = headRot.eulerAngles.y + yRot;
         if (nextAngle < 180)
         {
+            //so it is necessary to seperate the amount of angle that go in to the head rotation 
+            //and boby rotation(if the angle exceed maxAngle of Head Rotation)
             if (nextAngle > MaxAngleOnHeadRotation)
             {
                 var leftoverAngle = (nextAngle - MaxAngleOnHeadRotation);
@@ -120,13 +132,14 @@ public class FirstPersonView : ICameraView
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
 
-                target.localRotation *= Quaternion.Euler(0, yRot, 0f);
+                target.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
             {
                 headRot *= Quaternion.Euler(0f, yRot, 0f);
                 head.localRotation *= Quaternion.Euler(0, yRot, 0);
+              
             }
         }
         else if (nextAngle > 180)
@@ -138,7 +151,7 @@ public class FirstPersonView : ICameraView
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
 
-                target.localRotation *= Quaternion.Euler(0, yRot, 0f);
+                target.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
@@ -207,12 +220,8 @@ public class FirstPersonView : ICameraView
         return q;
     }
 
-    public Vector3 SetCameraPos()
-    {
-        throw new System.NotImplementedException();
-    }
 
-    public void SetCameraPos(Transform target, Transform cameraRig)
+    public void SetCameraPos()
     {
         cameraRig.position = new Vector3(target.position.x + OffSetX, target.position.y + OffSetY, target.position.z + OffSetZ);
     }

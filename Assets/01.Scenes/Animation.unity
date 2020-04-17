@@ -554,11 +554,11 @@ MonoBehaviour:
   target: {fileID: 1616689217}
   cameraMode:
     offSetX: 0
-    offSetY: 1.65
+    offSetY: 1.75
     offSetZ: 0
-    targetOffSet: 1.65
+    targetOffSet: 1.75
     height: 0
-    distance: 2
+    distance: 4
 --- !u!4 &1599198043
 Transform:
   m_ObjectHideFlags: 0

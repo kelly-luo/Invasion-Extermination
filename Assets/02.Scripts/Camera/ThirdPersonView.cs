@@ -9,10 +9,10 @@ public class ThirdPersonView : ICameraView
     public float MinAngleOnRotatingXAxis { get; set; } = -90f;
     public float MaxAngleOnHeadRotation { get; set; } = 90f;
     public float MinAngleOnHeadRotation { get; set; } = -90f;
-    public bool IsSmooth { get; set; } = false;
-    public float SmoothTime { get; set; } = 5f;
-    public float XSensitivity { get; set; } = 5f;
-    public float YSensitivity { get; set; } = 5f;
+    public bool IsSmooth { get; set; } = true;
+    public float SmoothTime { get; set; } = 1f;
+    public float XSensitivity { get; set; }
+    public float YSensitivity { get; set; }
 
     public IUserInputManager UserInput { get; set; }
     public Quaternion HeadRot
@@ -46,16 +46,13 @@ public class ThirdPersonView : ICameraView
     #region Camera Setting
     //offSet (Y) of target
     public float TargetOffSet { get; set; }  = 1.65f;
-    //height different between a target(player)
-    public float Height { get; set; } = 0.0f;
     //distance between a target(Player) 
     public float Distance { get; set; } = 2.0f;
     #endregion
 
-    public ThirdPersonView (float targetOffSet = 2.0f, float height = 0f, float distance = 4.0f)
+    public ThirdPersonView (float targetOffSet = 2.0f, float distance = 4.0f)
     {
         this.TargetOffSet = targetOffSet;
-        this.Height = height;
         this.Distance = distance;
     }
 
@@ -159,46 +156,6 @@ public class ThirdPersonView : ICameraView
                 head.localRotation *= Quaternion.Euler(0, yRot, 0);
             }
         }
-
-        //if (neckRot.eulerAngles.x +)
-
-        //    float angleY = 2.0f * Mathf.Rad2Deg * Mathf.Atan(neckRot.x);// fix this 
-        //angleY = Mathf.Clamp(angleY, -45, 45);
-        //Debug.Log(yRot);
-        //if (angleY <= -45f)
-        //{
-        //    if (yRot > 0f)
-        //    {
-        //        neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
-        //        neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
-        //    }
-        //    else
-        //    {
-
-        //        target.localRotation *= Quaternion.Euler(0, yRot, 0f);
-        //    }
-
-        //}
-        //else if (angleY >= 45f)
-        //{
-        //    if (yRot < 0f)
-        //    {
-        //        neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
-        //        neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
-        //    }
-        //    else
-        //    {
-        //        target.localRotation *= Quaternion.Euler(0, yRot, 0f);
-
-        //    }
-        //}
-        //else
-        //{
-
-        //    neckRot *= Quaternion.Euler(-yRot, 0f, -xRot);
-        //    neckRot *= Quaternion.Euler(0f, -neckRot.eulerAngles.y, 0f);
-        //}
-        //neck.localRotation = neckRot;
     }
 
     private Quaternion ClampOnRotatingXAxis(Quaternion q)
@@ -222,7 +179,24 @@ public class ThirdPersonView : ICameraView
 
     public void SetCameraPos()
     {
-        var camPosVect =(-camera.forward).normalized;
-        cameraRig.position = camPosVect * Distance + (target.position + new Vector3(0f, TargetOffSet,0f));
+        RaycastHit hit;
+        var originPoint = (target.position + new Vector3(0f, TargetOffSet, 0f));
+        var camPosVect = (-camera.forward);
+        //shoot the raycast from the origin and toward the camPoseVect 
+        if (Physics.Raycast(originPoint, camPosVect, out hit, Distance))
+        {
+            //when it hit the coilder it is position of camera.
+            cameraRig.position = hit.point;
+        }
+        else
+        {
+            cameraRig.position = camPosVect * Distance + originPoint;
+        }
     }
+
+    public Vector3 GetCameraDirection()
+    {
+        return camera.forward;
+    }
+
 }

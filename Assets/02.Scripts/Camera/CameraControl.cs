@@ -23,19 +23,74 @@ public class CameraControl : MonoBehaviour
             get { return viewListIdx; }
             private set // This NEED TO REFACTOR 
             {
-                //get HeadRot from old view
-                var currentHeadRot = cameraViewList[viewListIdx].HeadRot;
-                var currentCameraRigRot = cameraViewList[viewListIdx].CameraRigRot;
-                var currentCameraRot = cameraViewList[viewListIdx].CameraRot;
                 viewListIdx = ((value) % cameraViewList.Count);
-                //set HeadRot to new wiew
-                Debug.Log("float count" + cameraViewList.Count);
-                Debug.Log("float " + viewListIdx);
-                cameraViewList[viewListIdx].HeadRot = currentHeadRot;
-                cameraViewList[viewListIdx].CameraRigRot = currentCameraRigRot;
-                cameraViewList[viewListIdx].CameraRot = currentCameraRot;
+                //set  to new wiew
             }
         }
+
+        #region Camera Sensitivity setting
+        private bool smooth;
+        public bool Smooth
+        {
+            get { return smooth; }
+            set
+            {
+                if(value != smooth)
+                {
+                    smooth = value;
+                    foreach (var view in cameraViewList)
+                        view.IsSmooth = value;
+                }     
+            }
+        }
+
+        private float smoothTime;
+        public float SmoothTime
+        {
+            get { return smoothTime; }
+            set
+            {
+                if(value != smoothTime)
+                {
+                    smoothTime = value;
+                    foreach(var view in cameraViewList)
+                    {
+                        view.SmoothTime = value;
+                    }
+                }
+            }
+        }
+
+        private float xSensitivity;
+        public float XSensitivity
+        {
+            get { return xSensitivity; }
+            set
+            {
+                if (value != xSensitivity)
+                {
+                    xSensitivity = value;
+                    foreach (var view in cameraViewList)
+                        view.XSensitivity = value;
+                }
+            }
+        }
+
+        private float ySensitivity;
+        public float YSensitivity
+        {
+            get { return ySensitivity; }
+            set
+            {
+                if (value != ySensitivity)
+                {
+                    ySensitivity = value;
+                    foreach (var view in cameraViewList)
+                        view.YSensitivity = value;
+                }
+            }
+        }
+        #endregion
 
         #region Camera Setting
         [Header("First Person View Camera Setting")]
@@ -47,36 +102,62 @@ public class CameraControl : MonoBehaviour
         [Header("Thrid Person View Camera Setting")]
         //offSet (Y) of target
         public float targetOffSet = 1.65f;
-        //height different between a target(player)
-        public float height = 0.0f;
         //distance between a target(Player) 
         public float distance = 4.0f;
         #endregion
+
         public FirstPersonView firstPersonView;
         public ThirdPersonView thirdPersonView;
-
-
 
         public void InitView(Transform target, Transform targetNeckTr, Transform targetHeadTr, Transform cameraRigTr, Transform cameraTr, IUserInputManager userInput)
         {
             firstPersonView = new FirstPersonView(offSetX, offSetY, offSetZ);
-            thirdPersonView = new ThirdPersonView(targetOffSet, height, distance);
+            thirdPersonView = new ThirdPersonView(targetOffSet, distance);
 
-            cameraViewList.Add(firstPersonView);
-            cameraViewList.Add(thirdPersonView);
+            var bindingFlags = BindingFlags.Instance | BindingFlags.Public;
+
+            var fieldValues = this.GetType()
+                                .GetFields(bindingFlags)
+                                .Select(field => field.GetValue(this))
+                                .Where(field => field is ICameraView)
+                                .ToList();
+
+            foreach (var viewField in fieldValues)
+            {
+                cameraViewList.Add(viewField as ICameraView);
+            }
 
             foreach (var camView in cameraViewList)
             {
                 camView.Init(target.transform, targetNeckTr, targetHeadTr, cameraRigTr, cameraTr, userInput);
             }
+            this.SmoothTime = 10f;
+            this.XSensitivity = 1.3f;
+            this.YSensitivity = 1.3f;
+            this.Smooth = true;
+        }
+
+        public void TransferRotationData()
+        {
+            var currentHeadRot = cameraViewList [viewListIdx].HeadRot;
+            var currentCameraRigRot = cameraViewList [viewListIdx].CameraRigRot;
+            var currentCameraRot = cameraViewList [viewListIdx].CameraRot;
         }
 
         public ICameraView NextView()
         {
+            //transfer Camera Rotation data to new view 
+            var currentHeadRot = cameraViewList[viewListIdx].HeadRot;
+            var currentCameraRigRot = cameraViewList[viewListIdx].CameraRigRot;
+            var currentCameraRot = cameraViewList[viewListIdx].CameraRot;
             ViewListIdx = ViewListIdx + 1;
+
+            cameraViewList[viewListIdx].HeadRot = currentHeadRot;
+            cameraViewList[viewListIdx].CameraRigRot = currentCameraRigRot;
+            cameraViewList[viewListIdx].CameraRot = currentCameraRot;
             return CurrentView;
         }
-
+ 
     }
 
 
@@ -141,6 +222,8 @@ public class CameraControl : MonoBehaviour
         {
             cameraMode.NextView();
         }
+
+
         UpdateCursorLock();
     }
 
@@ -150,23 +233,6 @@ public class CameraControl : MonoBehaviour
 
     }
     #endregion
-
-    //private void GetCameraViewList()
-    //{
-    //    //reflection verion of method that getting view fields in the CameraView class.
-    //    var bindingFlags = BindingFlags.Instance |
-    //                       BindingFlags.Public;
-    //    var fieldValues = cameraMode.GetType()
-    //                                .GetFields(bindingFlags)
-    //                                .Select(field => field.GetValue(cameraMode))
-    //                                .Where(field => field is ICameraView)
-    //                                .ToList();
-
-    //    foreach (var viewField in fieldValues)
-    //    {
-    //        cameraViewList.Add(viewField as ICameraView);
-    //    }
-    //}
 
     #region CursorLockMechanism
     public void UpdateCursorLock()

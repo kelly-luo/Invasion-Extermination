@@ -10,9 +10,9 @@ public class FirstPersonView : ICameraView
     public float MaxAngleOnHeadRotation { get; set; } = 90f;
     public float MinAngleOnHeadRotation { get; set; } = -90f;
     public bool IsSmooth { get; set; } = false;
-    public float SmoothTime { get; set; } = 5f;
-    public float XSensitivity { get; set; } = 2f;
-    public float YSensitivity { get; set; } = 2f;
+    public float SmoothTime { get; set; } = 1f;
+    public float XSensitivity { get; set; }
+    public float YSensitivity { get; set; }
     public IUserInputManager UserInput { get; set; }
 
     public Quaternion HeadRot
@@ -220,9 +220,13 @@ public class FirstPersonView : ICameraView
         return q;
     }
 
-
     public void SetCameraPos()
     {
         cameraRig.position = new Vector3(target.position.x + OffSetX, target.position.y + OffSetY, target.position.z + OffSetZ);
+    }
+
+    public Vector3 GetCameraDirection()
+    {
+        return camera.forward; ;
     }
 }

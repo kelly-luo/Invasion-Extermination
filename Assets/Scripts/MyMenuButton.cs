@@ -16,7 +16,7 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     [SerializeField] protected MyMenuButtonGroup menuButtonGroup;
     public Animator animator;
-    [SerializeField] AnimatorFunctions animatorFunctions;
+    //[SerializeField] AnimatorFunctions animatorFunctions;
 
     public State currentState;
 

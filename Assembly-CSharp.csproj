@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\ApplySettings.cs" />
     <Compile Include="Assets\Scripts\FlexibleGridLayout.cs" />
     <Compile Include="Assets\Scripts\GobalFrame.cs" />
     <Compile Include="Assets\Scripts\MapClass.cs" />

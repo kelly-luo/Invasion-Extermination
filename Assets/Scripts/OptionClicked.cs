@@ -17,6 +17,11 @@ public class OptionClicked : MonoBehaviour
     void Update()
     {
 
+        if(menuButton.name == "Exit")
+        {
+            Application.Quit();
+        }
+
         if (menuButton.clicked)
         {
             GobalFrame.bringToView(frame,menuButton);

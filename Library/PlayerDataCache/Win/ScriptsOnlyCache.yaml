@@ -122,31 +122,31 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12232}
     - Class: 114
-      Script: {instanceID: 12356}
+      Script: {instanceID: 12334}
     - Class: 114
-      Script: {instanceID: 12360}
+      Script: {instanceID: 12358}
     - Class: 114
-      Script: {instanceID: 12374}
+      Script: {instanceID: 12362}
     - Class: 114
-      Script: {instanceID: 12554}
+      Script: {instanceID: 12376}
     - Class: 114
-      Script: {instanceID: 12618}
+      Script: {instanceID: 12556}
     - Class: 114
-      Script: {instanceID: 12650}
+      Script: {instanceID: 12620}
     - Class: 114
-      Script: {instanceID: 12766}
+      Script: {instanceID: 12652}
     - Class: 114
-      Script: {instanceID: 12848}
+      Script: {instanceID: 12768}
     - Class: 114
-      Script: {instanceID: 12958}
+      Script: {instanceID: 12850}
     - Class: 114
-      Script: {instanceID: 12970}
+      Script: {instanceID: 12960}
     - Class: 114
-      Script: {instanceID: 12984}
+      Script: {instanceID: 12972}
     - Class: 114
-      Script: {instanceID: 13000}
+      Script: {instanceID: 12986}
     - Class: 114
-      Script: {instanceID: 207804}
+      Script: {instanceID: 13002}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -464,6 +464,12 @@ ScriptsOnlyBuild:
     className: InputField
   - hash:
       serializedVersion: 2
+      Hash: ce23991bb459ab857ed165505bad6557
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ApplySettings
+  - hash:
+      serializedVersion: 2
       Hash: c9a8b80298a116835b51ba1cf9284367
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -654,13 +660,7 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: ce23991bb459ab857ed165505bad6557
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: ApplySettings
   platform: 5
   scenePathNames:
   - Assets/Scenes/MainMenuV2.unity
-  playerPath: C:/Users/Yuki Liyanage/Downloads/Invasion_Extermination.exe
+  playerPath: C:/Users/Yuki Liyanage/Desktop/Invasion Extermination/Test-Invasion-Extermination/Invasion_Extermination.exe

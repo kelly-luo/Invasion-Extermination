@@ -18,7 +18,7 @@ public class ApplySettings : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool windowsMode = windowToggleMode.isOn;
+        bool windowsMode = windowToggleMode.isOn; 
         string restext = resoultionCombo.options[resoultionCombo.value].text;
         string[] restextSp = restext.Split('x');
 
@@ -28,13 +28,11 @@ public class ApplySettings : MonoBehaviour
 
         if (menuButton.clicked)
         {
-            Screen.SetResolution(width, height, true);
-            hmm = "" + Screen.height;
+            Screen.SetResolution(width, height, windowsMode);
+            
+            menuButton.clicked = false;
         }
-        else
-        {
-
-        }
+        
 
     }
 }

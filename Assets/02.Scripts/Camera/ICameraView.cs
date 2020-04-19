@@ -8,13 +8,14 @@ public interface ICameraView
     float SmoothTime { get; set; }
     float XSensitivity { get; set; }
     float YSensitivity { get; set; }
+    float XRot { get; }
+    float YRot { get; }
 
-    Quaternion HeadRot { get ; set; }
     Quaternion CameraRigRot { get; set; }
     Quaternion CameraRot { get; set; }
     
 
-    void Init(Transform target, Transform neck, Transform head,Transform cameraRig, Transform camera, IUserInputManager userInput);
+    void Init(Transform target, Transform cameraRig, Transform camera, IUserInputManager userInput);
 
     void RotateView();
 

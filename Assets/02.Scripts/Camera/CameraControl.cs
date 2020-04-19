@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEngine;
 
 
-public class CameraControl : MonoBehaviour
+public class CameraControl : MonoBehaviour , ICameraControl
 {
     [Serializable]
     public class CameraMode
@@ -29,7 +29,7 @@ public class CameraControl : MonoBehaviour
         }
 
         #region Camera Sensitivity setting
-        private bool smooth;
+        private bool smooth = true;
         public bool Smooth
         {
             get { return smooth; }
@@ -109,7 +109,7 @@ public class CameraControl : MonoBehaviour
         public FirstPersonView firstPersonView;
         public ThirdPersonView thirdPersonView;
 
-        public void InitView(Transform target, Transform targetNeckTr, Transform targetHeadTr, Transform cameraRigTr, Transform cameraTr, IUserInputManager userInput)
+        public void InitView(Transform target, Transform cameraRigTr, Transform cameraTr, IUserInputManager userInput)
         {
             firstPersonView = new FirstPersonView(offSetX, offSetY, offSetZ);
             thirdPersonView = new ThirdPersonView(targetOffSet, distance);
@@ -129,7 +129,7 @@ public class CameraControl : MonoBehaviour
 
             foreach (var camView in cameraViewList)
             {
-                camView.Init(target.transform, targetNeckTr, targetHeadTr, cameraRigTr, cameraTr, userInput);
+                camView.Init(target.transform, cameraRigTr, cameraTr, userInput);
             }
             this.SmoothTime = 10f;
             this.XSensitivity = 1.3f;
@@ -139,7 +139,6 @@ public class CameraControl : MonoBehaviour
 
         public void TransferRotationData()
         {
-            var currentHeadRot = cameraViewList [viewListIdx].HeadRot;
             var currentCameraRigRot = cameraViewList [viewListIdx].CameraRigRot;
             var currentCameraRot = cameraViewList [viewListIdx].CameraRot;
         }
@@ -147,12 +146,11 @@ public class CameraControl : MonoBehaviour
         public ICameraView NextView()
         {
             //transfer Camera Rotation data to new view 
-            var currentHeadRot = cameraViewList[viewListIdx].HeadRot;
             var currentCameraRigRot = cameraViewList[viewListIdx].CameraRigRot;
             var currentCameraRot = cameraViewList[viewListIdx].CameraRot;
+
             ViewListIdx = ViewListIdx + 1;
 
-            cameraViewList[viewListIdx].HeadRot = currentHeadRot;
             cameraViewList[viewListIdx].CameraRigRot = currentCameraRigRot;
             cameraViewList[viewListIdx].CameraRot = currentCameraRot;
             return CurrentView;
@@ -162,8 +160,7 @@ public class CameraControl : MonoBehaviour
 
 
     public GameObject target;
-    private Transform targetNeckTr;
-    private Transform targetHeadTr;
+
     
     public CameraMode cameraMode;
     private Transform cameraRigTr;
@@ -175,6 +172,21 @@ public class CameraControl : MonoBehaviour
     private bool isCursorLocked;
 
     #region properties
+    public float XRot
+    {
+        get
+        {
+            return cameraMode.CurrentView.XRot;
+        }
+    }
+
+    public float YRot
+    {
+        get
+        {
+            return cameraMode.CurrentView.YRot;
+        }
+    }
 
     private bool cursorLock = true;
     public bool CursorLock
@@ -196,21 +208,21 @@ public class CameraControl : MonoBehaviour
     #endregion
 
     #region UnityBasicMethod
-
-    void Start()
+    void Awake()
     {
         //get transform of camera Rig
         cameraRigTr = GetComponent<Transform>();
         //get transform of camera (child relationShip);
         cameraTr = transform.Find("PlayerCamera");
 
-        targetNeckTr = GameObject.Find("Neck").transform;
-        targetHeadTr = GameObject.Find("Head").transform;
+    }
+    void Start()
+    {
         if (userInput == null)
             userInput = new UserInputManager();
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
         //get the Instance in the cameraView Class and put it in the cameraViewList
-        cameraMode.InitView(target.transform, targetNeckTr, targetHeadTr, cameraRigTr, cameraTr, userInput);
+        cameraMode.InitView(target.transform, cameraRigTr, cameraTr, userInput);
 
     }
 
@@ -264,5 +276,16 @@ public class CameraControl : MonoBehaviour
         }
     }
     #endregion
+     
+    #region CameraRelatedMethod
 
+    public Transform GetCameraTransform()
+    {
+        return cameraTr;
+    }
+    public Vector3 GetSightDirection()
+    {
+        return cameraMode.CurrentView.GetCameraDirection();
+    }
+    #endregion
 }

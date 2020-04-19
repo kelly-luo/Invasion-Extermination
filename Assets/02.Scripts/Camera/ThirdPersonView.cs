@@ -7,19 +7,16 @@ public class ThirdPersonView : ICameraView
     public bool IsClampOnRotatingXAxis { get; set; } = true;
     public float MaxAngleOnRotatingXAxis { get; set; } = 80f;
     public float MinAngleOnRotatingXAxis { get; set; } = -90f;
-    public float MaxAngleOnHeadRotation { get; set; } = 90f;
-    public float MinAngleOnHeadRotation { get; set; } = -90f;
     public bool IsSmooth { get; set; } = true;
     public float SmoothTime { get; set; } = 1f;
     public float XSensitivity { get; set; }
     public float YSensitivity { get; set; }
 
     public IUserInputManager UserInput { get; set; }
-    public Quaternion HeadRot
-    {
-        get { return headRot; }
-        set { headRot = value; }
-    }
+
+    public float YRot { get; set; }
+    public float XRot { get; set; }
+
     public Quaternion CameraRigRot
     {
         get { return cameraRigRot; }
@@ -32,20 +29,16 @@ public class ThirdPersonView : ICameraView
     }
 
     private Transform target;
-    private Transform neck;
-    private Transform head;
     private Transform cameraRig;
     private Transform camera;
 
-    private Quaternion targetRot;
     private Quaternion cameraRigRot;
     private Quaternion cameraRot;
-    private Quaternion neckRot;
-    private Quaternion headRot;
+
 
     #region Camera Setting
     //offSet (Y) of target
-    public float TargetOffSet { get; set; }  = 1.65f;
+    public float TargetOffSet { get; set; } = 1.65f;
     //distance between a target(Player) 
     public float Distance { get; set; } = 2.0f;
     #endregion
@@ -56,17 +49,11 @@ public class ThirdPersonView : ICameraView
         this.Distance = distance;
     }
 
-    public void Init(Transform target, Transform neck, Transform head, Transform cameraRig, Transform camera,  IUserInputManager userInput)
+    public void Init(Transform target,Transform cameraRig, Transform camera,  IUserInputManager userInput)
     {
         this.target = target;
-        this.neck = neck;
-        this.head = head;
         this.cameraRig = cameraRig;
         this.camera = camera;
-
-        this.targetRot = target.localRotation;
-        this.neckRot = neck.localRotation;
-        this.headRot = Quaternion.Euler(0f, 0f, 0f);
 
         this.cameraRigRot = cameraRig.localRotation;
         this.cameraRot = camera.localRotation;
@@ -76,11 +63,11 @@ public class ThirdPersonView : ICameraView
 
     public void RotateView()
     {
-        float yRot = UserInput.GetAxis("Mouse X") * XSensitivity;
-        float xRot = UserInput.GetAxis("Mouse Y") * YSensitivity;
+        YRot = UserInput.GetAxis("Mouse X") * XSensitivity;
+        XRot = UserInput.GetAxis("Mouse Y") * YSensitivity;
 
-        cameraRigRot *= Quaternion.Euler(0, yRot, 0f);
-        cameraRot *= Quaternion.Euler(-xRot, 0f, 0f);
+        cameraRigRot *= Quaternion.Euler(0, YRot, 0f);
+        cameraRot *= Quaternion.Euler(-XRot, 0f, 0f);
 
         if (IsClampOnRotatingXAxis)
             cameraRot = ClampOnRotatingXAxis(cameraRot);
@@ -98,65 +85,8 @@ public class ThirdPersonView : ICameraView
             camera.localRotation = cameraRot;
         }
 
-
-        RotateHeadAndTarget(yRot);
-        RotateNeck(xRot);
-
     }
 
-    private void RotateNeck(float xRot)
-    {
-        //you might be wondering why did i put the x on z axis and 
-        //it is because the I found that local Transform of a Neck bone in model was reversed. 
-        neck.localRotation = Quaternion.Euler(0f, 0f, cameraRot.eulerAngles.x);
-
-    }
-    //this method need to be more clean
-    private void RotateHeadAndTarget(float yRot)
-    {
-        //NextAngle is amount of angle change in head rotation
-        var nextAngle = headRot.eulerAngles.y + yRot;
-        if (nextAngle < 180)
-        {
-            //so it is necessary to seperate the amount of angle that go in to the head rotation 
-            //and boby rotation(if the angle exceed maxAngle of Head Rotation)
-            if (nextAngle > MaxAngleOnHeadRotation)
-            {
-                var leftoverAngle = (nextAngle - MaxAngleOnHeadRotation);
-                var angleUpToLimit = yRot - leftoverAngle;
-
-                headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
-
-                target.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
-
-            }
-            else
-            {
-                headRot *= Quaternion.Euler(0f, yRot, 0f);
-                head.localRotation *= Quaternion.Euler(0, yRot, 0);
-
-            }
-        }
-        else if (nextAngle > 180)
-        {
-            if (nextAngle < (360 + MinAngleOnHeadRotation))
-            {
-                var leftoverAngle = (nextAngle - (360 + MinAngleOnHeadRotation));
-                var angleUpToLimit = yRot - leftoverAngle;
-                headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                head.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
-
-                target.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
-
-            }
-            else
-            {
-                headRot *= Quaternion.Euler(0, yRot, 0);
-                head.localRotation *= Quaternion.Euler(0, yRot, 0);
-            }
-        }
-    }
 
     private Quaternion ClampOnRotatingXAxis(Quaternion q)
     {

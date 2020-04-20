@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/MainMenuV2.unity
-  isLoaded: 1
-  isActive: 1
+- path: Assets/Scenes/TestPlayerMovement/TestPlayerMovement.unity
+  isLoaded: 0
+  isActive: 0
   isSubScene: 0

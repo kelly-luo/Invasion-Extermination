@@ -135,6 +135,7 @@ public class PlayerCtrl : MonoBehaviour
 
     private void RotateAvatarTowardSight()
     {
+
     }//tmr
 
     #endregion

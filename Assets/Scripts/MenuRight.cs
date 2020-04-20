@@ -19,7 +19,7 @@ public class MenuRight : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 }
 

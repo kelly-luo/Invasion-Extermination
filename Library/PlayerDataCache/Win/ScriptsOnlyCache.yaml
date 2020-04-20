@@ -10,6 +10,9 @@ ScriptsOnlyBuild:
     - MyMenuButton
     - MyMenuButtonGroup
     - OptionClicked
+    - PanelGroup
+    - TabButton
+    - TabGroup
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
     Unity.TextMeshPro.dll:
@@ -32,6 +35,7 @@ ScriptsOnlyBuild:
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
+    - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.Dropdown
     - UnityEngine.UI.GraphicRaycaster
@@ -96,57 +100,65 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11372}
     - Class: 114
-      Script: {instanceID: 11486}
+      Script: {instanceID: 11422}
     - Class: 114
       Script: {instanceID: 11488}
     - Class: 114
-      Script: {instanceID: 11590}
+      Script: {instanceID: 11490}
     - Class: 114
-      Script: {instanceID: 11668}
+      Script: {instanceID: 11592}
     - Class: 114
-      Script: {instanceID: 11756}
+      Script: {instanceID: 11670}
     - Class: 114
-      Script: {instanceID: 11782}
+      Script: {instanceID: 11702}
     - Class: 114
-      Script: {instanceID: 11842}
+      Script: {instanceID: 11760}
     - Class: 114
-      Script: {instanceID: 11944}
+      Script: {instanceID: 11786}
     - Class: 114
-      Script: {instanceID: 12006}
+      Script: {instanceID: 11846}
     - Class: 114
-      Script: {instanceID: 12018}
+      Script: {instanceID: 11948}
     - Class: 114
-      Script: {instanceID: 12086}
+      Script: {instanceID: 12010}
     - Class: 114
-      Script: {instanceID: 12170}
+      Script: {instanceID: 12022}
     - Class: 114
-      Script: {instanceID: 12232}
+      Script: {instanceID: 12090}
     - Class: 114
-      Script: {instanceID: 12334}
+      Script: {instanceID: 12144}
     - Class: 114
-      Script: {instanceID: 12358}
+      Script: {instanceID: 12174}
+    - Class: 114
+      Script: {instanceID: 12236}
+    - Class: 114
+      Script: {instanceID: 12338}
     - Class: 114
       Script: {instanceID: 12362}
     - Class: 114
-      Script: {instanceID: 12376}
+      Script: {instanceID: 12366}
     - Class: 114
-      Script: {instanceID: 12556}
+      Script: {instanceID: 12380}
     - Class: 114
-      Script: {instanceID: 12620}
+      Script: {instanceID: 12384}
     - Class: 114
-      Script: {instanceID: 12652}
+      Script: {instanceID: 12562}
     - Class: 114
-      Script: {instanceID: 12768}
+      Script: {instanceID: 12626}
     - Class: 114
-      Script: {instanceID: 12850}
+      Script: {instanceID: 12658}
     - Class: 114
-      Script: {instanceID: 12960}
+      Script: {instanceID: 12774}
     - Class: 114
-      Script: {instanceID: 12972}
+      Script: {instanceID: 12856}
     - Class: 114
-      Script: {instanceID: 12986}
+      Script: {instanceID: 12966}
     - Class: 114
-      Script: {instanceID: 13002}
+      Script: {instanceID: 12978}
+    - Class: 114
+      Script: {instanceID: 12992}
+    - Class: 114
+      Script: {instanceID: 13008}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 124
@@ -266,6 +278,12 @@ ScriptsOnlyBuild:
     className: TMP_InputField
   - hash:
       serializedVersion: 2
+      Hash: 1db28c2e027f5e9c4180cc59d5adf48b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: TabGroup
+  - hash:
+      serializedVersion: 2
       Hash: 7ab0e790220bdca831fdd886b339039d
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -342,6 +360,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Shadow
+  - hash:
+      serializedVersion: 2
+      Hash: d718921043d521cd802201491771d1b6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PanelGroup
   - hash:
       serializedVersion: 2
       Hash: cc4274b586df3c02688bac01b88bd16c
@@ -498,6 +522,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: ActivationPlayableAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 02d1f17b4211ba6911491e17996800ad
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: TabButton
   - hash:
       serializedVersion: 2
       Hash: 18c222bef9ae745ce69ddde9b74337ca

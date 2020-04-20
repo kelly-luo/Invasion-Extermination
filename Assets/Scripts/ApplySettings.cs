@@ -13,6 +13,7 @@ public class ApplySettings : MonoBehaviour
     void Start()
     {
         menuButton = GetComponent<MyMenuButton>();
+      
     }
 
     // Update is called once per frame
@@ -28,8 +29,7 @@ public class ApplySettings : MonoBehaviour
 
         if (menuButton.clicked)
         {
-            Screen.SetResolution(width, height, windowsMode);
-            
+            Screen.SetResolution(width, height, true);   
             menuButton.clicked = false;
         }
         

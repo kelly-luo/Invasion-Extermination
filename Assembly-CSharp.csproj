@@ -74,6 +74,9 @@
     <Compile Include="Assets\Scripts\MyMenuButton.cs" />
     <Compile Include="Assets\Scripts\MyMenuButtonGroup.cs" />
     <Compile Include="Assets\Scripts\OptionClicked.cs" />
+    <Compile Include="Assets\Scripts\PanelGroup.cs" />
+    <Compile Include="Assets\Scripts\TabButton.cs" />
+    <Compile Include="Assets\Scripts\TabGroup.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />

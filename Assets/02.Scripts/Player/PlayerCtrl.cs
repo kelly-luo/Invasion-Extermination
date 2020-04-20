@@ -61,9 +61,9 @@ public class PlayerCtrl : MonoBehaviour
 
     void Update()
     {
-        MoveCharacter();
-        RotateNeck();
-        RotateHeadAndAvatar(cameraCtrl.YRot);
+        this.MoveCharacter();
+        this.RotateNeck();
+        this.RotateHeadAndAvatar(cameraCtrl.YRot);
     }
 
     private void MoveCharacter()
@@ -73,7 +73,8 @@ public class PlayerCtrl : MonoBehaviour
 
         Vector3 moveDir = (cameraRigTr.forward * Vertical) + (cameraRigTr.right * Horizontal);
 
-        tr.Translate(moveDir.normalized * MoveSpeed * Time.deltaTime,Space.World); 
+        tr.Translate(moveDir.normalized * MoveSpeed * Time.deltaTime,Space.World);
+        this.RotateAvatarTowardSight();
     }
 
     #region CharacterBodyMove
@@ -135,7 +136,7 @@ public class PlayerCtrl : MonoBehaviour
 
     private void RotateAvatarTowardSight()
     {
-
+        tr.localRotation= Quaternion.Slerp(tr.localRotation, Quaternion.LookRotation(cameraRigTr.forward), Time.deltaTime);
     }//tmr
 
     #endregion

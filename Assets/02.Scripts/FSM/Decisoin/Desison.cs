@@ -8,4 +8,3 @@ namespace IEGame.FiniteStateMachine
     }
 }
 
-

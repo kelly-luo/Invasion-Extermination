@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerCtrl : MonoBehaviour
 {
 
-    #region Movement Values
-    public float MoveSpeed { get; set; } = 2.5f;
+    #region Input Values
     public float Vertical { get; set; }
     public float Horizontal { get; set; }
     #endregion
@@ -25,6 +24,7 @@ public class PlayerCtrl : MonoBehaviour
 
     #region Character Avatar Value
     private Quaternion headRot = Quaternion.Euler(0f,0,0f);
+    private Quaternion actualHeadRot;
 
     public float MaxAngleOnHeadRotation { get; set; } = 90f;
     public float MinAngleOnHeadRotation { get; set; } = -90f;
@@ -34,32 +34,45 @@ public class PlayerCtrl : MonoBehaviour
 
     #endregion
 
+    #region Animator
+    private Animator animator; // this need to be DI
 
+    private readonly int hashXSpeed = Animator.StringToHash("XSpeed");
+    private readonly int hashZSpeed = Animator.StringToHash("ZSpeed");
+    #endregion
 
+    private ICharacterTranslate playerTranslate;
     private Transform tr;
     private IUserInputManager userInput;
+
 
     void Awake()
     {
         neckTr = GameObject.Find("Neck").transform;
         headTr = GameObject.Find("Head").transform;
+        tr = GetComponent<Transform>();
+        animator = GetComponent<Animator>();
+        playerTranslate = new PlayerTranslate(tr);
+        actualHeadRot = headTr.localRotation;
     }
 
     void Start()
     {
-        tr = GetComponent<Transform>();
         cameraCtrl = cameraRig.GetComponent<CameraControl>();
         cameraRigTr = cameraRig.GetComponent<Transform>();
         cameraTr = cameraCtrl.GetCameraTransform();
+
         if (userInput == null)
         {
             userInput = new UserInputManager();
         }
-
-        
     }
 
     void Update()
+    {
+    }
+
+    private void LateUpdate()
     {
         this.MoveCharacter();
         this.RotateNeck();
@@ -70,11 +83,15 @@ public class PlayerCtrl : MonoBehaviour
     {
         Vertical = userInput.GetAxis("Vertical");
         Horizontal = userInput.GetAxis("Horizontal");
-
         Vector3 moveDir = (cameraRigTr.forward * Vertical) + (cameraRigTr.right * Horizontal);
-
-        tr.Translate(moveDir.normalized * MoveSpeed * Time.deltaTime,Space.World);
-        this.RotateAvatarTowardSight();
+        Debug.Log("X: " + Vertical.ToString() + "Y: " + Horizontal.ToString());
+        playerTranslate.TranslateCharacter(moveDir);
+        var xSpeed = Horizontal;
+        animator.SetFloat(hashXSpeed, xSpeed);
+        var zSpeed = Vertical;
+        animator.SetFloat(hashZSpeed, zSpeed);
+        if ((xSpeed > 0)||( zSpeed > 0))
+            this.RotateAvatarTowardSight();
     }
 
     #region CharacterBodyMove
@@ -91,7 +108,6 @@ public class PlayerCtrl : MonoBehaviour
     {
         //NextAngle is amount of angle change in head rotation
         var nextAngle = headRot.eulerAngles.y + yRot;
-        Debug.Log("headRot " + headRot.eulerAngles.y.ToString());
         if (nextAngle < 180)
         {
             //so it is necessary to seperate the amount of angle that go in to the head rotation 
@@ -102,7 +118,8 @@ public class PlayerCtrl : MonoBehaviour
                 var angleUpToLimit = yRot - leftoverAngle;
 
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                headTr.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
+                actualHeadRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
+                headTr.localRotation = actualHeadRot;
 
                 tr.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
@@ -110,7 +127,8 @@ public class PlayerCtrl : MonoBehaviour
             else
             {
                 headRot *= Quaternion.Euler(0f, yRot, 0f);
-                headTr.localRotation *= Quaternion.Euler(0, yRot, 0);
+                actualHeadRot *= Quaternion.Euler(0f, yRot, 0f);
+                headTr.localRotation = actualHeadRot;
 
             }
         }
@@ -121,7 +139,8 @@ public class PlayerCtrl : MonoBehaviour
                 var leftoverAngle = (nextAngle - (360 + MinAngleOnHeadRotation));
                 var angleUpToLimit = yRot - leftoverAngle;
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                headTr.localRotation *= Quaternion.Euler(0, angleUpToLimit, 0);
+                actualHeadRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
+                headTr.localRotation = actualHeadRot;
 
                 tr.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
@@ -129,7 +148,8 @@ public class PlayerCtrl : MonoBehaviour
             else
             {
                 headRot *= Quaternion.Euler(0, yRot, 0);
-                headTr.localRotation *= Quaternion.Euler(0, yRot, 0);
+                actualHeadRot *= Quaternion.Euler(0f, yRot, 0f);
+                headTr.localRotation = actualHeadRot;
             }
         }
     }

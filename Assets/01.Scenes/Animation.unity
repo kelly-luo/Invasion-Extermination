@@ -370,7 +370,11 @@ PrefabInstance:
     - target: {fileID: 9571598, guid: 48b470c6a762f60438c631f219257520, type: 3}
       propertyPath: m_Avatar
       value: 
-      objectReference: {fileID: 9000000, guid: 91028badc63f59f43a9c5bda64fbd608, type: 3}
+      objectReference: {fileID: 9000000, guid: 897b34267f422c1499700402763d096e, type: 3}
+    - target: {fileID: 9571598, guid: 48b470c6a762f60438c631f219257520, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: e01fe09cadae24d4992564d94c5e89a3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48b470c6a762f60438c631f219257520, type: 3}
 --- !u!4 &358909973 stripped
@@ -528,24 +532,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2ca19289c480c447ba0542e93b13da1, type: 3}
---- !u!1 &602039749 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 122258, guid: f2ca19289c480c447ba0542e93b13da1,
-    type: 3}
-  m_PrefabInstance: {fileID: 602039748}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &602039750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 602039749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3f9ca1e585fd3945952bedaf3175acb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1599198041
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +542,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1599198043}
   - component: {fileID: 1599198042}
-  - component: {fileID: 1599198044}
   m_Layer: 0
   m_Name: CameraRig
   m_TagString: Untagged
@@ -598,18 +583,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1599198044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599198041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3f9ca1e585fd3945952bedaf3175acb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1616689217 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 153682, guid: 48b470c6a762f60438c631f219257520,
@@ -642,8 +615,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CurrentState>k__BackingField: {fileID: 0}
-  <Stats>k__BackingField: {fileID: 0}
   <RemainState>k__BackingField: {fileID: 0}
+  <Stats>k__BackingField: {fileID: 0}
   <Transform>k__BackingField: {fileID: 358909973}
 --- !u!1 &1977387822
 GameObject:

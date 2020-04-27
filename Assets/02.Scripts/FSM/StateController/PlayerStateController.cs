@@ -7,8 +7,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
 {
     [field: SerializeField]
     public State CurrentState { get; set; }
-
     //state of default RemainState value (any value but it have to match with the return value of transition ) 
+
     [field: SerializeField]
     public State RemainState { get; set; }
 
@@ -18,9 +18,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
     [field: SerializeField]
     public Transform Transform { get; set; }
 
-
-
     public float StateTimeElapsed { get; set; }
+    // state will change depends on this class (speed) 
+    public ICharacterTranslate playerMovement { get; set; }
+
+
+
+    public PlayerStateController(ICharacterTranslate playerMovement)
+    {
+        this.playerMovement = playerMovement;
+    }
 
     void Awake()
     {
@@ -37,7 +44,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
 
         //update scene
-        CurrentState.UpdateState(this);
+        //CurrentState.UpdateState(this);
     }
     //check attack timer (so player do not "attack" every frames); 
     public bool CheckIsAttackReady(float duration)

@@ -5,8 +5,6 @@ using IEGame.FiniteStateMachine;
 
 public class PlayerStats : ObjectStats
 {
-    [field: SerializeField]
-    public float HP{ get; set; }
 
     [field: SerializeField]
     public int Level { get; set; }

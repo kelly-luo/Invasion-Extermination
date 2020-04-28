@@ -106,6 +106,7 @@ public class PlayerCtrl : MonoBehaviour
 
     private void RotateHeadAndAvatar(float yRot)
     {
+        headTr.localRotation = actualHeadRot;
         //NextAngle is amount of angle change in head rotation
         var nextAngle = headRot.eulerAngles.y + yRot;
         if (nextAngle < 180)
@@ -118,8 +119,8 @@ public class PlayerCtrl : MonoBehaviour
                 var angleUpToLimit = yRot - leftoverAngle;
 
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                actualHeadRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                headTr.localRotation = actualHeadRot;
+                headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
+                actualHeadRot = headTr.localRotation;
 
                 tr.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
@@ -127,8 +128,8 @@ public class PlayerCtrl : MonoBehaviour
             else
             {
                 headRot *= Quaternion.Euler(0f, yRot, 0f);
-                actualHeadRot *= Quaternion.Euler(0f, yRot, 0f);
-                headTr.localRotation = actualHeadRot;
+                headTr.localRotation *= Quaternion.Euler(0f, yRot, 0f);
+                actualHeadRot = headTr.localRotation;
 
             }
         }
@@ -139,8 +140,8 @@ public class PlayerCtrl : MonoBehaviour
                 var leftoverAngle = (nextAngle - (360 + MinAngleOnHeadRotation));
                 var angleUpToLimit = yRot - leftoverAngle;
                 headRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                actualHeadRot *= Quaternion.Euler(0f, angleUpToLimit, 0f);
-                headTr.localRotation = actualHeadRot;
+                headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
+                actualHeadRot = headTr.localRotation;
 
                 tr.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
@@ -148,8 +149,8 @@ public class PlayerCtrl : MonoBehaviour
             else
             {
                 headRot *= Quaternion.Euler(0, yRot, 0);
-                actualHeadRot *= Quaternion.Euler(0f, yRot, 0f);
-                headTr.localRotation = actualHeadRot;
+                headTr.localRotation *= Quaternion.Euler(0f, yRot, 0f);
+                actualHeadRot = headTr.localRotation;// try rotation slerp
             }
         }
     }

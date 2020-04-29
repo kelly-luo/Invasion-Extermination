@@ -90,22 +90,24 @@ public class PlayerCtrl : MonoBehaviour
         animator.SetFloat(hashXSpeed, xSpeed);
         var zSpeed = Vertical;
         animator.SetFloat(hashZSpeed, zSpeed);
-        if ((xSpeed > 0)||( zSpeed > 0))
-            this.RotateAvatarTowardSight();
+        if ((xSpeed > 0) || (zSpeed > 0))
+            this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body . 
     }
 
     #region CharacterBodyMove
 
     private void RotateNeck()
     {
-        //you might be wondering why did i put the x on z axis and 
-        //it is because the I found that local Transform of a Neck bone in model was reversed. 
+        //you might be wondering why did i put the x on z axis 
+        //it is because the I found that local Transform of the Neck bone in model was reversed. 
         neckTr.localRotation = Quaternion.Euler(0f, 0f, cameraTr.localRotation.eulerAngles.x);
 
     }
 
     private void RotateHeadAndAvatar(float yRot)
     {
+        // this part because animation changes the head position in Update so i have to
+        // save the rotation of head on actualHeadRot value and use it as head rotation.
         headTr.localRotation = actualHeadRot;
         //NextAngle is amount of angle change in head rotation
         var nextAngle = headRot.eulerAngles.y + yRot;
@@ -150,15 +152,21 @@ public class PlayerCtrl : MonoBehaviour
             {
                 headRot *= Quaternion.Euler(0, yRot, 0);
                 headTr.localRotation *= Quaternion.Euler(0f, yRot, 0f);
-                actualHeadRot = headTr.localRotation;// try rotation slerp
+                actualHeadRot = headTr.localRotation;
             }
         }
     }
 
     private void RotateAvatarTowardSight()
     {
-        tr.localRotation= Quaternion.Slerp(tr.localRotation, Quaternion.LookRotation(cameraRigTr.forward), Time.deltaTime);
-    }//tmr
+        var bodyRot = tr.localRotation;
+
+        tr.localRotation = Quaternion.Slerp(tr.localRotation, Quaternion.LookRotation(cameraRigTr.forward), Time.deltaTime);
+        //take the amount of change in body rotation 
+        var ChangeRotBody = tr.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
+        //add to Head Rotation
+        actualHeadRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
+    }
 
     #endregion
 }

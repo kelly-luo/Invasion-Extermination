@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerTranslate : ICharacterTranslate
 {
     public Transform Character { get; set; }
-    public float Speed { get; set; } = 2.5f;
+    public float Speed { get; set; } = 1.5f;
     public Vector3 MoveDirection { get; set; }
 
     public PlayerTranslate(Transform character)

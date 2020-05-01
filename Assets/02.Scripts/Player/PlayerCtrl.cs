@@ -165,6 +165,7 @@ public class PlayerCtrl : MonoBehaviour
         //take the amount of change in body rotation 
         var ChangeRotBody = tr.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
         //add to Head Rotation
+        headRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
         actualHeadRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
     }
 

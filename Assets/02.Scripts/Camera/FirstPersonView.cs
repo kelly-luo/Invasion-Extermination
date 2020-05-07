@@ -61,8 +61,6 @@ public class FirstPersonView : ICameraView
         this.cameraRigRot = cameraRig.localRotation;
         this.cameraRot = camera.localRotation;
         this.UserInput = userInput;
-
-
     }
 
     //as you can see this code is lot like mouseLook code 
@@ -90,8 +88,6 @@ public class FirstPersonView : ICameraView
             cameraRig.localRotation = cameraRigRot;
             camera.localRotation = cameraRot;
         }
-
-
 
     }
 

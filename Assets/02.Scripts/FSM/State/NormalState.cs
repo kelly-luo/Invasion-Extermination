@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 
+[CreateAssetMenu(menuName = "PluggableScript/State/NormalState")]
 public class NormalState : State
 {
     public Action[] actions;

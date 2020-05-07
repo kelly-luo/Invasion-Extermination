@@ -8,6 +8,26 @@ public class PlayerTranslate : ICharacterTranslate
     public float Speed { get; set; } = 1.5f;
     public Vector3 MoveDirection { get; set; }
 
+    private bool isRunning = false;
+    public bool IsRunning 
+    {
+        get
+        {
+            return isRunning;
+        }
+        set
+        {
+            if(value)
+            {
+                Speed = 3.0f;
+            }
+            else
+            {
+                Speed = 1.5f;
+            }
+        }
+    }
+
     public PlayerTranslate(Transform character)
     {
         this.Character = character;

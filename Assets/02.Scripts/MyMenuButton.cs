@@ -20,7 +20,7 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     public State currentState;
 
-    public bool pressed =false;
+    public bool pressed = false;
 
     public bool clicked = false;
 

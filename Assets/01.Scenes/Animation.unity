@@ -642,8 +642,8 @@ MonoBehaviour:
   target: {fileID: 1616689217}
   cameraMode:
     offSetX: 0
-    offSetY: 1.75
-    offSetZ: 0
+    offSetY: 1.65
+    offSetZ: 0.21
     targetOffSet: 1.75
     distance: 4
 --- !u!4 &1599198043
@@ -683,7 +683,8 @@ MonoBehaviour:
     type: 2}
   <RemainState>k__BackingField: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783,
     type: 2}
-  <Stats>k__BackingField: {fileID: 0}
+  <Stats>k__BackingField: {fileID: 11400000, guid: fb5ab91575c59e143889b6bdc9c4e76c,
+    type: 2}
   <Transform>k__BackingField: {fileID: 358909973}
   <CameraRig>k__BackingField: {fileID: 1599198041}
 --- !u!136 &1616689220

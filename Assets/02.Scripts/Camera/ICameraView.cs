@@ -12,8 +12,7 @@ public interface ICameraView
     float YRot { get; }
 
     Quaternion CameraRigRot { get; set; }
-    Quaternion CameraRot { get; set; }
-    
+    Quaternion CameraRot { get; set; }    
 
     void Init(Transform target, Transform cameraRig, Transform camera, IUserInputManager userInput);
 

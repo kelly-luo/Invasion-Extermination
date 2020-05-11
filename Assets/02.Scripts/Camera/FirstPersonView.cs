@@ -13,7 +13,7 @@ public class FirstPersonView : ICameraView
     public float XSensitivity { get; set; }
     public float YSensitivity { get; set; }
     public IUserInputManager UserInput { get; set; }
-    
+        
     public float YRot { get; set; }
     public float XRot { get; set; }
 
@@ -112,7 +112,10 @@ public class FirstPersonView : ICameraView
 
     public void SetCameraPos()
     {
-        cameraRig.position = new Vector3(target.position.x + OffSetX, target.position.y + OffSetY, target.position.z + OffSetZ);
+        //cameraRig.position = new Vector3(target.position.x + OffSetX, target.position.y + OffSetY, target.position.z + OffSetZ);
+        cameraRig.position = new Vector3(target.position.x + OffSetX, target.position.y + OffSetY, target.position.z);
+        cameraRig.position += cameraRig.forward * OffSetZ;
+  
     }
 
     public Vector3 GetCameraDirection()

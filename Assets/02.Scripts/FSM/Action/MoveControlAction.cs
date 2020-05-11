@@ -7,7 +7,6 @@ using IEGame.FiniteStateMachine;
 public class MoveControlAction : Action
 {
 
-
     public override void Act(IStateController controller)
     {
         var stateControlller = controller as PlayerStateController;
@@ -19,5 +18,7 @@ public class MoveControlAction : Action
         stateControlller.playerTranslate.TranslateCharacter(moveDir);
         stateControlller.MoveAnimation(horizontal, vertical);
 
+        
     }
 }
+    

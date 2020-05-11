@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 
+[CreateAssetMenu(menuName = "PluggableScript/Stats/PlayerStats")]
 public class PlayerStats : ObjectStats
 {
 

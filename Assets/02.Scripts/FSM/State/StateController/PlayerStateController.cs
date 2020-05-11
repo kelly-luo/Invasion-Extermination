@@ -32,8 +32,56 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #region Animation
     public Animator Animator { get; set; }
 
-    private readonly int hashXSpeed = Animator.StringToHash("XSpeed");
-    private readonly int hashZSpeed = Animator.StringToHash("ZSpeed");
+    private readonly int hashXDirectionSpeed = Animator.StringToHash("XDirectionSpeed");
+    private readonly int hashZDirectionSpeed = Animator.StringToHash("ZDirectionSpeed");
+
+    private readonly int hashSpeed = Animator.StringToHash("Speed");
+
+    private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
+    private bool isRunning = false;
+    public bool IsRunning
+    {
+        get
+        {
+            return isRunning;
+        }
+        set
+        {
+            if (isRunning != value)
+            {
+                playerTranslate.IsRunning = value;
+                Animator.SetBool(hashIsRunning, value);
+                isRunning = value;
+            }
+            if(value)
+            {
+                Animator.SetFloat(hashSpeed, 3.0f);
+            }
+            else
+            {
+                Animator.SetFloat(hashSpeed, 1.5f);
+            }
+        }
+    }
+
+    private readonly int hashIsSitting = Animator.StringToHash("IsSitting");
+    private bool isSitting = false;
+    public bool IsSitting
+    {
+        get
+        {
+            return isSitting;
+        }
+        set
+        {
+            if (isSitting != value)
+            {
+                playerTranslate.IsSitting = value;
+                Animator.SetBool(hashIsSitting, value);
+                isSitting = value;
+            }
+        }
+    }
     #endregion
 
     #region Character Avatar Value
@@ -59,8 +107,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public ICharacterTranslate playerTranslate { get; set; }
     public IUserInputManager UserInput { get; set; }
 
-
-    #region Unity Base Function
+    #region MonoBehaviour Base Function
     void Awake()
     {
         neckTr = GameObject.Find("Neck").transform;
@@ -87,47 +134,30 @@ public class PlayerStateController : MonoBehaviour, IStateController
     }
 
     void Update()
-    { 
+    {
         // adding check active function .
 
 
-        //update scene
-        //CurrentState.UpdateState(this);
+        //update scene\
+        CurrentState.UpdateState(this);
+        if (UserInput.GetKeyUp(KeyCode.LeftShift))
+        {
+            IsRunning = !isRunning;
+        }
     }
 
     void LateUpdate()
     {
-
+        RotateNeck();
+        RotateHeadAndAvatar(CameraCtrl.YRot);
     }
     #endregion
-
-
-    //check attack timer (so player do not "attack" every frames); 
-    public bool CheckIsAttackReady(float duration)
-    {
-        StateTimeElapsed += Time.deltaTime;
-        return (StateTimeElapsed >= duration);
-    }
-
-    public void OnExitState()
-    {
-        StateTimeElapsed = 0;
-    }
-
-    public void TransitionToState(State nextState)
-    {
-        if(nextState != RemainState)
-        {
-            CurrentState = nextState;
-            this.OnExitState();
-        }
-    }
 
     #region animation method
     public void MoveAnimation(float xSpeed ,float zSpeed)
     {
-        Animator.SetFloat(hashXSpeed, xSpeed);
-        Animator.SetFloat(hashZSpeed, zSpeed);
+        Animator.SetFloat(hashXDirectionSpeed, xSpeed);
+        Animator.SetFloat(hashZDirectionSpeed, zSpeed);
         Debug.Log("XSpeed: " + xSpeed.ToString() + " YSpeed: " + zSpeed.ToString());
         if ((xSpeed > 0) || (zSpeed > 0))
             this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body . 
@@ -210,6 +240,27 @@ public class PlayerStateController : MonoBehaviour, IStateController
     }
 
     #endregion
+
+    //check attack timer (so player do not "attack" every frames); 
+    public bool CheckIsAttackReady(float duration)
+    {
+        StateTimeElapsed += Time.deltaTime;
+        return (StateTimeElapsed >= duration);
+    }
+
+    public void OnExitState()
+    {
+        StateTimeElapsed = 0;
+    }
+
+    public void TransitionToState(State nextState)
+    {
+        if(nextState != RemainState)
+        {
+            CurrentState = nextState;
+            this.OnExitState();
+        }
+    }
 }
 
 

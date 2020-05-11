@@ -29,7 +29,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
 
         #region Camera Sensitivity setting
-        private bool smooth = true;
+        private bool smooth = false;
         public bool Smooth
         {
             get { return smooth; }
@@ -158,14 +158,11 @@ public class CameraControl : MonoBehaviour , ICameraControl
  
     }
 
-
     public GameObject target;
-
     
     public CameraMode cameraMode;
     private Transform cameraRigTr;
     private Transform cameraTr;
-
 
     private IUserInputManager userInput;
 

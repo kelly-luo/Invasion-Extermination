@@ -28,6 +28,23 @@ public class PlayerTranslate : ICharacterTranslate
         }
     }
 
+    private bool isSitting = false;
+    public bool IsSitting
+    {
+        get
+        {
+            return isSitting;
+        }
+        set
+        {
+            if (value)
+            {
+                Speed = 1f;
+            }
+
+        }
+    }
+
     public PlayerTranslate(Transform character)
     {
         this.Character = character;

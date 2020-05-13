@@ -73,7 +73,7 @@ namespace Tests
             SetUpTest();
 
             var unityService = Substitute.For<IUnityServiceManager>();
-            unityService.GetAxis("Mouse Y").Returns(-100); // as checking clamp this need to be Lower than -90 and higher than -179
+            unityService.GetAxis("Mouse Y").Returns(-110); // as checking clamp this need to be Lower than -90 and higher than -179
 
             firstPersonView.UnityService = unityService;
             firstPersonView.IsClampOnRotatingXAxis = true;

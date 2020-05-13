@@ -9,10 +9,10 @@ public class FirstPersonView : ICameraView
     public float MinAngleOnRotatingXAxis { get; set; } = -90f;
 
     public bool IsSmooth { get; set; } = false;
-    public float SmoothTime { get; set; } = 1f;
-    public float XSensitivity { get; set; }
+    public float SmoothTime { get; set; } 
+    public float XSensitivity { get; set; } 
     public float YSensitivity { get; set; }
-    public IUserInputManager UserInput { get; set; }
+    public IUnityServiceManager UnityService { get; set; }
         
     public float YRot { get; set; }
     public float XRot { get; set; }
@@ -52,7 +52,7 @@ public class FirstPersonView : ICameraView
     }
 
 
-    public void Init(Transform target, Transform cameraRig, Transform camera, IUserInputManager userInput)
+    public void Init(Transform target, Transform cameraRig, Transform camera, IUnityServiceManager userInput)
     {
         this.target = target;
         this.cameraRig = cameraRig;
@@ -60,15 +60,15 @@ public class FirstPersonView : ICameraView
 
         this.cameraRigRot = cameraRig.localRotation;
         this.cameraRot = camera.localRotation;
-        this.UserInput = userInput;
+        this.UnityService = userInput;
     }
 
     //as you can see this code is lot like mouseLook code 
     //It is because mouselook code is too fundamental
     public void RotateView()
     {
-        YRot = UserInput.GetAxis("Mouse X") * XSensitivity;
-        XRot = UserInput.GetAxis("Mouse Y") * YSensitivity;
+        YRot = UnityService.GetAxis("Mouse X") * XSensitivity;
+        XRot = UnityService.GetAxis("Mouse Y") * YSensitivity;
 
         cameraRigRot *= Quaternion.Euler(0, YRot, 0f);
         cameraRot *= Quaternion.Euler(-XRot, 0f, 0f);
@@ -79,9 +79,9 @@ public class FirstPersonView : ICameraView
         if (IsSmooth)
         {
             cameraRig.localRotation = Quaternion.Slerp(cameraRig.localRotation, cameraRigRot,
-                SmoothTime * Time.deltaTime);
+                SmoothTime * UnityService.DeltaTime);
             camera.localRotation = Quaternion.Slerp(camera.localRotation, cameraRot,
-                SmoothTime * Time.deltaTime);
+                SmoothTime * UnityService.DeltaTime);
         }
         else
         {
@@ -90,7 +90,6 @@ public class FirstPersonView : ICameraView
         }
 
     }
-
 
     private Quaternion ClampOnRotatingXAxis(Quaternion q)
     {

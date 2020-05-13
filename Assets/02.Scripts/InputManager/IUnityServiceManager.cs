@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IUserInputManager 
+public interface IUnityServiceManager 
 {
     float GetAxis(string inputKey);
 
@@ -11,4 +11,6 @@ public interface IUserInputManager
     bool GetKeyDown(KeyCode key);
 
     bool GetMouseButtonUp(int button);
+
+    float DeltaTime { get; }
 }

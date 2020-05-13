@@ -12,7 +12,7 @@ public class ThirdPersonView : ICameraView
     public float XSensitivity { get; set; }
     public float YSensitivity { get; set; }
 
-    public IUserInputManager UserInput { get; set; }
+    public IUnityServiceManager UserInput { get; set; }
 
     public float YRot { get; set; }
     public float XRot { get; set; }
@@ -49,7 +49,7 @@ public class ThirdPersonView : ICameraView
         this.Distance = distance;
     }
 
-    public void Init(Transform target,Transform cameraRig, Transform camera,  IUserInputManager userInput)
+    public void Init(Transform target,Transform cameraRig, Transform camera,  IUnityServiceManager userInput)
     {
         this.target = target;
         this.cameraRig = cameraRig;

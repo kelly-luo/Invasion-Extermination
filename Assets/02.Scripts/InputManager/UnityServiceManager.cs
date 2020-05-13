@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UserInputManager : IUserInputManager
+public class UnityServiceManager : IUnityServiceManager
 {
+    public float DeltaTime
+    {
+        get { return Time.deltaTime; }
+    }
     public float GetAxis(string inputKey)
     {
         return Input.GetAxis(inputKey);
@@ -23,5 +27,6 @@ public class UserInputManager : IUserInputManager
     {
         return Input.GetMouseButton(button);
     }
+
 
 }

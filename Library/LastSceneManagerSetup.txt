@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/01.Scenes/Invex.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0

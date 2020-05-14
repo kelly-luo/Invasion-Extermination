@@ -26,7 +26,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public Transform CameraRigTr { get; set; }
 
     public Transform CameraTr { get; set; }
-    public ICameraControl CameraCtrl{ get;set;}
+    public ICameraControl CameraCtrl { get; set; }
     #endregion 
 
     #region Animation
@@ -53,7 +53,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 Animator.SetBool(hashIsRunning, value);
                 isRunning = value;
             }
-            if(value)
+            if (value)
             {
                 Animator.SetFloat(hashSpeed, 3.0f);
             }
@@ -154,7 +154,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #endregion
 
     #region animation method
-    public void MoveAnimation(float xSpeed ,float zSpeed)
+    public void MoveAnimation(float xSpeed, float zSpeed)
     {
         Animator.SetFloat(hashXDirectionSpeed, xSpeed);
         Animator.SetFloat(hashZDirectionSpeed, zSpeed);
@@ -255,12 +255,30 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void TransitionToState(State nextState)
     {
-        if(nextState != RemainState)
+        if (nextState != RemainState)
         {
             CurrentState = nextState;
             this.OnExitState();
         }
     }
+
+    public void SavePlayer()
+    {
+        SaveSystem.SavePlayer(this);
+    }
+
+    public void LoadPlayer()
+    {
+        PlayerStats data = SaveSystem.LoadPlayer();
+
+        Vector3 position;
+        position.x = data.position[0];
+        position.y = data.position[1];
+        position.z = data.position[2];
+
+        Transform.position = position;
+    }
+
 }
 
 

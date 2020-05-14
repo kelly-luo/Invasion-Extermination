@@ -9,7 +9,7 @@ public class PlayerTranslate : ICharacterTranslate
     public Vector3 MoveDirection { get; set; }
 
     private bool isRunning = false;
-    public bool IsRunning 
+    public bool IsRunning
     {
         get
         {
@@ -17,7 +17,7 @@ public class PlayerTranslate : ICharacterTranslate
         }
         set
         {
-            if(value)
+            if (value)
             {
                 Speed = 3.0f;
             }
@@ -48,13 +48,30 @@ public class PlayerTranslate : ICharacterTranslate
     public PlayerTranslate(Transform character)
     {
         this.Character = character;
-    } 
+    }
 
 
     public void TranslateCharacter(Vector3 moveDir)
     {
         MoveDirection = moveDir;
         Character.Translate(moveDir.normalized * Speed * Time.deltaTime, Space.World);
+    }
+
+    public void SavePlayer()
+    {
+        SaveSystem.SavePlayer(this);
+    }
+
+    public void LoadPlayer()
+    {
+        PlayerStats data = SaveSystem.LoadPlayer();
+
+        Vector3 position;
+        position.x = data.position[0];
+        position.y = data.position[1];
+        position.z = data.position[2];
+
+        Character.position = position;
     }
 
 }

@@ -4,22 +4,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class MenuLeft : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
+public class MenuLeft : ButtonClicked
 {
-
-  
-    public void OnPointerClick(PointerEventData eventData)
+    public MapSelect mapSelect;
+    public override void ButtonEvent(MyMenuButton menuButton)
     {
-        if(MapSelect.index > 0)MapSelect.index -= 1;
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-   
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-       // throw new System.NotImplementedException();
+         mapSelect.index -= 1;
     }
 }

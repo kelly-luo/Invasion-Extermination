@@ -8,40 +8,45 @@ public class MapSelect : MonoBehaviour
 
     public Image imageComp;
 
-    public Sprite currentMapImage;
-    public string currentMapID;
-    public int internalIndex = 0;
+    public MapClass currentMap;
 
-    public static int size;
+    public int size;
+    public int index;
 
-    public static int index;
-
+    private int currentIndex;
     public MapClass[] maps;
 
-    // Start is called before the first frame update
+    public string hmm;
+  
     void Start()
     {
-       
-
+        index = 0;
         size = maps.Length;
-        index = internalIndex;
-        currentMapID = maps[0].mapID;
-        currentMapImage = maps[0].mapImage;
 
-        imageComp.sprite = currentMapImage;
+        updatePanel();
     }
-
-    // Update is called once per frame
     void Update()
     {
-        if(internalIndex != index)
+        if(currentIndex != index)
         {
-            internalIndex = index;
-            currentMapID = maps[internalIndex].mapID;
-            currentMapImage = maps[internalIndex].mapImage;
-
-            imageComp.sprite = currentMapImage;
+            if (index < 0) index = size - 1;
+            else if (index > size - 1) index = 0;
+            updatePanel();
         }
+
+    }
+
+    private void updatePanel()
+    {
+        currentMap = maps[index];
+        imageComp.sprite = currentMap.mapImage;
+        currentIndex = index;
+
+    }
+
+    public string getMap()
+    {
+        return currentMap.mapID;
     }
 
 }

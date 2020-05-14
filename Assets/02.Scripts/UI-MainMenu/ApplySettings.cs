@@ -5,16 +5,11 @@ using UnityEngine.UI;
 
 public class ApplySettings : ButtonClicked
 {
-    private MyMenuButton menuButton;
+    
     public Dropdown resoultionCombo;
     public Toggle windowToggleMode;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        menuButton = GetComponent<MyMenuButton>();
-    }
-
+  
     public override void ButtonEvent(MyMenuButton menuButton)
     {
         bool windowsMode = windowToggleMode.isOn;

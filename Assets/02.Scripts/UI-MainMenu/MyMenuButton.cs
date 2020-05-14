@@ -16,13 +16,13 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     [SerializeField] protected MyMenuButtonGroup menuButtonGroup;
     public Animator animator;
-    //[SerializeField] AnimatorFunctions animatorFunctions;
 
     public State currentState;
 
     public bool pressed = false;
 
-    public bool clicked = false;
+    private ButtonClicked buttonClicked;
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -41,13 +41,13 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
         menuButtonGroup.OnTabExit(this);
     }
 
-    // Start is called before the first frame update
+
     void Start()
     {
         currentState = State.idle;
+        buttonClicked = GetComponent<ButtonClicked>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(currentState == State.selected)
@@ -73,7 +73,7 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     public void ButtonClicked()
     {
-        clicked = !clicked;
+        buttonClicked.ButtonEvent(this);
     }
 
     public void setState(string tag)

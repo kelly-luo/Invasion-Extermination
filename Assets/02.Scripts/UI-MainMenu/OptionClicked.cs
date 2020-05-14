@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OptionClicked : MonoBehaviour
+public class OptionClicked : ButtonClicked
 {
     private MyMenuButton menuButton;
     public GameObject frame;
@@ -17,14 +17,20 @@ public class OptionClicked : MonoBehaviour
     void Update()
     {
 
-        if(menuButton.name == "Exit")
-        {
-            Application.Quit();
-        }
+  
 
-        if (menuButton.clicked)
+    }
+
+    public override void ButtonEvent(MyMenuButton menuButton)
+    {
+        //if (menuButton.name == "Exit")
+        //{
+        //    Application.Quit();
+        //}
+
+        if (frame.activeSelf == false)
         {
-            GobalFrame.bringToView(frame,menuButton);
+            GobalFrame.bringToView(frame, menuButton);
         }
         else
         {
@@ -32,6 +38,6 @@ public class OptionClicked : MonoBehaviour
         }
 
         inView = GobalFrame.frameInView;
-
     }
+
 }

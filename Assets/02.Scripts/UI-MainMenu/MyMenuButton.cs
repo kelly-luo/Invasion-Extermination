@@ -1,20 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-public interface IMyMenuButton
-{
-    void click();
-    void OnPointerClick(PointerEventData eventData);
-    void OnPointerEnter(PointerEventData eventData);
-    void OnPointerExit(PointerEventData eventData);
-    void setState(string tag);
-
-    ButtonClicked getButtonClicked();
-    void setButtonClicked(ButtonClicked buttonClicked);
-}
-
-public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler, IMyMenuButton
+public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
 
     public enum State
@@ -33,7 +20,39 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
     public bool pressed = false;
 
     public ButtonClicked buttonClicked;
-  
+
+
+    void Start()
+    {
+        currentState = State.idle;
+        buttonClicked = GetComponent<ButtonClicked>();
+    }
+
+    void Update()
+    {
+        
+        if (currentState == State.selected)
+        {
+            animator.SetBool("Selected", true);
+            if (pressed == true)
+            {
+                animator.SetBool("Pressed", true);
+                currentState = State.pressed;
+            }
+        }
+        else if (currentState == State.pressed)
+        {
+            animator.SetBool("Pressed", false);
+            pressed = false;
+            currentState = State.selected;
+        }
+        if (currentState == State.deselected)
+        {
+            animator.SetBool("Selected", false);
+        }
+
+    }
+
 
     public ButtonClicked getButtonClicked()
     {
@@ -60,37 +79,6 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
     public void OnPointerExit(PointerEventData eventData)
     {
         menuButtonGroup.OnTabExit(this);
-    }
-
-
-    void Start()
-    {
-        currentState = State.idle;
-        buttonClicked = GetComponent<ButtonClicked>();
-    }
-
-    void Update()
-    {
-        if (currentState == State.selected)
-        {
-            animator.SetBool("Selected", true);
-            if (pressed == true)
-            {
-                animator.SetBool("Pressed", true);
-                currentState = State.pressed;
-            }
-        }
-        else if (currentState == State.pressed)
-        {
-            animator.SetBool("Pressed", false);
-            pressed = false;
-            currentState = State.selected;
-        }
-        if (currentState == State.deselected)
-        {
-            animator.SetBool("Selected", false);
-        }
-
     }
 
     public void click()

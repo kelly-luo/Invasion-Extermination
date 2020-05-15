@@ -7,12 +7,13 @@ using UnityEngine;
 public class ButtonClicked : MonoBehaviour
 {
     [Test]
-    public void frame_appears_detects_click()
+    public void frame_appears_Menu()
     {
         //ARRANGE
-        IMyMenuButton button = Substitute.For<IMyMenuButton>();
+        MyMenuButton button = new MyMenuButton();
         OptionClicked optionClick = new OptionClicked();
         GameObject frame = new GameObject();
+        frame.SetActive(false);
         optionClick.setFrame(frame);
         button.setButtonClicked(optionClick);
         //ACT
@@ -21,4 +22,24 @@ public class ButtonClicked : MonoBehaviour
         bool actual = frame.activeSelf;
         Assert.AreEqual(true, actual);
     }
+
+
+    [Test]
+    public void frame_disappears_Menu()
+    {
+        //ARRANGE
+        MyMenuButton button = new MyMenuButton();
+        OptionClicked optionClick = new OptionClicked();
+        GameObject frame = new GameObject();
+        frame.SetActive(false);
+        optionClick.setFrame(frame);
+        button.setButtonClicked(optionClick);
+        button.click();
+        //ACT
+        button.click();
+        //ASSERT
+        bool actual = frame.activeSelf;
+        Assert.AreEqual(false, actual);
+    }
+
 }

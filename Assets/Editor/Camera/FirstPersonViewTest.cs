@@ -29,7 +29,7 @@ namespace Tests
             firstPersonView.Init(targetGameObject.transform, cameraRigGameObject.transform, cameraGameObject.transform, mock);
             firstPersonView.IsSmooth = false;
             firstPersonView.IsClampOnRotatingXAxis = false;
-         }
+        }
 
         // A Test behaves as an ordinary method
         [Test]
@@ -51,7 +51,7 @@ namespace Tests
         }
 
         [Test]
-        public void RotateView_RotationMinClampTest()
+        public void RotateView_RotationMinClampTest()   
         {
             SetUpTest();
 

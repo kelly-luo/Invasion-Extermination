@@ -11,12 +11,14 @@ public class UnityServiceManager : IUnityServiceManager
     public float GetAxis(string inputKey)
     {
         return Input.GetAxis(inputKey);
+
     }
 
     public bool GetKeyUp(KeyCode key)
     {
         return Input.GetKeyUp(key);
     }
+
 
     public bool GetKeyDown(KeyCode key)
     {

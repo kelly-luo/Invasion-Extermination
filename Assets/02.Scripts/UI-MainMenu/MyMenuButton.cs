@@ -59,16 +59,15 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
         return buttonClicked;
     }
 
-    public void setButtonClicked(ButtonClicked buttonClicked)
-    {
-        this.buttonClicked = buttonClicked;
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         menuButtonGroup.OnTabEnter(this);
         click();
 
+    }
+    public void click()
+    {
+        buttonClicked.ButtonEvent(this);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -81,10 +80,12 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
         menuButtonGroup.OnTabExit(this);
     }
 
-    public void click()
+
+    public void setButtonClicked(ButtonClicked buttonClicked)
     {
-        buttonClicked.ButtonEvent(this);
+        this.buttonClicked = buttonClicked;
     }
+
 
     public void setState(string tag)
     {

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 
-[System.Serializable]
+
 [CreateAssetMenu(menuName = "PluggableScript/Stats/PlayerStats")]
+[System.Serializable]
 public class PlayerStats : ObjectStats
 {
 
@@ -15,9 +16,9 @@ public class PlayerStats : ObjectStats
     public PlayerStats(PlayerStateController player)
     {
         position = new float[3];
-        //position[0] = player.Character.position.x;
-        //position[1] = player.Character.position.y;
-        //position[2] = player.Character.position.z;
+        position[0] = player.Transform.position.x;
+        position[1] = player.Transform.position.y;
+        position[2] = player.Transform.position.z;
     }
 
 }

@@ -276,6 +276,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         position.y = data.position[1];
         position.z = data.position[2];
 
+        playerTranslate.Character.position = position;
         Transform.position = position;
     }
 

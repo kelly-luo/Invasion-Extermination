@@ -9,18 +9,24 @@ public static class SaveSystem
     public static void SavePlayer(PlayerStateController player)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/playerSaveFiles";
+        string path = Application.persistentDataPath + "/playerSaveFile";
 
         FileStream stream = new FileStream(path, FileMode.Create);
         PlayerStats data = new PlayerStats(player);
 
         formatter.Serialize(stream, data);
         stream.Close();
+
+        //StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/playerDataText.txt");
+        //sw.WriteLine(data.position[0]);
+        //sw.WriteLine(data.position[1]);
+        //sw.WriteLine(data.position[2]);
+        //sw.Close();
     }
 
     public static PlayerStats LoadPlayer()
     {
-        string path = Application.persistentDataPath + "/playerSaveFiles";
+        string path = Application.persistentDataPath + "/playerSaveFile";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

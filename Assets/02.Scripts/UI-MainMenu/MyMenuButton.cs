@@ -1,9 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
+
+public interface IMyMenuButton
+{
+    void click();
+    void OnPointerClick(PointerEventData eventData);
+    void OnPointerEnter(PointerEventData eventData);
+    void OnPointerExit(PointerEventData eventData);
+    void setState(string tag);
+
+    ButtonClicked getButtonClicked();
+    void setButtonClicked(ButtonClicked buttonClicked);
+}
+
+public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler, IMyMenuButton
 {
 
     public enum State
@@ -21,14 +32,24 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     public bool pressed = false;
 
-    private ButtonClicked buttonClicked;
+    public ButtonClicked buttonClicked;
+  
 
+    public ButtonClicked getButtonClicked()
+    {
+        return buttonClicked;
+    }
+
+    public void setButtonClicked(ButtonClicked buttonClicked)
+    {
+        this.buttonClicked = buttonClicked;
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         menuButtonGroup.OnTabEnter(this);
-        ButtonClicked();
-       
+        click();
+
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -50,15 +71,16 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     void Update()
     {
-        if(currentState == State.selected)
+        if (currentState == State.selected)
         {
             animator.SetBool("Selected", true);
-            if(pressed == true)
+            if (pressed == true)
             {
                 animator.SetBool("Pressed", true);
                 currentState = State.pressed;
             }
-        }else if(currentState == State.pressed)
+        }
+        else if (currentState == State.pressed)
         {
             animator.SetBool("Pressed", false);
             pressed = false;
@@ -68,10 +90,10 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
         {
             animator.SetBool("Selected", false);
         }
-       
+
     }
 
-    public void ButtonClicked()
+    public void click()
     {
         buttonClicked.ButtonEvent(this);
     }

@@ -7,26 +7,14 @@ public class OptionClicked : ButtonClicked
     private MyMenuButton menuButton;
     public GameObject frame;
     public GameObject inView;
-    // Start is called before the first frame update
+
     void Start()
     {
         menuButton = GetComponent<MyMenuButton>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-  
-
-    }
-
     public override void ButtonEvent(MyMenuButton menuButton)
     {
-        //if (menuButton.name == "Exit")
-        //{
-        //    Application.Quit();
-        //}
 
         if (frame.activeSelf == false)
         {
@@ -38,6 +26,16 @@ public class OptionClicked : ButtonClicked
         }
 
         inView = GobalFrame.frameInView;
+    }
+
+    public GameObject getInView()
+    {
+        return inView;
+    }
+
+    public void setFrame(GameObject frame)
+    {
+        this.frame = frame;
     }
 
 }

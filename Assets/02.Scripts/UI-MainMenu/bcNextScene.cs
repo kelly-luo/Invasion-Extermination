@@ -11,7 +11,8 @@ public class bcNextScene : ButtonClicked
     public override void ButtonEvent(MyMenuButton menuButton)
     {
         mapID = mapSelect.getMap();
-        SceneManager.LoadScene(mapID, LoadSceneMode.Additive);
+        SceneManager.LoadScene(mapID, LoadSceneMode.Single);
+       
     }
 
 }

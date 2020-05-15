@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/01.Scenes/Test/Invex.unity
     guid: bf5156e5d4a8d2c49948acb035924d81
+  - enabled: 1
+    path: Assets/01.Scenes/HUD-test.unity
+    guid: 217b60a6bb9dd29418f6333877202162
   m_configObjects: {}

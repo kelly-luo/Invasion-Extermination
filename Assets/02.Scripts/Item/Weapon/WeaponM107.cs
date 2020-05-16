@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-    
-public class WeaponAK74 : MonoBehaviour, ImWeapon
+
+public class WeaponM107 : MonoBehaviour, ImWeapon
 {
 
     #region ID

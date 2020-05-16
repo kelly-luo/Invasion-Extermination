@@ -6,8 +6,6 @@ using UnityEngine;
 public interface ImWeapon : ImItem
 {
 
-    GameObject WeaponObject { get;}
-
     float Damage { get; set; }
 
     int MaxBullet { get; }

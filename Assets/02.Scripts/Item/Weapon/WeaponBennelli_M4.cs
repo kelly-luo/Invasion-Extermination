@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-    
-public class WeaponAK74 : MonoBehaviour, ImWeapon
+
+public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
 {
 
     #region ID
-
     public int EntityID { get; }
     public readonly int instanceID;
     public int InstanceID
@@ -69,10 +68,10 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     public GameObject Fire()
     {
+        RaycastHit hit;
         // required delay
         OnShotFire?.Invoke();
 
-        RaycastHit hit;
         if (Physics.Raycast(gameObject.transform.position, gameObject.transform.forward, out hit, 100))
         {
 

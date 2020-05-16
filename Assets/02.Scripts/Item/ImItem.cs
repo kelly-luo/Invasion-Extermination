@@ -6,7 +6,7 @@ public interface ImItem
 {
     int EntityID { get; }
 
-    int InstanceID { get; set; }
+    int InstanceID { get; }
 
     int LimitStacking { get; }
 }

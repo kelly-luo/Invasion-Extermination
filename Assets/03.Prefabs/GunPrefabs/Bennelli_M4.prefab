@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4243371153570508}
   - component: {fileID: 33898383997488124}
   - component: {fileID: 23904141403194016}
+  - component: {fileID: 2747903071366026490}
   m_Layer: 0
   m_Name: Bennelli_M4
   m_TagString: Untagged
@@ -81,6 +82,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &2747903071366026490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236257789494122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a307457d095fd34c89c8680e09e391b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1326079549577358
 GameObject:
   m_ObjectHideFlags: 0

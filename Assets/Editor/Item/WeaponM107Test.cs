@@ -6,9 +6,9 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class WeaponAK74Test
+    public class WeaponM107Test
     {
-        WeaponAK74 weaponClass;
+        WeaponM107 weaponClass;
         GameObject weapon;
         GameObject target;
 
@@ -16,12 +16,12 @@ namespace Tests
         public void SetUpTest()
         {
             weapon = new GameObject();
-            weaponClass = weapon.AddComponent<WeaponAK74>();
+            weaponClass = weapon.AddComponent<WeaponM107>();
 
             target = new GameObject();
 
-            target.transform.position = new Vector3(0f,30f,50f);
-           
+            target.transform.position = new Vector3(0f, 30f, 50f);
+
             BoxCollider boxCollider = target.AddComponent<BoxCollider>();
             boxCollider.size = new Vector3(10f, 10f, 10f);
 
@@ -95,4 +95,3 @@ namespace Tests
 
     }
 }
-    

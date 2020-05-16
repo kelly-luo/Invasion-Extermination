@@ -12,7 +12,7 @@ public class ThirdPersonView : ICameraView
     public float XSensitivity { get; set; }
     public float YSensitivity { get; set; }
 
-    public IUserInputManager UserInput { get; set; }
+    public IUnityServiceManager UnityService { get; set; }
 
     public float YRot { get; set; }
     public float XRot { get; set; }
@@ -49,7 +49,7 @@ public class ThirdPersonView : ICameraView
         this.Distance = distance;
     }
 
-    public void Init(Transform target,Transform cameraRig, Transform camera,  IUserInputManager userInput)
+    public void Init(Transform target,Transform cameraRig, Transform camera,  IUnityServiceManager userInput)
     {
         this.target = target;
         this.cameraRig = cameraRig;
@@ -57,14 +57,14 @@ public class ThirdPersonView : ICameraView
 
         this.cameraRigRot = cameraRig.localRotation;
         this.cameraRot = camera.localRotation;
-        this.UserInput = userInput;
+        this.UnityService = userInput;
 
     }
 
     public void RotateView()
     {
-        YRot = UserInput.GetAxis("Mouse X") * XSensitivity;
-        XRot = UserInput.GetAxis("Mouse Y") * YSensitivity;
+        YRot = UnityService.GetAxis("Mouse X") * XSensitivity;
+        XRot = UnityService.GetAxis("Mouse Y") * YSensitivity;
 
         cameraRigRot *= Quaternion.Euler(0, YRot, 0f);
         cameraRot *= Quaternion.Euler(-XRot, 0f, 0f);

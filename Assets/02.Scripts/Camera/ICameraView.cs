@@ -14,7 +14,7 @@ public interface ICameraView
     Quaternion CameraRigRot { get; set; }
     Quaternion CameraRot { get; set; }    
 
-    void Init(Transform target, Transform cameraRig, Transform camera, IUserInputManager userInput);
+    void Init(Transform target, Transform cameraRig, Transform camera, IUnityServiceManager userInput);
 
     void RotateView();
 

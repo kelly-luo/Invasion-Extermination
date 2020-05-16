@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem
 {
-    public static void SavePlayer(PlayerStateController player)
+    public static void SavePlayer(SavePlayerLocation player)
     {
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/playerSaveFile";
@@ -17,11 +17,11 @@ public static class SaveSystem
         formatter.Serialize(stream, data);
         stream.Close();
 
-        //StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/playerDataText.txt");
-        //sw.WriteLine(data.position[0]);
-        //sw.WriteLine(data.position[1]);
-        //sw.WriteLine(data.position[2]);
-        //sw.Close();
+        StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/playerDataText.txt");
+        sw.WriteLine(data.position[0]);
+        sw.WriteLine(data.position[1]);
+        sw.WriteLine(data.position[2]);
+        sw.Close();
     }
 
     public static PlayerStats LoadPlayer()

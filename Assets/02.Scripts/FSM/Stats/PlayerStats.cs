@@ -13,12 +13,12 @@ public class PlayerStats : ObjectStats
     public int Level { get; set; }
     public float[] position;
 
-    public PlayerStats(PlayerStateController player)
+    public PlayerStats(SavePlayerLocation player)
     {
         position = new float[3];
-        position[0] = player.Transform.position.x;
-        position[1] = player.Transform.position.y;
-        position[2] = player.Transform.position.z;
+        position[0] = player.transform.position.x;
+        position[1] = player.transform.position.y;
+        position[2] = player.transform.position.z;
     }
 
 }

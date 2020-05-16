@@ -4,10 +4,10 @@ using UnityEngine;
 
 public interface ImItem 
 {
-    int EntityID { get; set; }
+    int EntityID { get; }
 
-    int InstanceID { get; }
+    int InstanceID { get; set; }
 
-    int limitStacking { get; }
+    int LimitStacking { get; }
 }
 

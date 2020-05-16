@@ -8,21 +8,86 @@ namespace Tests
 {
     public class WeaponAK74Test
     {
+        WeaponAK74 weaponClass;
+        GameObject target;
+
+        [SetUp]
+        public void SetUpTest()
+        {
+            weaponClass = new WeaponAK74();
+
+            target = new GameObject();
+
+            target.transform.position = new Vector3(0f,30f,50f);
+           
+            BoxCollider boxCollider = target.AddComponent<BoxCollider>();
+            boxCollider.size = new Vector3(10f, 10f, 10f);
+
+        }
+
         // A Test behaves as an ordinary method
         [Test]
-        public void WeaponAK74TestSimplePasses()
+        public void BulletRunOut_BulletRunOutTest()
         {
+            this.SetUpTest();
+
+            var a = 1;
+            weaponClass.NumOfBullet = weaponClass.MaxBullet;
+            weaponClass.OnBulletRunOut += () => { a++; };
+
+            for (int i = 0; i < weaponClass.MaxBullet; i--)
+                weaponClass.NumOfBullet--;
+
+            Assert.AreEqual(2, a);
+
             // Use the Assert class to test conditions
         }
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator WeaponAK74TestWithEnumeratorPasses()
+        [Test]
+        public void BulletRunOut_ReloadTest()
         {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
+            this.SetUpTest();
+
+            var a = 1;
+            var NumOfBulletLeft = 13;
+
+            weaponClass.NumOfBullet = weaponClass.MaxBullet;
+            weaponClass.OnReload += () => { a++; };
+
+            for (int i = 0; i < weaponClass.MaxBullet; i++)
+                weaponClass.NumOfBullet--;
+            //Player manually reload when they run out of ammo
+            weaponClass.Reload(ref NumOfBulletLeft);
+
+            Assert.AreEqual(2, a);
+            Assert.AreEqual(0, NumOfBulletLeft);
+            Assert.AreEqual(13, weaponClass.NumOfBullet);
         }
+
+        [Test]
+        public void Fire_Test()
+        {
+            this.SetUpTest();
+
+            weaponClass.WeaponObject.transform.LookAt(target.transform);
+
+            GameObject bulletHitObject = weaponClass.Fire();
+
+            Assert.AreEqual(target, bulletHitObject);
+        }
+            
+        [Test]
+        public void Fire_OnShotFireTest()
+        {
+            this.SetUpTest();
+            var a = 1;
+
+            weaponClass.OnShotFire += () => { a++; };
+            weaponClass.Fire();
+
+            Assert.AreEqual(2, a);
+        }
+
     }
 }
+    

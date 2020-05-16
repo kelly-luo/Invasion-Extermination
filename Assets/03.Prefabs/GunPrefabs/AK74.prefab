@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 4519716788627816}
   - component: {fileID: 33705837635148522}
   - component: {fileID: 23860282398207496}
+  - component: {fileID: -5830662300139916627}
   m_Layer: 0
   m_Name: AK74
   m_TagString: Untagged
@@ -240,6 +241,18 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &-5830662300139916627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487774384131766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bfc16de0344c1c419dd12ae76db4808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1927369336514790
 GameObject:
   m_ObjectHideFlags: 0

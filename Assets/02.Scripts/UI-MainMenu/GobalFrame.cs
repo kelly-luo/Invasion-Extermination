@@ -17,7 +17,6 @@ public class GobalFrame : MonoBehaviour
             if (frameInView != newFrame)
             {
                 frameInView.SetActive(false);
-                currentButton.clicked = false;
                 currentButton = newButton;
                 frameInView = newFrame;
                 frameInView.SetActive(true);

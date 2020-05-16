@@ -7,6 +7,7 @@ public class PlayerTranslate : ICharacterTranslate
     public Transform Character { get; set; }
     public float Speed { get; set; } = 1.5f;
     public Vector3 MoveDirection { get; set; }
+    public IUnityServiceManager UnityService { get; set; }
 
     private bool isRunning = false;
     public bool IsRunning 
@@ -48,13 +49,13 @@ public class PlayerTranslate : ICharacterTranslate
     public PlayerTranslate(Transform character)
     {
         this.Character = character;
+        this.UnityService = new UnityServiceManager();
     } 
-
 
     public void TranslateCharacter(Vector3 moveDir)
     {
         MoveDirection = moveDir;
-        Character.Translate(moveDir.normalized * Speed * Time.deltaTime, Space.World);
+        Character.Translate(moveDir.normalized * Speed * UnityService.DeltaTime, Space.World);
     }
 
 }

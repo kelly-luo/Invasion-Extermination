@@ -105,7 +105,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     // state will change depends on this class (speed) 
     public ICharacterTranslate playerTranslate { get; set; }
-    public IUserInputManager UserInput { get; set; }
+    public IUnityServiceManager UnityService { get; set; }
 
     #region MonoBehaviour Base Function
     void Awake()
@@ -127,9 +127,9 @@ public class PlayerStateController : MonoBehaviour, IStateController
         CameraRigTr = CameraRig.GetComponent<Transform>();
         CameraTr = CameraCtrl.GetCameraTransform();
 
-        if (UserInput == null)
+        if (UnityService == null)
         {
-            UserInput = new UserInputManager();
+            UnityService = new UnityServiceManager();
         }
     }
 
@@ -140,9 +140,13 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
         //update scene\
         CurrentState.UpdateState(this);
-        if (UserInput.GetKeyUp(KeyCode.LeftShift))
+        if (UnityService.GetKeyUp(KeyCode.LeftShift))
         {
             IsRunning = !isRunning;
+        }
+        if (UnityService.GetKeyUp(KeyCode.LeftControl))
+        {
+            IsRunning = !isSitting;
         }
     }
 
@@ -158,8 +162,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         Animator.SetFloat(hashXDirectionSpeed, xSpeed);
         Animator.SetFloat(hashZDirectionSpeed, zSpeed);
-        Debug.Log("XSpeed: " + xSpeed.ToString() + " YSpeed: " + zSpeed.ToString());
-        if ((xSpeed > 0) || (zSpeed > 0))
+
+        if ((xSpeed > 0) || (xSpeed < 0) || (zSpeed > 0) || (zSpeed < 0))
             this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body . 
     }
     #endregion
@@ -229,9 +233,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     private void RotateAvatarTowardSight()
     {
+        var rotationSpeed = 150f;
         var bodyRot = Transform.localRotation;
+        var lookRotation = Quaternion.LookRotation(CameraRigTr.forward);
 
-        Transform.localRotation = Quaternion.Slerp(Transform.localRotation, Quaternion.LookRotation(CameraRigTr.forward), Time.deltaTime);
+        float angle = Quaternion.Angle(transform.rotation, lookRotation);
+        float timeToComplete = angle / rotationSpeed;
+        float donePercentage = Mathf.Min(1F, UnityService.DeltaTime / timeToComplete);
+
+        Transform.localRotation = Quaternion.Slerp(Transform.localRotation, lookRotation, donePercentage);
+
         //take the amount of change in body rotation 
         var ChangeRotBody = Transform.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
         //add to Head Rotation
@@ -244,7 +255,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     //check attack timer (so player do not "attack" every frames); 
     public bool CheckIsAttackReady(float duration)
     {
-        StateTimeElapsed += Time.deltaTime;
+        StateTimeElapsed += UnityService.DeltaTime;
         return (StateTimeElapsed >= duration);
     }
 

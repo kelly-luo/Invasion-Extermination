@@ -10,8 +10,8 @@ public class MoveControlAction : Action
     public override void Act(IStateController controller)
     {
         var stateControlller = controller as PlayerStateController;
-        var vertical = stateControlller.UserInput.GetAxis("Vertical");
-        var horizontal = stateControlller.UserInput.GetAxis("Horizontal");
+        var vertical = stateControlller.UnityService.GetAxis("Vertical");
+        var horizontal = stateControlller.UnityService.GetAxis("Horizontal");
         Vector3 moveDir = (stateControlller.CameraRigTr.forward * vertical) 
             + (stateControlller.CameraRigTr.right * horizontal);
 

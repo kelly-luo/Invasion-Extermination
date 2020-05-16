@@ -109,7 +109,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         public FirstPersonView firstPersonView;
         public ThirdPersonView thirdPersonView;
 
-        public void InitView(Transform target, Transform cameraRigTr, Transform cameraTr, IUserInputManager userInput)
+        public void InitView(Transform target, Transform cameraRigTr, Transform cameraTr, IUnityServiceManager userInput)
         {
             firstPersonView = new FirstPersonView(offSetX, offSetY, offSetZ);
             thirdPersonView = new ThirdPersonView(targetOffSet, distance);
@@ -164,7 +164,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
     private Transform cameraRigTr;
     private Transform cameraTr;
 
-    private IUserInputManager userInput;
+    private IUnityServiceManager userInput;
 
     private bool isCursorLocked;
 
@@ -216,7 +216,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
     void Start()
     {
         if (userInput == null)
-            userInput = new UserInputManager();
+            userInput = new UnityServiceManager();
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
         //get the Instance in the cameraView Class and put it in the cameraViewList
         cameraMode.InitView(target.transform, cameraRigTr, cameraTr, userInput);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
+using UnityEngine.EventSystems;
 
 public class PlayerStateController : MonoBehaviour, IStateController
 {
@@ -13,7 +14,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     [field: SerializeField]
     public State RemainState { get; set; }
 
-    [field: SerializeField]
     public ObjectStats Stats { get; set; }
     #endregion state
 
@@ -99,6 +99,23 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #region Input Values
     public float Vertical { get; set; }
     public float Horizontal { get; set; }
+    public bool IsHoldingWeapon { get; set; } = true;
+    #endregion
+
+    #region Weapon Setting
+    public GameObject weapon;
+
+    public ImWeapon weaponClass;
+
+    public float weaponOffX = 0.5f;
+    public float weaponOffY = 0.5f;
+    public float weaponOffZ = 0.5f;
+
+    public Vector3 weaponBob;
+    public float BobFrequency { get; set; } = 10f;
+    public float BobAmount { get; set; } = 0.05f;
+
+
     #endregion
 
     public float StateTimeElapsed { get; set; }
@@ -119,6 +136,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         playerTranslate = new PlayerTranslate(Transform);
         actualHeadRot = headTr.localRotation;
 
+
     }
 
     void Start()
@@ -131,6 +149,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             UnityService = new UnityServiceManager();
         }
+        weaponClass = weapon.GetComponent<WeaponAK74>();
+        weapon.transform.parent = CameraTr;
     }
 
     void Update()
@@ -148,12 +168,21 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             IsRunning = !isSitting;
         }
+
+
+
     }
 
     void LateUpdate()
     {
         RotateNeck();
         RotateHeadAndAvatar(CameraCtrl.YRot);
+        SetWeaponPosition();
+        if (UnityService.GetMouseButtonUp(0))
+        {
+
+            this.Attack();
+        }
     }
     #endregion
 
@@ -164,7 +193,9 @@ public class PlayerStateController : MonoBehaviour, IStateController
         Animator.SetFloat(hashZDirectionSpeed, zSpeed);
 
         if ((xSpeed > 0) || (xSpeed < 0) || (zSpeed > 0) || (zSpeed < 0))
-            this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body . 
+            this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body .
+        
+
     }
     #endregion
 
@@ -252,6 +283,30 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion
 
+    #region GunMoveMotion
+    
+    public void SetWeaponPosition()
+    {
+        Vector3 weaponPosition = new Vector3(weaponBob.x + weaponOffX, weaponBob.y + weaponOffY, weaponBob.z + weaponOffZ);
+        weapon.transform.localPosition = weaponPosition;
+    }
+
+    public void UpdateWeaponBob(float xMovement,float YMovement)
+    {
+        if (Time.deltaTime > 0f)
+        {
+            var bobFactor = (xMovement + YMovement * 0.5f) * 0.5f;
+
+            float xBobValue = Mathf.Sin(UnityService.TimeAtFrame * BobFrequency) * BobAmount * bobFactor;
+            float yBobValue = ((Mathf.Sin(UnityService.TimeAtFrame * BobFrequency * 2f) * 0.5f) + 0.5f) * BobAmount * bobFactor;
+
+            weaponBob.x = xBobValue;
+            weaponBob.y = Mathf.Abs(yBobValue);
+        }
+    }
+
+    #endregion
+
     //check attack timer (so player do not "attack" every frames); 
     public bool CheckIsAttackReady(float duration)
     {
@@ -272,6 +327,19 @@ public class PlayerStateController : MonoBehaviour, IStateController
             this.OnExitState();
         }
     }
+
+    public void Attack()
+    {
+        if(IsHoldingWeapon)
+        {
+            weaponClass.Fire();
+            StartCoroutine(CameraCtrl.ShakeCamera());
+        }
+    }
+
+
+
+
 }
 
 

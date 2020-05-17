@@ -8,6 +8,17 @@ public class UnityServiceManager : IUnityServiceManager
     {
         get { return Time.deltaTime; }
     }
+
+    public float TimeAtFrame
+    {
+        get { return Time.time; }
+    }
+
+    public Vector3 InsideUnitSphere
+    {
+        get { return Random.insideUnitSphere;  }
+    }
+
     public float GetAxis(string inputKey)
     {
         return Input.GetAxis(inputKey);

@@ -11,4 +11,6 @@ public interface ICameraControl
     Transform GetCameraTransform();
 
     Vector3 GetSightDirection();
+
+    IEnumerator ShakeCamera(float duration = 0.05f, float magnitudePos = 0.3f, float magnitudeRot = 0.1f);
 }

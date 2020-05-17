@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 
 public class CameraControl : MonoBehaviour , ICameraControl
 {
@@ -158,13 +158,14 @@ public class CameraControl : MonoBehaviour , ICameraControl
  
     }
 
+
     public GameObject target;
     
     public CameraMode cameraMode;
     private Transform cameraRigTr;
     private Transform cameraTr;
 
-    private IUnityServiceManager userInput;
+    private IUnityServiceManager UnityService;
 
     private bool isCursorLocked;
 
@@ -204,6 +205,9 @@ public class CameraControl : MonoBehaviour , ICameraControl
     }
     #endregion
 
+    #region CameraEffectSetting
+    public bool shakeRotation = true;
+    #endregion
     #region UnityBasicMethod
     void Awake()
     {
@@ -215,19 +219,17 @@ public class CameraControl : MonoBehaviour , ICameraControl
     }
     void Start()
     {
-        if (userInput == null)
-            userInput = new UnityServiceManager();
+        if (UnityService == null)
+            UnityService = new UnityServiceManager();
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
         //get the Instance in the cameraView Class and put it in the cameraViewList
-        cameraMode.InitView(target.transform, cameraRigTr, cameraTr, userInput);
+        cameraMode.InitView(target.transform, cameraRigTr, cameraTr, UnityService);
 
     }
 
     void Update()
     {
-        cameraMode.CurrentView.RotateView();
-        // this is just tesing key to change the view point.
-        if(userInput.GetKeyDown(KeyCode.F5))
+        if(UnityService.GetKeyDown(KeyCode.F5))
         {
             cameraMode.NextView();
         }
@@ -238,6 +240,8 @@ public class CameraControl : MonoBehaviour , ICameraControl
 
     void LateUpdate()
     {
+        cameraMode.CurrentView.RotateView();
+        // this is just tesing key to change the view point.
         cameraMode.CurrentView.SetCameraPos();
 
     }
@@ -252,13 +256,14 @@ public class CameraControl : MonoBehaviour , ICameraControl
 
     private void LockUpdate()
     {
-        if (userInput.GetKeyUp(KeyCode.Escape))
+
+        if (UnityService.GetKeyUp(KeyCode.Escape))
         {
             isCursorLocked = false;
         }
-        else if (userInput.GetMouseButtonUp(0))
+        else if (UnityService.GetMouseButtonUp(0))
         {
-            isCursorLocked = true;
+             isCursorLocked = true;
         }
 
         if (isCursorLocked)
@@ -273,7 +278,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
     }
     #endregion
-     
+    
     #region CameraRelatedMethod
 
     public Transform GetCameraTransform()
@@ -284,5 +289,33 @@ public class CameraControl : MonoBehaviour , ICameraControl
     {
         return cameraMode.CurrentView.GetCameraDirection();
     }
+
+    public IEnumerator ShakeCamera(float duration = 0.05f, float magnitudePos = 0.03f, float magnitudeRot = 0.1f)
+    {
+        float passTime = 0.0f;
+
+        while (passTime < duration)
+        {
+            Vector3 shakePos = UnityService.InsideUnitSphere;
+
+            cameraRigTr.localPosition = shakePos * magnitudePos;
+
+            if (shakeRotation)
+            {
+                //get random rotation from PerlineNoise function math lib
+                Vector3 shakeRot = new Vector3(0, 0, Mathf.PerlinNoise(UnityService.TimeAtFrame * magnitudeRot, 0.0f));
+
+                cameraRigTr.localRotation = Quaternion.Euler(shakeRot);
+            }
+            passTime += UnityService.DeltaTime;
+            Debug.Log("asdas");
+
+
+            yield return null;
+        }
+
+    }
     #endregion
+
+
 }

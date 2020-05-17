@@ -17,8 +17,8 @@ public class MoveControlAction : Action
 
         stateControlller.playerTranslate.TranslateCharacter(moveDir);
         stateControlller.MoveAnimation(horizontal, vertical);
+        stateControlller.UpdateWeaponBob(horizontal, vertical);
 
-        
     }
 }
     

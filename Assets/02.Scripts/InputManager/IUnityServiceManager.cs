@@ -13,4 +13,8 @@ public interface IUnityServiceManager
     bool GetMouseButtonUp(int button);
 
     float DeltaTime { get; }
+
+    float TimeAtFrame { get; }
+
+    Vector3 InsideUnitSphere { get; }
 }

@@ -17,22 +17,22 @@ public class SavePlayerLocation : MonoBehaviour
 
     //}
 
-    public void SavePlayer()
-    {
-        Debug.Log("Button pressed");
-        SaveSystem.SavePlayer(this);
-    }
+    //public void SavePlayer()
+    //{
+    //    Debug.Log("Button pressed");
+    //    SaveSystem.SavePlayer(this);
+    //}
 
-    public void LoadPlayer()
-    {
-        PlayerStats data = SaveSystem.LoadPlayer();
+    //public void LoadPlayer()
+    //{
+    //    PlayerStats data = SaveSystem.LoadPlayer();
 
-        Vector3 position;
-        position.x = data.position[0];
-        position.y = data.position[1];
-        position.z = data.position[2];
+    //    Vector3 position;
+    //    position.x = data.position[0];
+    //    position.y = data.position[1];
+    //    position.z = data.position[2];
 
-        //playerTranslate.Character.position = position;
-        transform.position = position;
-    }
+    //    //playerTranslate.Character.position = position;
+    //    transform.position = position;
+    //}
 }

@@ -2,6 +2,7 @@
 
 namespace IEGame.FiniteStateMachine
 {
+    [System.Serializable]
     public abstract class ObjectStats : ScriptableObject
     {
         [field: SerializeField]

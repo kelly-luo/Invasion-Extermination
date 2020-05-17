@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-
-public class CameraControl : MonoBehaviour , ICameraControl
+public class CameraControl : MonoBehaviour, ICameraControl
 {
     [Serializable]
     public class CameraMode
@@ -15,7 +15,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
 
         public ICameraView CurrentView
         {
-            get { return cameraViewList[viewListIdx];}
+            get { return cameraViewList[viewListIdx]; }
         }
         private int viewListIdx = 0;
         public int ViewListIdx
@@ -35,12 +35,12 @@ public class CameraControl : MonoBehaviour , ICameraControl
             get { return smooth; }
             set
             {
-                if(value != smooth)
+                if (value != smooth)
                 {
                     smooth = value;
                     foreach (var view in cameraViewList)
                         view.IsSmooth = value;
-                }     
+                }
             }
         }
 
@@ -50,10 +50,10 @@ public class CameraControl : MonoBehaviour , ICameraControl
             get { return smoothTime; }
             set
             {
-                if(value != smoothTime)
+                if (value != smoothTime)
                 {
                     smoothTime = value;
-                    foreach(var view in cameraViewList)
+                    foreach (var view in cameraViewList)
                     {
                         view.SmoothTime = value;
                     }
@@ -139,8 +139,8 @@ public class CameraControl : MonoBehaviour , ICameraControl
 
         public void TransferRotationData()
         {
-            var currentCameraRigRot = cameraViewList [viewListIdx].CameraRigRot;
-            var currentCameraRot = cameraViewList [viewListIdx].CameraRot;
+            var currentCameraRigRot = cameraViewList[viewListIdx].CameraRigRot;
+            var currentCameraRot = cameraViewList[viewListIdx].CameraRot;
         }
 
         public ICameraView NextView()
@@ -155,11 +155,11 @@ public class CameraControl : MonoBehaviour , ICameraControl
             cameraViewList[viewListIdx].CameraRot = currentCameraRot;
             return CurrentView;
         }
- 
+
     }
 
     public GameObject target;
-    
+
     public CameraMode cameraMode;
     private Transform cameraRigTr;
     private Transform cameraTr;
@@ -194,7 +194,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
         set
         {
-            if(!value)
+            if (!value)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -227,7 +227,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
     {
         cameraMode.CurrentView.RotateView();
         // this is just tesing key to change the view point.
-        if(userInput.GetKeyDown(KeyCode.F5))
+        if (userInput.GetKeyDown(KeyCode.F5))
         {
             cameraMode.NextView();
         }
@@ -258,7 +258,10 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
         else if (userInput.GetMouseButtonUp(0))
         {
-            isCursorLocked = true;
+            if (!IsPointerOverUIObject())
+            {
+                isCursorLocked = true;
+            };
         }
 
         if (isCursorLocked)
@@ -273,7 +276,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
     }
     #endregion
-     
+
     #region CameraRelatedMethod
 
     public Transform GetCameraTransform()
@@ -285,4 +288,13 @@ public class CameraControl : MonoBehaviour , ICameraControl
         return cameraMode.CurrentView.GetCameraDirection();
     }
     #endregion
+
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
 }

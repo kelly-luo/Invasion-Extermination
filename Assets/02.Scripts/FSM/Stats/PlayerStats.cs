@@ -6,14 +6,14 @@ using IEGame.FiniteStateMachine;
 
 [CreateAssetMenu(menuName = "PluggableScript/Stats/PlayerStats")]
 [System.Serializable]
-public class PlayerStats : ObjectStats
+public class PlayerStats
 {
 
     [field: SerializeField]
     public int Level { get; set; }
     public float[] position;
 
-    public PlayerStats(SavePlayerLocation player)
+    public PlayerStats(PlayerStateController player)
     {
         position = new float[3];
         position[0] = player.transform.position.x;

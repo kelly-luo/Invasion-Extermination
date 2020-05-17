@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 
 public class CameraControl : MonoBehaviour , ICameraControl
 {
@@ -258,7 +258,10 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
         else if (userInput.GetMouseButtonUp(0))
         {
-            isCursorLocked = true;
+            if(!IsPointerOverUIObject())
+            {
+                isCursorLocked = true;
+            };
         }
 
         if (isCursorLocked)
@@ -285,4 +288,13 @@ public class CameraControl : MonoBehaviour , ICameraControl
         return cameraMode.CurrentView.GetCameraDirection();
     }
     #endregion
+
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
 }

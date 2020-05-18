@@ -179,7 +179,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     void Update()
     {
         //update scene
-        CurrentState.UpdateState(this);
+    
         if (UnityService.GetKeyUp(KeyCode.LeftShift))
         {
             IsRunning = !isRunning;

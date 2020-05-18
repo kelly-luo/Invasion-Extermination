@@ -6,7 +6,6 @@ using IEGame.FiniteStateMachine;
 [CreateAssetMenu(menuName = "PluggableScript/Stats/PlayerStats")]
 public class PlayerStats : ObjectStats
 {
-
     [field: SerializeField]
     public int Level { get; set; }
 }

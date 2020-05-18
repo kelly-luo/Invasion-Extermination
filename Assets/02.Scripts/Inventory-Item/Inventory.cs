@@ -13,14 +13,16 @@ public class Inventory
 
     public void Add(Item item)
     {
-        inventory.Add(item.InstanceId, item);
-        if (Primary == null)
-        {
-            SetPrimary(item);
-        }
-        else if (Secondary == null)
-        {
-            SetSecondary(item);
+        if (inventory.Count < 24) { 
+            inventory.Add(item.InstanceId, item);
+            if (Primary == null)
+            {
+                SetPrimary(item);
+            }
+            else if (Secondary == null)
+            {
+                SetSecondary(item);
+            }
         }
     }
 

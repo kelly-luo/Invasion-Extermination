@@ -9,12 +9,16 @@ public class UIManager : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    private IUnityServiceManager UnityServiceManager = new UnityServiceManager();
+
     public Slider healthView;
     public Image healthFill;
 
     public TMP_Text scoreView;
     public TMP_Text moneyView;
     public TMP_Text ammoView;
+
+    public GameObject inventoryPanel;
 
     //Temp values, change to 0 after testing
     public int money;
@@ -38,6 +42,12 @@ public class UIManager : MonoBehaviour
         setAmmo(ammo);
         setMoney(money);
         setScore(score);
+
+        if (UnityServiceManager.GetKeyDown(KeyCode.I))
+        {
+           openInventory();
+        }
+
     }
     public void setHealth(int health)
     {
@@ -66,6 +76,10 @@ public class UIManager : MonoBehaviour
         else ammoView.text = formatValue(ammo);
     }
 
+    public void openInventory()
+    {
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+    }
     private string formatValue(int value)
     {
         if(value < 10)
@@ -78,4 +92,5 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
 }

@@ -7,14 +7,20 @@ namespace US8Tests_SaveLoad
     public class SaveLoadTest
     {
         private PlayerInformation playerInformation;
+        private GameObject player;
+        private TestableSaveSystem saveSystem;
+        private ISaveSystem iSaveSystem;
 
         [SetUp]
         public void Setup()
         {
-            GameObject player = new GameObject();
+            // create a GameObject to attach the PlayerInformation component
+            player = new GameObject();
             playerInformation = player.AddComponent<PlayerInformation>();
 
-            // first initialise the player's stats
+            saveSystem = new TestableSaveSystem();
+
+            // first initialise the player's stats and position
             Vector3 position1 = new Vector3(1f, -7f, 2.55f);
             playerInformation.transform.position = position1;
             playerInformation.Health = 97.2f;
@@ -23,11 +29,18 @@ namespace US8Tests_SaveLoad
             playerInformation.Money = 999999;
         }
 
+        [TearDown]
+        public void Teardown()
+        {
+            //Dispose the player object
+            Object.Destroy(player);
+        }
+
         // Test if the save file exists in the location 
         [Test]
         public void TestSavePlayer_SaveFileExistsAfterSaving()
         {
-            SaveSystem.SavePlayer(playerInformation);
+            saveSystem.Save(playerInformation);
 
             // Path.GetFileName() will return a null if not found
             Assert.IsNotNull(Path.GetFileName(Application.persistentDataPath + "/playerSaveFile"));
@@ -37,7 +50,7 @@ namespace US8Tests_SaveLoad
         [Test]
         public void TestLoadPlayer_LoadedPositionFromFileIsCorrect()
         {
-            SaveSystem.LoadPlayer();
+            saveSystem.Load();
 
             //check for x position
             Assert.AreEqual(1f, playerInformation.transform.position[0]);
@@ -53,7 +66,7 @@ namespace US8Tests_SaveLoad
         [Test]
         public void TestLoadPlayer_LoadedHealthFromFileIsCorrect()
         {
-            SaveSystem.LoadPlayer();
+            saveSystem.Load();
 
             //check for health points
             Assert.AreEqual(97.2f, playerInformation.Health);
@@ -64,7 +77,7 @@ namespace US8Tests_SaveLoad
         [Test]
         public void TestLoadPlayer_LoadedLevelFromFileIsCorrect()
         {
-            SaveSystem.LoadPlayer();
+            saveSystem.Load();
 
             //check for health points
             Assert.AreEqual(10, playerInformation.Level);
@@ -75,7 +88,7 @@ namespace US8Tests_SaveLoad
         [Test]
         public void TestLoadPlayer_LoadedScoreFromFileIsCorrect()
         {
-            SaveSystem.LoadPlayer();
+            saveSystem.Load();
 
             //check for health points
             Assert.AreEqual(3501, playerInformation.Score);
@@ -86,10 +99,28 @@ namespace US8Tests_SaveLoad
         [Test]
         public void TestLoadPlayer_LoadedMoneyFromFileIsCorrect()
         {
-            SaveSystem.LoadPlayer();
+            saveSystem.Load();
 
             //check for health points
             Assert.AreEqual(999999, playerInformation.Money);
+
+        }
+
+        // Test if the saving new player Health and loading is correct
+        [Test]
+        public void TestLoadPlayer_ChangeHealthAndLoadingFromOldSaveIsCorrect()
+        {
+            playerInformation.Health = 97.2f;
+            saveSystem.Save(playerInformation);
+
+            // simulate player losing health
+            playerInformation.Health = 9.271f;
+
+            // simulate the player re-loading from previous save
+            saveSystem.Load();
+
+            //check for health points is still same from previous save
+            Assert.AreEqual(97.2f, playerInformation.Health);
 
         }
     }

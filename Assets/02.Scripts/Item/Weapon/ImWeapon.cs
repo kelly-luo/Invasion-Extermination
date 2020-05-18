@@ -14,9 +14,17 @@ public interface ImWeapon : ImItem
 
     float Delay { get; }
 
+    bool IsShooting { get; }
+
     float ReloadTime { get; set; }
 
     float RequiredScore { get; }
+
+    float ShakeDuration { get; }
+
+    float ShakeMagnitudePos { get; }
+
+    float ShakeMagnitudeRot { get; }
 
     Action OnShotFire { get; set; }
 
@@ -24,7 +32,9 @@ public interface ImWeapon : ImItem
     
     Action OnReload { get; set; }
 
+
     GameObject Fire();
+
 
     void Reload(ref int numOfBulletLeft);
 }

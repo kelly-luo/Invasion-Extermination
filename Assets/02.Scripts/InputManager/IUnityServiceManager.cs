@@ -17,4 +17,5 @@ public interface IUnityServiceManager
     float TimeAtFrame { get; }
 
     Vector3 InsideUnitSphere { get; }
+
 }

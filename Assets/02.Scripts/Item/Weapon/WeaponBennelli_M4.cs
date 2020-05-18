@@ -30,6 +30,26 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
     }
     #endregion
 
+    #region Shake Setting
+
+    public float ShakeDuration { get; } = 0.05f;
+
+    public float ShakeMagnitudePos { get; } = 0.03f;
+
+    public float ShakeMagnitudeRot { get; } = 0.1f;
+
+    private bool isShooting = false;
+
+    public bool IsShooting
+    {
+        get
+        {
+            return isShooting;
+        }
+    }
+
+    #endregion
+
     public float Damage { get; set; } = 20;
 
     public float Delay { get; set; }

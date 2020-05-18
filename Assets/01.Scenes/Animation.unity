@@ -132,6 +132,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AK74
       objectReference: {fileID: 0}
+    - target: {fileID: 1487774384131766, guid: ee329c3cd08e58645834d20702d7f6c6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4519716788627816, guid: ee329c3cd08e58645834d20702d7f6c6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -175,6 +179,11 @@ PrefabInstance:
     - target: {fileID: 4519716788627816, guid: ee329c3cd08e58645834d20702d7f6c6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23860282398207496, guid: ee329c3cd08e58645834d20702d7f6c6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee329c3cd08e58645834d20702d7f6c6, type: 3}
@@ -758,6 +767,7 @@ MonoBehaviour:
   weaponOffY: -0.11
   weaponOffZ: 0.64
   weaponBob: {x: 0, y: 0, z: 0}
+  weaponRebound: {x: 0, y: 0, z: 0}
 --- !u!136 &1616689220
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 public class PlayerStateController : MonoBehaviour, IStateController
 {
@@ -17,8 +18,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public ObjectStats Stats { get; set; }
     #endregion state
 
+    #region Unity Component
     [field: SerializeField]
     public Transform Transform { get; set; }
+
+    #endregion
+
 
     #region Camera Setting
     [field: SerializeField]
@@ -27,6 +32,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public Transform CameraTr { get; set; }
     public ICameraControl CameraCtrl{ get;set;}
+
+
     #endregion 
 
     #region Animation
@@ -115,6 +122,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public float BobFrequency { get; set; } = 10f;
     public float BobAmount { get; set; } = 0.05f;
 
+    public Vector3 weaponRebound;
+
 
     #endregion
 
@@ -129,7 +138,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         neckTr = GameObject.Find("Neck").transform;
         headTr = GameObject.Find("Head").transform;
-
 
         Transform = GetComponent<Transform>();
         Animator = GetComponent<Animator>();
@@ -151,14 +159,26 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
         weaponClass = weapon.GetComponent<WeaponAK74>();
         weapon.transform.parent = CameraTr;
+
+        gameObject.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+
+
+        var components = weapon.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer component in components)
+        {
+            component.shadowCastingMode = ShadowCastingMode.Off;
+        }
+
+        weaponClass.OnShotFire += ShakeCameraWhenShoot;
+        weaponClass.OnShotFire += StartReboundCoroutine;
+        CameraCtrl.OnViewChange += ChangeTheTexturWhenCameraviewChange;
+
+
     }
 
     void Update()
     {
-        // adding check active function .
-
-
-        //update scene\
+        //update scene
         CurrentState.UpdateState(this);
         if (UnityService.GetKeyUp(KeyCode.LeftShift))
         {
@@ -168,8 +188,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             IsRunning = !isSitting;
         }
-
-
 
     }
 
@@ -287,13 +305,14 @@ public class PlayerStateController : MonoBehaviour, IStateController
     
     public void SetWeaponPosition()
     {
-        Vector3 weaponPosition = new Vector3(weaponBob.x + weaponOffX, weaponBob.y + weaponOffY, weaponBob.z + weaponOffZ);
+        Vector3 weaponPosition = new Vector3(weaponBob.x + weaponRebound.x + weaponOffX + weaponRebound.x,
+            weaponBob.y + weaponRebound.y + weaponOffY , weaponBob.z + weaponRebound.z + weaponOffZ);
         weapon.transform.localPosition = weaponPosition;
     }
 
     public void UpdateWeaponBob(float xMovement,float YMovement)
     {
-        if (Time.deltaTime > 0f)
+        if (UnityService.DeltaTime > 0f)
         {
             var bobFactor = (xMovement + YMovement * 0.5f) * 0.5f;
 
@@ -305,6 +324,43 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
     }
 
+    public void UpdateWeaponReboundWhenShoot()
+    {
+        if (UnityService.DeltaTime > 0f)
+        {
+            float xReboundValue = Mathf.Sin(UnityService.TimeAtFrame *90f) * weaponClass.ShakeMagnitudePos * 0.025f;
+
+            float yReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 70f) * weaponClass.ShakeMagnitudePos * 0.1f;
+
+            float zReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 50f) * weaponClass.ShakeMagnitudePos * 0.1f;
+
+            weaponRebound.x = xReboundValue;
+            weaponRebound.y = yReboundValue;
+            weaponRebound.z = zReboundValue;
+        }
+    }
+
+    public IEnumerator KeepUpdateWeaponRebound()
+    {
+        var timeAtShoot = UnityService.TimeAtFrame;
+        //the UpdateRebound  will continue in corutine during delay
+        while(timeAtShoot + weaponClass.Delay > UnityService.TimeAtFrame)
+        {
+            this.UpdateWeaponReboundWhenShoot();
+            yield return null;
+        }
+    }
+
+    public void StartReboundCoroutine()
+    {
+        StartCoroutine(KeepUpdateWeaponRebound());
+    }
+
+    public void ShakeCameraWhenShoot()
+    {
+        StartCoroutine(CameraCtrl.ShakeCamera(weaponClass.ShakeDuration, weaponClass.ShakeMagnitudePos, weaponClass.ShakeMagnitudeRot));
+    }
+
     #endregion
 
     //check attack timer (so player do not "attack" every frames); 
@@ -312,6 +368,9 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         StateTimeElapsed += UnityService.DeltaTime;
         return (StateTimeElapsed >= duration);
+
+        
+
     }
 
     public void OnExitState()
@@ -333,10 +392,21 @@ public class PlayerStateController : MonoBehaviour, IStateController
         if(IsHoldingWeapon)
         {
             weaponClass.Fire();
-            StartCoroutine(CameraCtrl.ShakeCamera());
+            
+            
         }
     }
 
+    public void ChangeTheTexturWhenCameraviewChange()
+    {
+        var renderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+        renderer.shadowCastingMode = (renderer.shadowCastingMode == ShadowCastingMode.On) 
+            ? ShadowCastingMode.ShadowsOnly : ShadowCastingMode.On;
+
+        var components = weapon.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer component in components)
+            component.enabled = !component.enabled;
+    }
 
 
 

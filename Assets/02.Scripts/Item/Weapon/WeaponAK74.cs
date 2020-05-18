@@ -31,11 +31,37 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     }
     #endregion
 
+    #region Shake Setting
+
+    public float ShakeDuration { get; } = 0.05f;
+
+    public float ShakeMagnitudePos { get; } = 0.03f;
+
+    public float ShakeMagnitudeRot { get; } = 0.1f;
+
+    #endregion
+
+    #region Shooting Setting 
+
     public float Damage { get; set; } = 20;
 
-    public float Delay { get; set; }
+    public float Delay { get; set; } = 0.2f;
 
     public float RequiredScore { get; }
+
+    private bool isShooting = false;
+
+    private float lastShootTime = 0f; 
+
+    public bool IsShooting
+    {
+        get
+        {
+            return isShooting;
+        }
+    }
+
+    #endregion
 
     #region Delegate Event
 
@@ -47,6 +73,9 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     public int LimitStacking { get; }
 
     public float ReloadTime { get; set; }
+
+    public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
+
 
     public void Reload(ref int numOfBulletLeft)
     {
@@ -69,6 +98,11 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     public GameObject Fire()
     {
+        if (lastShootTime + Delay > UnityService.TimeAtFrame)
+            return null;
+        isShooting = true;
+        lastShootTime = UnityService.TimeAtFrame;
+
         // required delay
         OnShotFire?.Invoke();
 
@@ -76,6 +110,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         if (Physics.Raycast(gameObject.transform.position, gameObject.transform.forward, out hit, 100))
         {
 
+            isShooting = false;
             return hit.transform.gameObject;
 
             //do the related action with monster here
@@ -84,6 +119,5 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         {
             return null;
         }
-
     }
 }

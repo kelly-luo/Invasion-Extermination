@@ -22,7 +22,6 @@ public class UnityServiceManager : IUnityServiceManager
     public float GetAxis(string inputKey)
     {
         return Input.GetAxis(inputKey);
-
     }
 
     public bool GetKeyUp(KeyCode key)
@@ -40,6 +39,4 @@ public class UnityServiceManager : IUnityServiceManager
     {
         return Input.GetMouseButton(button);
     }
-
-
 }

@@ -203,12 +203,15 @@ public class CameraControl : MonoBehaviour , ICameraControl
             cursorLock = value;
         }
     }
+
+    public Action OnViewChange { get; set; }
     #endregion
 
     #region CameraEffectSetting
-    public bool shakeRotation = true;
+    public bool shakeRotation = false;
     #endregion
-    #region UnityBasicMethod
+
+    #region Mono BasicMethod
     void Awake()
     {
         //get transform of camera Rig
@@ -232,6 +235,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         if(UnityService.GetKeyDown(KeyCode.F5))
         {
             cameraMode.NextView();
+            this.OnViewChange?.Invoke();
         }
 
 
@@ -298,14 +302,14 @@ public class CameraControl : MonoBehaviour , ICameraControl
         {
             Vector3 shakePos = UnityService.InsideUnitSphere;
 
-            cameraRigTr.localPosition = shakePos * magnitudePos;
+            cameraTr.localPosition = shakePos * magnitudePos;
 
             if (shakeRotation)
             {
                 //get random rotation from PerlineNoise function math lib
                 Vector3 shakeRot = new Vector3(0, 0, Mathf.PerlinNoise(UnityService.TimeAtFrame * magnitudeRot, 0.0f));
 
-                cameraRigTr.localRotation = Quaternion.Euler(shakeRot);
+                cameraTr.localRotation = Quaternion.Euler(shakeRot);
             }
             passTime += UnityService.DeltaTime;
             Debug.Log("asdas");

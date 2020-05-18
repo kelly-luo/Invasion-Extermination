@@ -15,7 +15,7 @@ public class PlayerStats
 
     public float[] position;
 
-    public PlayerStats(PlayerStateController player)
+    public PlayerStats(PlayerInformation player)
     {
         position = new float[3];
         position[0] = player.transform.position.x;

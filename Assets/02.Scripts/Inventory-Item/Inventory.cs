@@ -6,11 +6,13 @@ using UnityEngine;
 
 public class Inventory
 {
+    
     public Item Primary { get; set; }
     public Item Secondary { get; set; }
     //key = instance id, value = Item
     public Dictionary<int, Item> inventory = new Dictionary<int, Item>();
 
+    
     public void Add(Item item)
     {
         if (inventory.Count < 24) { 
@@ -23,6 +25,7 @@ public class Inventory
             {
                 SetSecondary(item);
             }
+       
         }
     }
 
@@ -49,5 +52,10 @@ public class Inventory
     {
         if (Primary == item) Primary = Secondary;
         Secondary = item;
+    }
+
+    public int GetSize()
+    {
+        return inventory.Count;
     }
 }

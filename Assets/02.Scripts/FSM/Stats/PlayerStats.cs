@@ -4,7 +4,7 @@ using UnityEngine;
 using IEGame.FiniteStateMachine;
 
 
-[CreateAssetMenu(menuName = "PluggableScript/Stats/PlayerStats")]
+//[CreateAssetMenu(menuName = "PluggableScript/Stats/PlayerStats")]
 [System.Serializable]
 public class PlayerStats
 {
@@ -17,15 +17,15 @@ public class PlayerStats
 
     public PlayerStats(PlayerStateController player)
     {
-        //position = new float[3];
-        //position[0] = player.transform.position.x;
-        //position[1] = player.transform.position.y;
-        //position[2] = player.transform.position.z;
+        position = new float[3];
+        position[0] = player.transform.position.x;
+        position[1] = player.transform.position.y;
+        position[2] = player.transform.position.z;
 
-        ////Health = 97.2f;
-        ////Level = 10;
-        ////Score = 3501;
-        ////Money = 999999;
+        this.Level = player.Level;
+        this.Score = player.Score;
+        this.Money = player.Money;
+        this.Health = player.Health;
     }
 
 }

@@ -8,42 +8,41 @@ public static class SaveSystem
 {
     public static void SavePlayer(PlayerStateController player)
     {
-        //BinaryFormatter formatter = new BinaryFormatter();
-        //string path = Application.persistentDataPath + "/playerSaveFile";
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/playerSaveFile";
 
-        //FileStream stream = new FileStream(path, FileMode.Create);
-        //PlayerStats data = new PlayerStats(player);
+        FileStream stream = new FileStream(path, FileMode.Create);
+        PlayerStats data = new PlayerStats(player);
 
-        //Debug.Log($"Player was SAVED. Health:{data.Health} Level:{data.Level} Money:{data.Money} Score:{data.Score} Position: x={data.position[0]} y={data.position[1]} y={data.position[2]}");
+        Debug.Log($"Player was SAVED. Health:{data.Health} Level:{data.Level} Money:{data.Money} Score:{data.Score} Position: x={data.position[0]} y={data.position[1]} y={data.position[2]}");
 
-        //formatter.Serialize(stream, data);
-        //stream.Close();
+        formatter.Serialize(stream, data);
+        stream.Close();
 
-        //StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/playerDataText.txt");
-        //sw.WriteLine(data.position[0]);
-        //sw.WriteLine(data.position[1]);
-        //sw.WriteLine(data.position[2]);
-        //sw.Close();
+        StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/playerDataText.txt");
+        sw.WriteLine(data.position[0]);
+        sw.WriteLine(data.position[1]);
+        sw.WriteLine(data.position[2]);
+        sw.Close();
     }
 
     public static PlayerStats LoadPlayer()
     {
-        //string path = Application.persistentDataPath + "/playerSaveFile";
-        //if (File.Exists(path))
-        //{
-        //    BinaryFormatter formatter = new BinaryFormatter();
-        //    FileStream stream = new FileStream(path, FileMode.Open);
+        string path = Application.persistentDataPath + "/playerSaveFile";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
 
-        //    PlayerStats data = formatter.Deserialize(stream) as PlayerStats;
-        //    stream.Close();
+            PlayerStats data = formatter.Deserialize(stream) as PlayerStats;
+            stream.Close();
 
-        //    return data;
-        //}
-        //else
-        //{
-        //    Debug.LogError("Save file not found in " + path);
-        //    return null;
-        //}
-        return null;
+            return data;
+        }
+        else
+        {
+            Debug.LogError("Save file not found in " + path);
+            return null;
+        }
     }
 }

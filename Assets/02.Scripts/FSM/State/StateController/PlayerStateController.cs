@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 
+[ExecuteInEditMode]
 public class PlayerStateController : MonoBehaviour, IStateController
 {
     [field: SerializeField] public int Level { get; set; }
@@ -153,6 +154,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             IsRunning = !isSitting;
         }
+
+
     }
 
     void LateUpdate()
@@ -280,28 +283,27 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void SavePlayer()
     {
-        //Debug.Log("Button save going through");
-        //SaveSystem.SavePlayer(this);
+        Debug.Log("Button save going through");
+        SaveSystem.SavePlayer(this);
     }
 
     public void LoadPlayer()
     {
-        //PlayerStats data = SaveSystem.LoadPlayer();
+        PlayerStats data = SaveSystem.LoadPlayer();
 
-        //Vector3 position;
-        //position.x = data.position[0];
-        //position.y = data.position[1];
-        //position.z = data.position[2];
+        Vector3 position;
+        position.x = data.position[0];
+        position.y = data.position[1];
+        position.z = data.position[2];
 
-        //transform.position = position;
-        //this.Health = data.Health;
-        //this.Score = data.Score;
-        //this.Level = data.Level;
-        //this.Score = data.Score;
+        transform.position = position;
+        this.Health = data.Health;
+        this.Score = data.Score;
+        this.Level = data.Level;
+        this.Score = data.Score;
 
-        //Debug.Log($"Player was LOADED. Health:{this.Health} Level:{this.Level} Money:{this.Money} Score:{this.Score} Position: x={this.transform.position[0]} y={this.transform.position[1]} y={this.transform.position[2]}");
+        Debug.Log($"Player was LOADED. Health:{this.Health} Level:{this.Level} Money:{this.Money} Score:{this.Score} Position: x={this.transform.position[0]} y={this.transform.position[1]} y={this.transform.position[2]}");
     }
-
 }
 
 

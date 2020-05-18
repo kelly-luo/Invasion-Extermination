@@ -1,77 +1,93 @@
-﻿//using System.Collections;
-//using System.IO;
-//using NUnit.Framework;
-//using UnityEngine;
-//using UnityEngine.TestTools;
+﻿using System.IO;
+using NUnit.Framework;
+using UnityEngine;
 
-//namespace US8Tests_SaveLoad
-//{
-//    public class SaveLoadTest
-//    {
-//        private PlayerTranslate playerTranslate;
-//        private PlayerStateController playerStateController;
-//        private PlayerStats stats;
+namespace US8Tests_SaveLoad
+{
+    public class SaveLoadTest
+    {
+        private PlayerStateController playerStateController;
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            //GameObject gameGameObject = MonoBehaviour.Instantiate(Resources.Load<GameObject>("03.Prefabs/Characters/TestPlayer"));
+        [SetUp]
+        public void Setup()
+        {
+            // first initialise the player's stats
+            Vector3 position1 = new Vector3(1f, -7f, 2.55f);
+            playerStateController.Transform.position = position1;
+            playerStateController.Health = 97.2f;
+            playerStateController.Level = 10;
+            playerStateController.Score = 3501;
+            playerStateController.Money = 999999;
+        }
 
-//            Vector3 position1 = new Vector3(1f, 0f, 0f);
-//            playerStateController.Transform.position = position1;
+        // Test if the save file exists in the location 
+        [Test]
+        public void TestSavePlayer_SaveFileExistsAfterSaving()
+        {
+            SaveSystem.SavePlayer(playerStateController);
 
-//        }
+            // Path.GetFileName() will return a null if not found
+            Assert.IsNotNull(Path.GetFileName(Application.persistentDataPath + "/playerSaveFile"));
+        }
 
-//        //[TearDown]
-//        //public void Teardown()
-//        //{
-//        //    Object.Destroy(game.gameObject);
-//        //}
+        // Test if the loaded character has correct position (x,y,z)
+        [Test]
+        public void TestLoadPlayer_LoadedPositionFromFileIsCorrect()
+        {
+            SaveSystem.LoadPlayer();
 
-//        // Test if the save file exists in the location 
-//        [Test]
-//        public void TestSaveFileExistsAfterSaving()
-//        {
-//            SaveSystem.SavePlayer(playerStateController);
+            //check for x position
+            Assert.AreEqual(1f, playerStateController.Transform.position[0]);
 
-//            // Path.GetFileName() will return a null if not found
-//            Assert.IsNotNull(Path.GetFileName(Application.persistentDataPath + "/playerSaveFile"));
-//        }
+            //check for y position
+            Assert.AreEqual(-7f, playerStateController.Transform.position[1]);
 
-//        // Test if the loaded character has correct position (x,y,z)
-//        [Test]
-//        public void TestLoadedPositionFromFileIsCorrect()
-//        {
-            
-//        }
+            //check for z position
+            Assert.AreEqual(2.55f, playerStateController.Transform.position[2]);
+        }
 
-//        // Test if the loaded character has the correct health points
+        // Test if the loaded character has the correct health points
+        [Test]
+        public void TestLoadPlayer_LoadedHealthFromFileIsCorrect()
+        {
+            SaveSystem.LoadPlayer();
 
+            //check for health points
+            Assert.AreEqual(97.2f, playerStateController.Health);
 
-//        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-//        // `yield return null;` to skip a frame.
-//        [UnityTest]
-//        public IEnumerator TestWithEnumeratorPasses()
-//        {
-//            // Use the Assert class to test conditions.
-//            // Use yield to skip a frame.
-//            yield return null;
-//        }
+        }
 
+        // Test if the loaded character has the correct health points
+        [Test]
+        public void TestLoadPlayer_LoadedLevelFromFileIsCorrect()
+        {
+            SaveSystem.LoadPlayer();
 
-//        [UnityTest]
-//        public IEnumerator AsteroidsMoveDown()
-//        {
-//            GameObject asteroid = game.GetSpawner().SpawnAsteroid();
-//            float initialYPos = asteroid.transform.position.y;
-//            yield return new WaitForSeconds(0.1f);
+            //check for health points
+            Assert.AreEqual(10, playerStateController.Level);
 
-//            Assert.Less(asteroid.transform.position.y, initialYPos);
-//        }
+        }
 
+        // Test if the loaded character has the correct health points
+        [Test]
+        public void TestLoadPlayer_LoadedScoreFromFileIsCorrect()
+        {
+            SaveSystem.LoadPlayer();
 
+            //check for health points
+            Assert.AreEqual(97.2f, playerStateController.Score);
 
+        }
 
+        // Test if the loaded character has the correct health points
+        [Test]
+        public void TestLoadPlayer_LoadedMoneyFromFileIsCorrect()
+        {
+            SaveSystem.LoadPlayer();
 
-//    }
-//}
+            //check for health points
+            Assert.AreEqual(999999, playerStateController.Money);
+
+        }
+    }
+}

@@ -5,21 +5,27 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-
     public Inventory PlayerInventory { get; set; }
 
     private int maxSlot;
     private int maxWeapons;
     private int currentSlotUsed;
 
-    private GameObject[] slots;
     public GameObject inventoryPanel;
+    private GameObject[] slots;
 
     public GameObject weaponInstances;
     private GameObject[] weaponInstance;
+
+    public GameObject Primary;
+    public GameObject Secondary;
+
+
+    public int temp;
     void Start()
     {
         Intialize();
+       
     }
     private void Intialize()
     {
@@ -55,6 +61,7 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateInventoryGUI()
     {
+        UpdateWeaponSlots();
         currentSlotUsed = PlayerInventory.GetSize();
         Image slotImage;
         GameObject currentSlot;
@@ -66,6 +73,56 @@ public class InventoryManager : MonoBehaviour
             slotImage.sprite = weaponInstance[Weapon.Value.Id].GetComponent<SpriteRenderer>().sprite;
             if (currentSlot.activeSelf == false) currentSlot.SetActive(true);
         }
+    }
+
+    public void SetPrimary(int key)
+    {
+        if (PlayerInventory.ContainsKey(key)) 
+        {
+            PlayerInventory.SetPrimary(key);
+            UpdateWeaponSlots();
+        }
+    }
+
+    public void SetSecondary(int key)
+    {
+        if (PlayerInventory.ContainsKey(key))
+        {
+            PlayerInventory.SetSecondary(key);
+            UpdateWeaponSlots();
+        }
+    }
+
+    public void removeItem(int key)
+    {
+        if (PlayerInventory.ContainsKey(key))
+        {
+            Debug.Log("Removed="+key);
+            Item RemovedItem = PlayerInventory.FindItem(key);
+            PlayerInventory.Remove(RemovedItem);
+            
+            slots[key].transform.GetChild(0).gameObject.SetActive(false);
+            UpdateWeaponSlots();
+
+        }
+    }
+
+    public void UpdateWeaponSlots()
+    {
+        if(PlayerInventory.Primary != null)
+        { 
+            Primary.GetComponent<Image>().sprite = weaponInstance[PlayerInventory.Primary.Id].GetComponent<SpriteRenderer>().sprite;
+            if (!Primary.activeSelf) Primary.SetActive(true);
+        }
+        else
+            Primary.SetActive(false);
+        
+        if (PlayerInventory.Secondary != null)
+        {
+            Secondary.GetComponent<Image>().sprite = weaponInstance[PlayerInventory.Secondary.Id].GetComponent<SpriteRenderer>().sprite;
+            if (!Secondary.activeSelf) Secondary.SetActive(true);
+        }else
+            Secondary.SetActive(false);
     }
 
     void Update()

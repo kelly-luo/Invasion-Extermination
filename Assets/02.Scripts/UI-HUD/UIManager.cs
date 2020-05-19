@@ -7,7 +7,6 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
 
     readonly private IUnityServiceManager UnityServiceManager = new UnityServiceManager();
 

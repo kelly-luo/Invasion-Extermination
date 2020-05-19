@@ -54,6 +54,26 @@ public class Inventory
         Secondary = item;
     }
 
+    public void SetPrimary(int key)
+    {
+        SetPrimary(FindItem(key));
+    }
+    public void SetSecondary(int key)
+    {
+        SetSecondary(FindItem(key));
+    }
+    public void Remove(int key)
+    {
+        Remove(FindItem(key));
+    }
+
+    public Item FindItem(int key)
+    {
+        if (ContainsKey(key) == false) return null;
+        return inventory[key];
+        
+    }
+
     public int GetSize()
     {
         return inventory.Count;

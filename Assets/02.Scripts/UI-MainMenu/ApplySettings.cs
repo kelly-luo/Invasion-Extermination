@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ApplySettings : ButtonClicked
@@ -10,7 +11,7 @@ public class ApplySettings : ButtonClicked
     public Toggle windowToggleMode;
 
   
-    public override void ButtonEvent(MyMenuButton menuButton)
+    public override void ButtonEvent(PointerEventData eventData)
     {
         bool windowsMode = windowToggleMode.isOn;
         string restext = resoultionCombo.options[resoultionCombo.value].text;

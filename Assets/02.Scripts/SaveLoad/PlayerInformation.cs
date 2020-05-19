@@ -7,14 +7,11 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public int Money { get; set; }
     [field: SerializeField] public float Health { get; set; }
 
-    private PlayerStateController playerStateController;
     private Transform transform;
     // Start is called before the first frame update
     void Start()
     {
-        playerStateController = GetComponent<PlayerStateController>();
         transform = GetComponent<Transform>();
-
     }
 
     public void SavePlayer()

@@ -29,7 +29,6 @@ public class UnityServiceManager : IUnityServiceManager
         return Input.GetKeyUp(key);
     }
 
-
     public bool GetKeyDown(KeyCode key)
     {
         return Input.GetKeyDown(key);

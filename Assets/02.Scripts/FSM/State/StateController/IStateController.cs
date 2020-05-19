@@ -12,7 +12,7 @@ namespace IEGame.FiniteStateMachine
         //stats of something that inherit from ObjectStats
         ObjectStats Stats { get; set; }
 
-        Transform Transform { get; set; }
+        Transform PlayerTransform { get; set; }
 
         float StateTimeElapsed { get; set; }
 

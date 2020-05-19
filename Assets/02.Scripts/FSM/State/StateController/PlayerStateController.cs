@@ -20,7 +20,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #region Unity Component
     [field: SerializeField]
-    public Transform Transform { get; set; }
+    public Transform PlayerTransform { get; set; }
 
     #endregion
 
@@ -41,10 +41,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     private readonly int hashXDirectionSpeed = Animator.StringToHash("XDirectionSpeed");
     private readonly int hashZDirectionSpeed = Animator.StringToHash("ZDirectionSpeed");
+    private readonly int hashFire = Animator.StringToHash("Fire");
 
     private readonly int hashSpeed = Animator.StringToHash("Speed");
 
     private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
+    private readonly int hashIsHoldingRifle = Animator.StringToHash("IsHoldingRifle");
     private bool isRunning = false;
     public bool IsRunning
     {
@@ -56,7 +58,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             if (isRunning != value)
             {
-                playerTranslate.IsRunning = value;
+                PlayerTranslate.IsRunning = value;
                 Animator.SetBool(hashIsRunning, value);
                 isRunning = value;
             }
@@ -83,7 +85,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             if (isSitting != value)
             {
-                playerTranslate.IsSitting = value;
+                PlayerTranslate.IsSitting = value;
                 Animator.SetBool(hashIsSitting, value);
                 isSitting = value;
             }
@@ -106,7 +108,19 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #region Input Values
     public float Vertical { get; set; }
     public float Horizontal { get; set; }
-    public bool IsHoldingWeapon { get; set; } = true;
+    private bool isHoldingRifle;
+    public bool IsHoldingRifle
+    {
+        get { return isHoldingRifle; }
+        set
+        {
+            Animator.SetBool(hashIsHoldingRifle, value);
+
+            weaponHolding.SetActive(value);       
+
+            isHoldingRifle = value;
+        }
+    }
     #endregion
 
     #region Weapon Setting
@@ -125,25 +139,36 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public Vector3 weaponRebound;
 
 
+    private GameObject weaponHolding;
+    private Transform weaponHolderTr;
+
     #endregion
 
     public float StateTimeElapsed { get; set; }
 
     // state will change depends on this class (speed) 
-    public ICharacterTranslate playerTranslate { get; set; }
+    public ICharacterTranslate PlayerTranslate { get; set; }
     public IUnityServiceManager UnityService { get; set; }
 
     #region MonoBehaviour Base Function
     void Awake()
     {
-        neckTr = GameObject.Find("Neck").transform;
-        headTr = GameObject.Find("Head").transform;
+        var transforms = GetComponentsInChildren<Transform>();
+        foreach (Transform tr in transforms)
+        {
+            if (tr.gameObject.name == "Neck")
+                neckTr = tr;
+            if (tr.gameObject.name == "Head")
+                headTr = tr;
+            if (tr.gameObject.name == "RWeaponHolder")
+                weaponHolderTr = tr;
+        }
 
-        Transform = GetComponent<Transform>();
+
+        PlayerTransform = GetComponent<Transform>();
         Animator = GetComponent<Animator>();
-        playerTranslate = new PlayerTranslate(Transform);
+        PlayerTranslate = new PlayerTranslate(PlayerTransform);
         actualHeadRot = headTr.localRotation;
-
 
     }
 
@@ -153,12 +178,15 @@ public class PlayerStateController : MonoBehaviour, IStateController
         CameraRigTr = CameraRig.GetComponent<Transform>();
         CameraTr = CameraCtrl.GetCameraTransform();
 
+        weaponHolding = InitilizeHoldingWeapon(weaponHolderTr);
+
         if (UnityService == null)
         {
             UnityService = new UnityServiceManager();
         }
         weaponClass = weapon.GetComponent<WeaponAK74>();
         weapon.transform.parent = CameraTr;
+
 
         gameObject.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
 
@@ -171,15 +199,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
         weaponClass.OnShotFire += ShakeCameraWhenShoot;
         weaponClass.OnShotFire += StartReboundCoroutine;
+        weaponClass.OnShotFire += SetWeaponFireAnimation;
         CameraCtrl.OnViewChange += ChangeTheTexturWhenCameraviewChange;
 
-
     }
+
 
     void Update()
     {
         //update scene
-    
+
         if (UnityService.GetKeyUp(KeyCode.LeftShift))
         {
             IsRunning = !isRunning;
@@ -188,32 +217,49 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             IsRunning = !isSitting;
         }
-
+        if (UnityService.GetKeyUp(KeyCode.F3))
+        {
+            IsHoldingRifle = !IsHoldingRifle;
+        }
+        CurrentState.UpdateState(this);
     }
 
     void LateUpdate()
     {
-        RotateNeck();
-        RotateHeadAndAvatar(CameraCtrl.YRot);
         SetWeaponPosition();
         if (UnityService.GetMouseButtonUp(0))
         {
-
             this.Attack();
         }
+
+        RotateNeck();
+        RotateHeadAndAvatar(CameraCtrl.YRot);
     }
     #endregion
 
     #region animation method
     public void MoveAnimation(float xSpeed ,float zSpeed)
     {
+
+        if(!isRunning && zSpeed > 0.5f)
+        {
+            zSpeed = 0.5f;
+        }
+        if(zSpeed <= 0f )
+        {
+            IsRunning = false;
+        }
+
         Animator.SetFloat(hashXDirectionSpeed, xSpeed);
         Animator.SetFloat(hashZDirectionSpeed, zSpeed);
 
-        if ((xSpeed > 0) || (xSpeed < 0) || (zSpeed > 0) || (zSpeed < 0))
+        if (((xSpeed > 0) || (xSpeed < 0) || (zSpeed > 0) || (zSpeed < 0)) || IsHoldingRifle)
             this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body .
-        
+    }
 
+    public void SetWeaponFireAnimation()
+    {
+        Animator.SetTrigger(hashFire);
     }
     #endregion
 
@@ -247,7 +293,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 actualHeadRot = headTr.localRotation;
 
-                Transform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
+                PlayerTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
@@ -268,7 +314,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 actualHeadRot = headTr.localRotation;
 
-                Transform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
+                PlayerTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
@@ -283,17 +329,17 @@ public class PlayerStateController : MonoBehaviour, IStateController
     private void RotateAvatarTowardSight()
     {
         var rotationSpeed = 150f;
-        var bodyRot = Transform.localRotation;
+        var bodyRot = PlayerTransform.localRotation;
         var lookRotation = Quaternion.LookRotation(CameraRigTr.forward);
 
         float angle = Quaternion.Angle(transform.rotation, lookRotation);
         float timeToComplete = angle / rotationSpeed;
         float donePercentage = Mathf.Min(1F, UnityService.DeltaTime / timeToComplete);
 
-        Transform.localRotation = Quaternion.Slerp(Transform.localRotation, lookRotation, donePercentage);
+        PlayerTransform.localRotation = Quaternion.Slerp(PlayerTransform.localRotation, lookRotation, donePercentage);
 
         //take the amount of change in body rotation 
-        var ChangeRotBody = Transform.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
+        var ChangeRotBody = PlayerTransform.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
         //add to Head Rotation
         headRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
         actualHeadRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
@@ -363,13 +409,24 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion
 
+
+    private GameObject InitilizeHoldingWeapon(Transform weaponHolderTr)
+    {
+        GameObject weaponTargetHolding = Instantiate(Resources.Load<GameObject>("GunPrefabs/AK74Weapon")) as GameObject;
+
+        weaponTargetHolding.transform.parent = weaponHolderTr;
+        weaponTargetHolding.transform.localScale = new Vector3(180f, 180f, 180f);
+        weaponTargetHolding.transform.localPosition = new Vector3(26.7f, 7f, -3.4f);
+        weaponTargetHolding.transform.localRotation = Quaternion.Euler(2.725f, -128.081f, 87.86401f);
+
+        return weaponTargetHolding;
+    }
+
     //check attack timer (so player do not "attack" every frames); 
     public bool CheckIsAttackReady(float duration)
     {
         StateTimeElapsed += UnityService.DeltaTime;
         return (StateTimeElapsed >= duration);
-
-        
 
     }
 
@@ -389,10 +446,9 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void Attack()
     {
-        if(IsHoldingWeapon)
+        if(IsHoldingRifle)
         {
             weaponClass.Fire();
-            
             
         }
     }

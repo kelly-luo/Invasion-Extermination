@@ -33,7 +33,7 @@ public interface ImWeapon : ImItem
     Action OnReload { get; set; }
 
 
-    GameObject Fire();
+    GameObject Fire(Vector3 playerPosition, Vector3 shootDirection);
 
 
     void Reload(ref int numOfBulletLeft);

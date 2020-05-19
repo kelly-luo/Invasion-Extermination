@@ -5,9 +5,11 @@ using UnityEngine;
 
 public interface ICameraControl
 {
+    CameraViewType CurrentViewMode { get; set; }
 
     float XRot { get; }
     float YRot { get; }
+
     Action OnViewChange { get; set; }
 
     Transform GetCameraTransform();

@@ -96,7 +96,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         }
     }
 
-    public GameObject Fire()
+    public GameObject Fire(Vector3 playerPosition,Vector3 shootDirection)
     {
         if (lastShootTime + Delay > UnityService.TimeAtFrame)
             return null;
@@ -107,7 +107,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         OnShotFire?.Invoke();
 
         RaycastHit hit;
-        if (Physics.Raycast(gameObject.transform.position, gameObject.transform.forward, out hit, 100))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, 100))
         {
 
             isShooting = false;

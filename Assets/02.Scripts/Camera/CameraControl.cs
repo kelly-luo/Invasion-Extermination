@@ -6,8 +6,10 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CameraControl : MonoBehaviour , ICameraControl
+public class CameraControl : MonoBehaviour, ICameraControl
 {
+
+
     [Serializable]
     public class CameraMode
     {
@@ -15,7 +17,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
 
         public ICameraView CurrentView
         {
-            get { return cameraViewList[viewListIdx];}
+            get { return cameraViewList[viewListIdx]; }
         }
         private int viewListIdx = 0;
         public int ViewListIdx
@@ -35,12 +37,12 @@ public class CameraControl : MonoBehaviour , ICameraControl
             get { return smooth; }
             set
             {
-                if(value != smooth)
+                if (value != smooth)
                 {
                     smooth = value;
                     foreach (var view in cameraViewList)
                         view.IsSmooth = value;
-                }     
+                }
             }
         }
 
@@ -50,10 +52,10 @@ public class CameraControl : MonoBehaviour , ICameraControl
             get { return smoothTime; }
             set
             {
-                if(value != smoothTime)
+                if (value != smoothTime)
                 {
                     smoothTime = value;
-                    foreach(var view in cameraViewList)
+                    foreach (var view in cameraViewList)
                     {
                         view.SmoothTime = value;
                     }
@@ -139,8 +141,8 @@ public class CameraControl : MonoBehaviour , ICameraControl
 
         public void TransferRotationData()
         {
-            var currentCameraRigRot = cameraViewList [viewListIdx].CameraRigRot;
-            var currentCameraRot = cameraViewList [viewListIdx].CameraRot;
+            var currentCameraRigRot = cameraViewList[viewListIdx].CameraRigRot;
+            var currentCameraRot = cameraViewList[viewListIdx].CameraRot;
         }
 
         public ICameraView NextView()
@@ -155,12 +157,14 @@ public class CameraControl : MonoBehaviour , ICameraControl
             cameraViewList[viewListIdx].CameraRot = currentCameraRot;
             return CurrentView;
         }
- 
+
     }
 
 
+    public CameraViewType CurrentViewMode { get; set; } = CameraViewType.First;
+
     public GameObject target;
-    
+
     public CameraMode cameraMode;
     private Transform cameraRigTr;
     private Transform cameraTr;
@@ -195,7 +199,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
         set
         {
-            if(!value)
+            if (!value)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -232,15 +236,11 @@ public class CameraControl : MonoBehaviour , ICameraControl
 
     void Update()
     {
-        if(UnityService.GetKeyDown(KeyCode.F5))
-        {
-            cameraMode.NextView();
-            this.OnViewChange?.Invoke();
-        }
-
+        UpdateViewMode();
 
         UpdateCursorLock();
     }
+
 
     void LateUpdate()
     {
@@ -267,7 +267,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
         else if (UnityService.GetMouseButtonUp(0))
         {
-             isCursorLocked = true;
+            isCursorLocked = true;
         }
 
         if (isCursorLocked)
@@ -282,7 +282,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
     }
     #endregion
-    
+
     #region CameraRelatedMethod
 
     public Transform GetCameraTransform()
@@ -303,7 +303,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
             Vector3 shakePos = UnityService.InsideUnitSphere;
 
             cameraTr.localPosition = shakePos * magnitudePos;
-
+      
             if (shakeRotation)
             {
                 //get random rotation from PerlineNoise function math lib
@@ -319,7 +319,29 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
 
     }
+    private void UpdateViewMode()
+    {
+        if (UnityService.GetKeyDown(KeyCode.F5))
+        {
+            cameraMode.NextView();
+            ViewModeChange();
+        }
+    }
+
+    private void ViewModeChange()
+    {
+        if (CurrentViewMode == CameraViewType.First)
+            CurrentViewMode = CameraViewType.Third;
+        else
+            CurrentViewMode = CameraViewType.First;
+
+        this.OnViewChange?.Invoke();
+    }
     #endregion
-
-
+}
+//view of the camera this need to be in the order of the camera view change 
+//e.g. First person view shows first before the Third person View
+public enum CameraViewType
+{
+    First, Third
 }

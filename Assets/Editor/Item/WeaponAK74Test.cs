@@ -74,7 +74,8 @@ namespace Tests
 
             weaponClass.gameObject.transform.LookAt(target.transform);
 
-            GameObject bulletHitObject = weaponClass.Fire();
+            GameObject bulletHitObject = weaponClass.Fire(weaponClass.gameObject.transform.position,
+                weaponClass.gameObject.transform.forward);
 
             Assert.AreEqual(target, bulletHitObject);
         }
@@ -88,7 +89,8 @@ namespace Tests
             var a = 1;
             weaponClass.OnShotFire += () => { a++; };
 
-            weaponClass.Fire();
+            weaponClass.Fire(weaponClass.gameObject.transform.position,
+                weaponClass.gameObject.transform.forward);
 
             Assert.AreEqual(2, a);
         }

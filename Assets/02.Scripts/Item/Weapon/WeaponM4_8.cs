@@ -86,7 +86,7 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
         }
     }
 
-    public GameObject Fire()
+    public GameObject Fire(Vector3 playerPosition, Vector3 shootDirection)
     {
         // required delay
         OnShotFire?.Invoke();

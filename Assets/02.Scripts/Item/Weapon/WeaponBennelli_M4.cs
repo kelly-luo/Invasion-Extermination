@@ -86,7 +86,7 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
         }
     }
 
-    public GameObject Fire()
+    public GameObject Fire(Vector3 playerPosition, Vector3 shootDirection)
     {
         RaycastHit hit;
         // required delay

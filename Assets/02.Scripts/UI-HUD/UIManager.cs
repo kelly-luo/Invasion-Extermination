@@ -7,7 +7,8 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    readonly private IUnityServiceManager UnityServiceManager = new UnityServiceManager();
 
     public Slider healthView;
     public Image healthFill;
@@ -15,6 +16,8 @@ public class UIManager : MonoBehaviour
     public TMP_Text scoreView;
     public TMP_Text moneyView;
     public TMP_Text ammoView;
+
+    public GameObject inventoryPanel;
 
     //Temp values, change to 0 after testing
     public int money;
@@ -26,20 +29,26 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         healthView.value = health;
-        scoreView.text = formatValue(score);
-        moneyView.text = formatValue(money);
-        ammoView.text = formatValue(ammo);
+        scoreView.text = FormatValue(score);
+        moneyView.text = FormatValue(money);
+        ammoView.text = FormatValue(ammo);
 
     }
 
     private void Update()
     {
-        setHealth(health);
-        setAmmo(ammo);
-        setMoney(money);
-        setScore(score);
+        SetHealth(health);
+        SetAmmo(ammo);
+        SetMoney(money);
+        SetScore(score);
+
+        if (UnityServiceManager.GetKeyDown(KeyCode.I))
+        {
+           OpenInventory();
+        }
+
     }
-    public void setHealth(int health)
+    public void SetHealth(int health)
     {
         if(health <= 0) healthView.value = 0;
         else if(health >=100) healthView.value = 100;
@@ -50,23 +59,27 @@ public class UIManager : MonoBehaviour
         else healthFill.color = Color.white;
     }
 
-    public void setScore(int score)
+    public void SetScore(int score)
     {
-        if (score <= 0) scoreView.text = formatValue(0);
-        else scoreView.text = formatValue(score);
+        if (score <= 0) scoreView.text = FormatValue(0);
+        else scoreView.text = FormatValue(score);
     }
-    public void setMoney(int money)
+    public void SetMoney(int money)
     {
-        if (money <= 0) moneyView.text = formatValue(0);
-        else moneyView.text = formatValue(money);
+        if (money <= 0) moneyView.text = FormatValue(0);
+        else moneyView.text = FormatValue(money);
     }
-    public void setAmmo(int ammo)
+    public void SetAmmo(int ammo)
     {
-        if (ammo <= 0) ammoView.text = formatValue(0);
-        else ammoView.text = formatValue(ammo);
+        if (ammo <= 0) ammoView.text = FormatValue(0);
+        else ammoView.text = FormatValue(ammo);
     }
 
-    private string formatValue(int value)
+    public void OpenInventory()
+    {
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+    }
+    private string FormatValue(int value)
     {
         if(value < 10)
         {
@@ -78,4 +91,5 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
 }

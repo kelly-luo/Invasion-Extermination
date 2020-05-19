@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
-
+    
     public enum State
     {
         selected,
@@ -62,12 +62,12 @@ public class MyMenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
     public void OnPointerClick(PointerEventData eventData)
     {
         menuButtonGroup.OnTabEnter(this);
-        click();
+        click(eventData);
 
     }
-    public void click()
+    public void click(PointerEventData eventData)
     {
-        buttonClicked.ButtonEvent(this);
+        buttonClicked.ButtonEvent(eventData);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

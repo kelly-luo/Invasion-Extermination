@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using NSubstitute;
@@ -28,10 +28,10 @@ namespace Tests
         public void TranslateCharacter_MovingTest()
         {
             this.SetupTest();
-
+            
             playerTranslate.TranslateCharacter(new Vector3(1f, 0f, 0f));
 
-            var ExpectedValue = new Vector3(1.5f, 0f, 0f);
+            var ExpectedValue = new Vector3(1.5f, 0f,0f);
 
             Assert.AreEqual(ExpectedValue, target.transform.position);
         }

@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
 
-public class MenuRight : ButtonClicked
+public class SlotDelete : ButtonClicked
 {
-    public MapSelect mapSelect;
+    public InventoryManager inventoryManager;
+    public GameObject Slot;
     public override void ButtonEvent(PointerEventData eventData)
     {
-         mapSelect.index += 1;
+        inventoryManager.removeItem(Slot.transform.GetSiblingIndex());
     }
-
 }
-

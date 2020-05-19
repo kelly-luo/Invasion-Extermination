@@ -6,7 +6,9 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CameraControl : MonoBehaviour, ICameraControl
+
+public class CameraControl : MonoBehaviour , ICameraControl
+
 {
 
 
@@ -267,7 +269,10 @@ public class CameraControl : MonoBehaviour, ICameraControl
         }
         else if (UnityService.GetMouseButtonUp(0))
         {
-            isCursorLocked = true;
+            if(!IsPointerOverUIObject())
+            {
+                isCursorLocked = true;
+            };
         }
 
         if (isCursorLocked)
@@ -338,6 +343,15 @@ public class CameraControl : MonoBehaviour, ICameraControl
         this.OnViewChange?.Invoke();
     }
     #endregion
+
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
 }
 //view of the camera this need to be in the order of the camera view change 
 //e.g. First person view shows first before the Third person View

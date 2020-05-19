@@ -80,7 +80,7 @@ namespace Tests
 
             firstPersonView.RotateView();
 
-            Assert.Greater(cameraGameObject.transform.rotation.eulerAngles.x,firstPersonView.MaxAngleOnRotatingXAxis - 1);
+            Assert.Greater(cameraGameObject.transform.rotation.eulerAngles.x, firstPersonView.MaxAngleOnRotatingXAxis - 1);
             Assert.Less(cameraGameObject.transform.rotation.eulerAngles.x, firstPersonView.MaxAngleOnRotatingXAxis + 1);
         }
 
@@ -95,7 +95,7 @@ namespace Tests
 
             firstPersonView.SetCameraPos();
             //need more thinik
-            Assert.AreEqual(new Vector3(0.0f + firstPersonView.OffSetX, 0.0f + firstPersonView.OffSetY, 0.0f) 
+            Assert.AreEqual(new Vector3(0.0f + firstPersonView.OffSetX, 0.0f + firstPersonView.OffSetY, 0.0f)
                 + cameraRigGameObject.transform.forward * firstPersonView.OffSetZ, cameraRigGameObject.transform.position);
         }
 

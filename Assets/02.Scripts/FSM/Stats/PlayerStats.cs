@@ -1,11 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using IEGame.FiniteStateMachine;
-
-
-//[CreateAssetMenu(menuName = "PluggableScript/Stats/PlayerStats")]
-[System.Serializable]
+﻿[System.Serializable]
 public class PlayerStats
 {
     public int Level { get; set; }

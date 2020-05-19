@@ -12,7 +12,8 @@ public static class SaveSystem
         FileStream stream = new FileStream(path, FileMode.Create);
         PlayerStats data = new PlayerStats(player);
 
-        Debug.Log($"Player was SAVED. Health:{data.Health} Level:{data.Level} Money:{data.Money} Score:{data.Score} Position: x={data.position[0]} y={data.position[1]} y={data.position[2]}");
+        Debug.Log($"Player was SAVED. Health:{data.Health} Level:{data.Level} Money:{data.Money}" +
+            $"Score:{data.Score} Position: x={data.position[0]} y={data.position[1]} y={data.position[2]}");
 
         formatter.Serialize(stream, data);
         stream.Close();

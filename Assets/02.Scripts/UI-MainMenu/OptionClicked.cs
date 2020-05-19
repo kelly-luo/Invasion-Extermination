@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class OptionClicked : ButtonClicked
 {
@@ -13,7 +14,7 @@ public class OptionClicked : ButtonClicked
         menuButton = GetComponent<MyMenuButton>();
     }
 
-    public override void ButtonEvent(MyMenuButton menuButton)
+    public override void ButtonEvent(PointerEventData eventData)
     {
 
         if (frame.activeSelf == false)

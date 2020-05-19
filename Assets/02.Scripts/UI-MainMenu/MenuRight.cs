@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class MenuRight : ButtonClicked
 {
     public MapSelect mapSelect;
-    public override void ButtonEvent(MyMenuButton menuButton)
+    public override void ButtonEvent(PointerEventData eventData)
     {
          mapSelect.index += 1;
     }

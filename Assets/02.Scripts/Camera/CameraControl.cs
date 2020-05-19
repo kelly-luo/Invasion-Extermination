@@ -258,7 +258,7 @@ public class CameraControl : MonoBehaviour, ICameraControl
         }
         else if (userInput.GetMouseButtonUp(0))
         {
-            if (!IsPointerOverUIObject())
+            if(!IsPointerOverUIObject())
             {
                 isCursorLocked = true;
             };

@@ -18,7 +18,7 @@ public class ControlsImageTest : MonoBehaviour
         for (int i = 0; i < 3; i++) script.InternalImageID[i] = i;
         button.setButtonClicked(script);
         //ACT
-        button.click();
+        button.click(null);
         //ASSERT
         Assert.AreEqual(1, script.CurrentIndex);
     }
@@ -34,7 +34,7 @@ public class ControlsImageTest : MonoBehaviour
         for (int i = 0; i < 3; i++) script.InternalImageID[i] = i;
         button.setButtonClicked(script);
         //ACT
-        for(int i = 0; i < 3;i++) button.click();
+        for(int i = 0; i < 3;i++) button.click(null);
         //ASSERT
         Assert.AreEqual(0, script.CurrentIndex);
     }

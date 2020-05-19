@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class bcInstructions : ButtonClicked
 {
@@ -20,7 +21,7 @@ public class bcInstructions : ButtonClicked
         for (int i = 0; i < images.Length; i++) InternalImageID[i] = i;
         }
     }
-    public override void ButtonEvent(MyMenuButton menuButton)
+    public override void ButtonEvent(PointerEventData eventData)
     {
         CurrentIndex++;
         if (CurrentIndex == getSize()) CurrentIndex = 0;

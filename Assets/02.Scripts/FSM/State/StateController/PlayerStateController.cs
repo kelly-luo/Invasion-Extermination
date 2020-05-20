@@ -5,6 +5,7 @@ using IEGame.FiniteStateMachine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 
+[ExecuteInEditMode]
 public class PlayerStateController : MonoBehaviour, IStateController
 {
     #region state
@@ -31,8 +32,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public Transform CameraRigTr { get; set; }
 
     public Transform CameraTr { get; set; }
-    public ICameraControl CameraCtrl{ get;set;}
 
+    public ICameraControl CameraCtrl{ get;set;}
 
     #endregion 
 
@@ -62,7 +63,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 Animator.SetBool(hashIsRunning, value);
                 isRunning = value;
             }
-            if(value)
+            if (value)
             {
                 Animator.SetFloat(hashSpeed, 3.0f);
             }
@@ -221,6 +222,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
             this.Attack();
         }
+
+
     }
 
 
@@ -235,7 +238,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #endregion
 
     #region animation method
-    public void MoveAnimation(float xSpeed ,float zSpeed)
+    public void MoveAnimation(float xSpeed, float zSpeed)
     {
 
         if(!isRunning && zSpeed > 0.5f)
@@ -434,7 +437,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void TransitionToState(State nextState)
     {
-        if(nextState != RemainState)
+        if (nextState != RemainState)
         {
             CurrentState = nextState;
             this.OnExitState();

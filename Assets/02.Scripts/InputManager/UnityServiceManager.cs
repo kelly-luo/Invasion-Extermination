@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class UnityServiceManager : IUnityServiceManager
 {
+    private static UnityServiceManager instance;
+    public static UnityServiceManager Instance
+    {
+        get
+        {
+            if(instance == null)
+            {
+                instance = new UnityServiceManager();
+            }
+
+            return instance;
+        }
+    }
+
     public float DeltaTime
     {
         get { return Time.deltaTime; }

@@ -20,7 +20,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #region Unity Component
     [field: SerializeField]
-    public Transform PlayerTransform { get; set; }
+    public Transform ObjectTransform { get; set; }
 
     #endregion
 
@@ -144,8 +144,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion
 
-    public float StateTimeElapsed { get; set; }
-
     // state will change depends on this class (speed) 
     public ICharacterTranslate PlayerTranslate { get; set; }
     public IUnityServiceManager UnityService { get; set; }
@@ -165,9 +163,9 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
 
 
-        PlayerTransform = GetComponent<Transform>();
-        Animator = GetComponent<Animator>();
-        PlayerTranslate = new PlayerTranslate(PlayerTransform);
+        this.ObjectTransform = GetComponent<Transform>();
+        this.Animator = GetComponent<Animator>();
+        PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
 
     }
@@ -182,7 +180,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
         if (UnityService == null)
         {
-            UnityService = new UnityServiceManager();
+            this.UnityService = UnityServiceManager.Instance;
         }
         weaponClass = fisrtPersonViewWeapon.GetComponent<WeaponAK74>();
         fisrtPersonViewWeapon.transform.parent = CameraTr;
@@ -290,7 +288,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 actualHeadRot = headTr.localRotation;
 
-                PlayerTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
+                ObjectTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
@@ -311,7 +309,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 actualHeadRot = headTr.localRotation;
 
-                PlayerTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
+                ObjectTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
@@ -326,17 +324,17 @@ public class PlayerStateController : MonoBehaviour, IStateController
     private void RotateAvatarTowardSight()
     {
         var rotationSpeed = 150f;
-        var bodyRot = PlayerTransform.localRotation;
+        var bodyRot = ObjectTransform.localRotation;
         var lookRotation = Quaternion.LookRotation(CameraRigTr.forward);
 
         float angle = Quaternion.Angle(transform.rotation, lookRotation);
         float timeToComplete = angle / rotationSpeed;
         float donePercentage = Mathf.Min(1F, UnityService.DeltaTime / timeToComplete);
 
-        PlayerTransform.localRotation = Quaternion.Slerp(PlayerTransform.localRotation, lookRotation, donePercentage);
+        ObjectTransform.localRotation = Quaternion.Slerp(ObjectTransform.localRotation, lookRotation, donePercentage);
 
         //take the amount of change in body rotation 
-        var ChangeRotBody = PlayerTransform.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
+        var ChangeRotBody = ObjectTransform.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
         //add to Head Rotation
         headRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
         actualHeadRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
@@ -419,25 +417,13 @@ public class PlayerStateController : MonoBehaviour, IStateController
         return weaponTargetHolding;
     }
 
-    //check attack timer (so player do not "attack" every frames); 
-    public bool CheckIsAttackReady(float duration)
-    {
-        StateTimeElapsed += UnityService.DeltaTime;
-        return (StateTimeElapsed >= duration);
 
-    }
-
-    public void OnExitState()
-    {
-        StateTimeElapsed = 0;
-    }
 
     public void TransitionToState(State nextState)
     {
         if(nextState != RemainState)
         {
             CurrentState = nextState;
-            this.OnExitState();
         }
     }
 
@@ -496,8 +482,15 @@ public class PlayerStateController : MonoBehaviour, IStateController
         var weaponMeshs = thirdPersonViewWeapon.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer mesh in weaponMeshs)
             mesh.enabled = boolValues;
+    }
 
+    public void TakeDamage(float Damage)
+    {
 
+    }
+
+    public void OnDeath()
+    {
 
     }
 }

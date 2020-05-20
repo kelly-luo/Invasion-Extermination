@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTranslate : ICharacterTranslate
+public class MonsterTranslate : ICharacterTranslate
 {
     public Transform Character { get; set; }
     public float Speed { get; set; } = 1.5f;
+    public bool IsSitting { get; set; }
     public Vector3 MoveDirection { get; set; }
     private IUnityServiceManager unityService = UnityServiceManager.Instance;
 
-    private bool isRunning = false;
-    public bool IsRunning 
+    private bool isRunning;
+    public bool IsRunning
     {
         get
         {
@@ -18,9 +19,9 @@ public class PlayerTranslate : ICharacterTranslate
         }
         set
         {
-            if(value)
+            if (value)
             {
-                Speed = 3.0f;
+                Speed = 2.5f;
             }
             else
             {
@@ -29,33 +30,14 @@ public class PlayerTranslate : ICharacterTranslate
         }
     }
 
-    private bool isSitting = false;
-    public bool IsSitting
+    public MonsterTranslate(Transform character)
     {
-        get
-        {
-            return isSitting;
-        }
-        set
-        {
-            if (value)
-            {
-                Speed = 1f;
-            }
-
-        }
+        this.Character = character; 
     }
-
-    public PlayerTranslate(Transform character)
-    {
-        this.Character = character;
-        this.unityService = UnityServiceManager.Instance;
-    } 
 
     public void TranslateCharacter(Vector3 moveDir)
     {
         MoveDirection = moveDir;
         Character.Translate(moveDir.normalized * Speed * unityService.DeltaTime, Space.World);
     }
-
 }

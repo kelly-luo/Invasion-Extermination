@@ -275,6 +275,11 @@ public class PlayerStateController : MonoBehaviour, IStateController
             this.OnExitState();
         }
     }
+
+    public void onMouseClick()
+    {
+        Debug.Log("ur cool");
+    }
 }
 
 

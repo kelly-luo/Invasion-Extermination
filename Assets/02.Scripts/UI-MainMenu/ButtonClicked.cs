@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public abstract class ButtonClicked : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public abstract class ButtonClicked : MonoBehaviour
         ButtonClickEvent = false;
     }
 
-    public abstract void ButtonEvent(MyMenuButton menuButton);
+    public abstract void ButtonEvent(PointerEventData eventData);
     public void ButtonEventEnd() 
     {
         ButtonClickEvent = false;

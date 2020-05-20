@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ButtonClicked : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class ButtonClicked : MonoBehaviour
         optionClick.setFrame(frame);
         button.setButtonClicked(optionClick);
         //ACT
-        button.click();
+        button.click(null);
         //ASSERT
         bool actual = frame.activeSelf;
         Assert.AreEqual(true, actual);
@@ -33,9 +34,9 @@ public class ButtonClicked : MonoBehaviour
         frame.SetActive(false);
         optionClick.setFrame(frame);
         button.setButtonClicked(optionClick);
-        button.click();
+        button.click(null);
         //ACT
-        button.click();
+        button.click(null);
         //ASSERT
         bool actual = frame.activeSelf;
         Assert.AreEqual(false, actual);

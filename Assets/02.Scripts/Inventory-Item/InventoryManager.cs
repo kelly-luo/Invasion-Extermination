@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     private int currentSlotUsed;
 
     public GameObject inventoryPanel;
+    public GameObject inventorySlotPanel;
     private GameObject[] slots;
 
     public GameObject weaponInstances;
@@ -22,21 +23,21 @@ public class InventoryManager : MonoBehaviour
 
 
     public int temp;
+   
     void Start()
     {
         Intialize();
-       
     }
-    private void Intialize()
+    public void Intialize()
     {
         currentSlotUsed = 0;
         PlayerInventory = new Inventory();
-        maxSlot = inventoryPanel.transform.childCount;
+        maxSlot = inventorySlotPanel.transform.childCount;
         slots = new GameObject[maxSlot];
 
         for (int i = 0; i < maxSlot; i++)
         {
-            slots[i] = inventoryPanel.transform.GetChild(i).gameObject;
+            slots[i] = inventorySlotPanel.transform.GetChild(i).gameObject;
         }
 
         maxWeapons = weaponInstances.transform.childCount;
@@ -46,9 +47,11 @@ public class InventoryManager : MonoBehaviour
             weaponInstance[i] = weaponInstances.transform.GetChild(i).gameObject;
         }
 
+        //TempCODE
         ItemCreater();
     }
 
+    //Remove when Items become avaliable
     private void ItemCreater()
     {
         PlayerInventory.Add(new Item(0, 0, 100, 100));
@@ -67,11 +70,16 @@ public class InventoryManager : MonoBehaviour
         GameObject currentSlot;
         foreach(KeyValuePair<int,Item> Weapon in PlayerInventory.inventory)
         {
-            Debug.Log(Weapon.Key + " , " + Weapon.Value.Id);
+            //Debug.Log(Weapon.Key + " , " + Weapon.Value.Id);
             currentSlot = slots[Weapon.Key].transform.GetChild(0).gameObject;
             slotImage = currentSlot.GetComponent<Image>();
             slotImage.sprite = weaponInstance[Weapon.Value.Id].GetComponent<SpriteRenderer>().sprite;
-            if (currentSlot.activeSelf == false) currentSlot.SetActive(true);
+            if (!currentSlot.activeSelf) currentSlot.SetActive(true);
+        }
+
+        for(int i = PlayerInventory.GetSize()  ; i < slots.Length; i++)
+        {
+            slots[i].GetComponent<MenuButton>().disableButton();
         }
     }
 
@@ -93,14 +101,14 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void removeItem(int key)
+    public void RemoveItem(int key)
     {
         if (PlayerInventory.ContainsKey(key))
         {
-            Debug.Log("Removed="+key);
+            //Debug.Log("Removed="+key);
             Item RemovedItem = PlayerInventory.FindItem(key);
             PlayerInventory.Remove(RemovedItem);
-            
+
             slots[key].transform.GetChild(0).gameObject.SetActive(false);
             UpdateWeaponSlots();
 
@@ -123,6 +131,11 @@ public class InventoryManager : MonoBehaviour
             if (!Secondary.activeSelf) Secondary.SetActive(true);
         }else
             Secondary.SetActive(false);
+    }
+
+    public void InventoryVisible()
+    {
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
     }
 
     void Update()

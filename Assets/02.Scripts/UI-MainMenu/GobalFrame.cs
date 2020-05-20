@@ -5,11 +5,11 @@ using UnityEngine;
 public class GobalFrame : MonoBehaviour
 {
     public static GameObject frameInView;
-    public static MyMenuButton currentButton;
+    public static MenuButton currentButton;
     // Start is called before the first frame update
   
 
-    public static void bringToView(GameObject newFrame, MyMenuButton newButton)
+    public static void bringToView(GameObject newFrame, MenuButton newButton)
     {
      
         if (frameInView != null)

@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text moneyView;
     public TMP_Text ammoView;
 
-    public GameObject inventoryPanel;
+    public InventoryManager invManager;
 
     //Temp values, change to 0 after testing
     public int money;
@@ -28,11 +28,19 @@ public class UIManager : MonoBehaviour
     public byte test;
     void Start()
     {
+
+        Intialize();
+    }
+
+    public void Intialize()
+    {
         healthView.value = health;
         scoreView.text = FormatValue(score);
         moneyView.text = FormatValue(money);
         ammoView.text = FormatValue(ammo);
 
+        invManager.Intialize();
+        invManager.UpdateWeaponSlots();
     }
 
     private void Update()
@@ -44,7 +52,7 @@ public class UIManager : MonoBehaviour
 
         if (UnityServiceManager.GetKeyDown(KeyCode.I))
         {
-           OpenInventory();
+            invManager.InventoryVisible();
         }
 
     }
@@ -75,10 +83,7 @@ public class UIManager : MonoBehaviour
         else ammoView.text = FormatValue(ammo);
     }
 
-    public void OpenInventory()
-    {
-        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-    }
+
     private string FormatValue(int value)
     {
         if(value < 10)

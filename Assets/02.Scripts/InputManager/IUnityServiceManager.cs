@@ -11,6 +11,8 @@ public interface IUnityServiceManager
     bool GetKeyDown(KeyCode key);
 
     bool GetMouseButtonUp(int button);
-
+        
     float DeltaTime { get; }
+
+    int UnityRandomRange(int min, int max);
 }

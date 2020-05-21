@@ -28,5 +28,9 @@ public class UnityServiceManager : IUnityServiceManager
         return Input.GetMouseButton(button);
     }
 
+    public int UnityRandomRange(int min, int max)
+    {
+        return Random.Range(min, max);
+    }
 
 }

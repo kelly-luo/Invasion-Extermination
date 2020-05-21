@@ -317,7 +317,6 @@ public class CameraControl : MonoBehaviour , ICameraControl
                 cameraTr.localRotation = Quaternion.Euler(shakeRot);
             }
             passTime += UnityService.DeltaTime;
-            Debug.Log("asdas");
 
 
             yield return null;

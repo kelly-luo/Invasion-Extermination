@@ -22,6 +22,10 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public ICharacterTranslate MonsterTranslate {get; set;}
 
+    public List<Transform> WayPoints { get; set; }
+
+    
+
     void Awake()
     {
         this.Stats = new MonsterStats();

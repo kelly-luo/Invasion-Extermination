@@ -16,8 +16,8 @@ namespace IEGame.FiniteStateMachine
 
         void TransitionToState(State nextState);
 
-        public void TakeDamage(float Damage);
+        void TakeDamage(float Damage);
 
-        public void OnDeath();
+        void OnDeath();
     }
 }

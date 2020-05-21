@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-public class PlayerWeaponManager : IWeaponManager
+public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
 {
+
     public Vector3 WeaponOffSet { get; set; }
 
     private Vector3 weaponRebound;
@@ -39,16 +42,82 @@ public class PlayerWeaponManager : IWeaponManager
     }
 
     private ImWeapon currentWeaponClass;
-    private ImWeapon firstWeaponClass;
-    private GameObject thirdPersonViewWeapon;
-    private GameObject firstPersonViewWeapon;
+    public ImWeapon FirstWeaponClass { get; set; }
+    public ImWeapon ThirdWeaponClass { get; set; }
 
-   
-    private IUnityServiceManager UnityService;
+    public GameObject ThirdPersonViewWeapon { get; set; }
+    public GameObject FirstPersonViewWeapon { get; set; }
 
-    public PlayerWeaponManager(IUnityServiceManager unityService)
+    private IUnityServiceManager UnityService = UnityServiceManager.Instance;
+
+
+    public void Attack(Vector3 playerPosition, Vector3 shootDirection)
     {
-        this.UnityService = unityService;
+        FirstWeaponClass.Fire(playerPosition, shootDirection);
+    }
+
+    
+    
+    #region Initialize  
+
+    public void EquipNewWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr, Transform thirdPersonViewWeaponHolderTr)
+    {
+        if (ThirdPersonViewWeapon != null)
+        {
+            GameObject.Destroy(ThirdPersonViewWeapon);
+            FirstPersonViewWeapon.SetActive(false);
+        }
+
+        this.InitializeFirstPersonWeapon(FirstPeronViewWeapon, fisrtPersonViewWeaponHolderTr);
+        this.InitializeThirdPersonWeapon(thirdPersonViewWeaponHolderTr);
+    }
+
+    private void InitializeThirdPersonWeapon(Transform thirdPersonViewWeaponHolderTr)
+    {
+        ThirdPersonViewWeapon = GameObject.Instantiate(FirstPersonViewWeapon, thirdPersonViewWeaponHolderTr);
+        ThirdPersonViewWeapon.transform.localScale = new Vector3(180f, 180f, 180f);
+        ThirdPersonViewWeapon.transform.localPosition = new Vector3(26.7f, 7f, -3.4f);
+        ThirdPersonViewWeapon.transform.localRotation = Quaternion.Euler(2.725f, -128.081f, 87.86401f);
+        ThirdWeaponClass = ThirdPersonViewWeapon.GetComponent<ImWeapon>();
+
+    }
+
+    private void InitializeFirstPersonWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr)
+    {
+        FirstPeronViewWeapon.SetActive(true);
+        FirstPersonViewWeapon = FirstPeronViewWeapon;
+        FirstPersonViewWeapon.transform.parent = fisrtPersonViewWeaponHolderTr;
+        FirstPersonViewWeapon.transform.localScale = new Vector3(1f, 1f, 1f);
+        WeaponOffSet = new Vector3(0.21f, -0.11f, 0.64f);
+        FirstPersonViewWeapon.transform.localRotation = Quaternion.Euler(0f, 180f,0f);
+        FirstWeaponClass = FirstPersonViewWeapon.GetComponent<ImWeapon>();
+    }
+    #endregion
+
+
+    #region Update Weapon
+    public void UpdateFirstPersonViewWeaponPosition()
+    {
+        Vector3 weaponPosition = new Vector3(weaponBob.x + WeaponRebound.x + WeaponOffSet.x + WeaponRebound.x,
+            weaponBob.y + WeaponRebound.y + WeaponOffSet.y, weaponBob.z + WeaponRebound.z + WeaponOffSet.z);
+        FirstPersonViewWeapon.transform.localPosition = weaponPosition;
+
+    }
+
+    public void UpdateWeaponReboundWhenShoot()
+    {
+        if (UnityService.DeltaTime > 0f)
+        {
+            float xReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 90f) * FirstWeaponClass.ShakeMagnitudePos * 0.025f;
+
+            float yReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 70f) * FirstWeaponClass.ShakeMagnitudePos * 0.1f;
+
+            float zReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 50f) * FirstWeaponClass.ShakeMagnitudePos * 0.1f;
+
+            weaponRebound.x = xReboundValue;
+            weaponRebound.y = yReboundValue;
+            weaponRebound.z = zReboundValue;
+        }
     }
 
     public void UpdateWeaponBob(float XMovement, float YMovement)
@@ -65,65 +134,56 @@ public class PlayerWeaponManager : IWeaponManager
         }
     }
 
-    public void Attack(Vector3 playerPosition, Vector3 shootDirection)
+    #endregion
+
+    public void StartReboundCoroutine()
     {
-        currentWeaponClass.Fire(playerPosition, shootDirection);
+        StartCoroutine(KeepUpdateWeaponRebound());
     }
 
-    private void InitializeThirdPersonWeapon(Transform thirdPersonViewWeaponHolderTr)
+    public IEnumerator KeepUpdateWeaponRebound()
     {
-        thirdPersonViewWeapon = GameObject.Instantiate(firstPersonViewWeapon, thirdPersonViewWeaponHolderTr);
-        thirdPersonViewWeapon.transform.localScale = new Vector3(180f, 180f, 180f);
-        thirdPersonViewWeapon.transform.localPosition = new Vector3(26.7f, 7f, -3.4f);
-        thirdPersonViewWeapon.transform.localRotation = Quaternion.Euler(2.725f, -128.081f, 87.86401f);
-    }
-    private void InitializeFirstPersonWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr)
-    {
-        firstPersonViewWeapon = FirstPeronViewWeapon;
-        firstPersonViewWeapon.transform.parent = fisrtPersonViewWeaponHolderTr;
-        firstPersonViewWeapon.transform.localScale = new Vector3(1f, 1f, 1f);
-        firstPersonViewWeapon.transform.localPosition = new Vector3(0.21f, -0.11f, 0.64f);
-        firstPersonViewWeapon.transform.localRotation = Quaternion.Euler(2.725f, -128.081f, 87.86401f);
-        firstWeaponClass = firstPersonViewWeapon.GetComponent<ImWeapon>();
-    }
-
-    public void EquipNewWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr, Transform thirdPersonViewWeaponHolderTr)
-    {
-        this.InitializeFirstPersonWeapon(FirstPeronViewWeapon, fisrtPersonViewWeaponHolderTr);
-        this.InitializeThirdPersonWeapon(thirdPersonViewWeaponHolderTr);
-    }
-
-    public void UpdateFirstPersonViewWeaponPosition()
-    {
-        Vector3 weaponPosition = new Vector3(weaponBob.x + WeaponRebound.x + WeaponOffSet.x + WeaponRebound.x,
-            weaponBob.y + WeaponRebound.y + WeaponOffSet.y, weaponBob.z + WeaponRebound.z + WeaponOffSet.z);
-        firstPersonViewWeapon.transform.localPosition = weaponPosition;
-    }
-
-    public void UpdateWeaponReboundWhenShoot()
-    {
-        if (UnityService.DeltaTime > 0f)
+        var timeAtShoot = UnityService.TimeAtFrame;
+        //the UpdateRebound  will continue in corutine during delay
+        while (timeAtShoot + FirstWeaponClass.Delay > UnityService.TimeAtFrame)
         {
-            float xReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 90f) * firstWeaponClass.ShakeMagnitudePos * 0.025f;
-
-            float yReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 70f) * firstWeaponClass.ShakeMagnitudePos * 0.1f;
-
-            float zReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 50f) * firstWeaponClass.ShakeMagnitudePos * 0.1f;
-
-            weaponRebound.x = xReboundValue;
-            weaponRebound.y = yReboundValue;
-            weaponRebound.z = zReboundValue;
+            this.UpdateWeaponReboundWhenShoot();
+            yield return null;
         }
     }
-
-
     public void SetFirstPersonWeaponActive(bool boolValue)
     {
-        firstPersonViewWeapon.SetActive(boolValue);
+        FirstPersonViewWeapon.SetActive(boolValue);
     }
 
     public void SetThirdPersonWeaponActive(bool boolValue)
     {
-        thirdPersonViewWeapon.SetActive(boolValue);
+        ThirdPersonViewWeapon.SetActive(boolValue);
+    }
+
+    public void AddOnShootFireEvent(Action eventMethod)
+    {
+        if (FirstWeaponClass != null)
+        {
+            FirstWeaponClass.OnShotFire += eventMethod;
+            ThirdWeaponClass.OnShotFire += eventMethod;
+        }
+    }
+
+    public void SetFirstPersonWeaponVisible(bool boolValue)
+    {
+        var weaponMeshs = FirstPersonViewWeapon.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mesh in weaponMeshs)
+            mesh.enabled = boolValue;
+        if (boolValue) //Current Weapon can only visible 
+            currentWeaponClass = FirstWeaponClass;
+    }
+    public void SetThirdPersonWeaponVisible(bool boolValue)
+    {
+        var weaponMeshs = ThirdPersonViewWeapon.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mesh in weaponMeshs)
+            mesh.enabled = boolValue;
+        if (boolValue) //Current Weapon can only visible 
+            currentWeaponClass = ThirdWeaponClass;
     }
 }

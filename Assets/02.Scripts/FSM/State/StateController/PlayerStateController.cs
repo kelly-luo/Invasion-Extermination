@@ -24,7 +24,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion
 
-
     #region Camera Setting
     [field: SerializeField]
     public GameObject CameraRig { get; set; }
@@ -108,45 +107,37 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #region Input Values
     public float Vertical { get; set; }
     public float Horizontal { get; set; }
-    private bool isHoldingRifle;
+
+    public bool HasWeapon { get; set; }
+
+    private bool isHoldingRifle = false;
     public bool IsHoldingRifle
     {
         get { return isHoldingRifle; }
         set
-        {
-            Animator.SetBool(hashIsHoldingRifle, value);
+        {           
+            if (HasWeapon)
+            {
+                Animator.SetBool(hashIsHoldingRifle, value);
+                isHoldingRifle = value;
+                this.UpdateTheTexturWhenCameraViewChange();
+            }
 
-            thirdPersonViewWeapon.SetActive(value);       
-
-            isHoldingRifle = value;
         }
     }
     #endregion
 
     #region Weapon Setting
-    public GameObject fisrtPersonViewWeapon;
 
-    public ImWeapon weaponClass;
-
-    public float weaponOffX = 0.5f;
-    public float weaponOffY = 0.5f;
-    public float weaponOffZ = 0.5f;
-
-    public Vector3 weaponBob;
-    public float BobFrequency { get; set; } = 10f;
-    public float BobAmount { get; set; } = 0.05f;
-    
-    public Vector3 weaponRebound;
-
-
-    private GameObject thirdPersonViewWeapon;
+    public GameObject weapon;
     private Transform weaponHolderTr;
 
     #endregion
 
     // state will change depends on this class (speed) 
     public ICharacterTranslate PlayerTranslate { get; set; }
-    public IUnityServiceManager UnityService { get; set; }
+    public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
+    public IWeaponManager WeaponManager { get; set; }
 
     #region MonoBehaviour Base Function
     void Awake()
@@ -162,9 +153,10 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 weaponHolderTr = tr;
         }
 
-
+        Stats = new PlayerStats();
         this.ObjectTransform = GetComponent<Transform>();
         this.Animator = GetComponent<Animator>();
+        this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
 
@@ -176,67 +168,59 @@ public class PlayerStateController : MonoBehaviour, IStateController
         CameraRigTr = CameraRig.GetComponent<Transform>();
         CameraTr = CameraCtrl.GetCameraTransform();
 
-        thirdPersonViewWeapon = InitilizeHoldingWeapon(weaponHolderTr);
-
-        if (UnityService == null)
-        {
-            this.UnityService = UnityServiceManager.Instance;
-        }
-        weaponClass = fisrtPersonViewWeapon.GetComponent<WeaponAK74>();
-        fisrtPersonViewWeapon.transform.parent = CameraTr;
-
 
         gameObject.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
 
 
-        var components = fisrtPersonViewWeapon.GetComponentsInChildren<MeshRenderer>();
-        foreach (MeshRenderer component in components)
-        {
-            component.shadowCastingMode = ShadowCastingMode.Off;
-        }
+        this.UpdateTheTexturWhenCameraViewChange();
 
-        this.UpdateTheTexturWhenCameraviewChange();
-
-        weaponClass.OnShotFire += ShakeCameraWhenShoot;
-        weaponClass.OnShotFire += StartReboundCoroutine;
-        weaponClass.OnShotFire += SetWeaponFireAnimation;
-        CameraCtrl.OnViewChange += UpdateTheTexturWhenCameraviewChange;
-
-        IsHoldingRifle = true;
+        CameraCtrl.OnViewChange += UpdateTheTexturWhenCameraViewChange;
+        this.EquipWeapon(weapon);
 
     }
-
 
     void Update()
     {
         //update scene
 
-        UpdateUserInput();
-        CurrentState.UpdateState(this);
+        this.UpdateUserInput();
+        this.CurrentState.UpdateState(this);
 
         if (UnityService.GetMouseButtonUp(0))
         {
-
             this.Attack();
         }
     }
 
 
-
     void LateUpdate()
     {
-
-        SetWeaponPosition();
-        RotateNeck();
-        RotateHeadAndAvatar(CameraCtrl.YRot);
+        if (IsHoldingRifle)
+        {
+            this.WeaponManager.UpdateFirstPersonViewWeaponPosition();
+        }
+        this.RotateNeck();
+        this.RotateHeadAndAvatar(CameraCtrl.YRot);
     }
     #endregion
+
+    public void EquipWeapon(GameObject Weapon)
+    {
+        this.HasWeapon = true;
+        this.WeaponManager.EquipNewWeapon(Weapon, CameraTr, weaponHolderTr);
+        this.WeaponManager.AddOnShootFireEvent(ShakeCameraWhenShoot);
+        this.WeaponManager.AddOnShootFireEvent(SetWeaponFireAnimation);
+        this.UpdateTheTexturWhenCameraViewChange();
+
+    }
+
 
     #region animation method
     public void MoveAnimation(float xSpeed ,float zSpeed)
     {
+        this.WeaponManager.UpdateWeaponBob(xSpeed, zSpeed);
 
-        if(!isRunning && zSpeed > 0.5f)
+        if (!isRunning && zSpeed > 0.5f)
         {
             zSpeed = 0.5f;
         }
@@ -245,17 +229,14 @@ public class PlayerStateController : MonoBehaviour, IStateController
             IsRunning = false;
         }
 
-        Animator.SetFloat(hashXDirectionSpeed, xSpeed);
-        Animator.SetFloat(hashZDirectionSpeed, zSpeed);
+        this.Animator.SetFloat(hashXDirectionSpeed, xSpeed);
+        this.Animator.SetFloat(hashZDirectionSpeed, zSpeed);
+
 
         if (((xSpeed > 0) || (xSpeed < 0) || (zSpeed > 0) || (zSpeed < 0)) || IsHoldingRifle)
             this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body .
     }
 
-    public void SetWeaponFireAnimation()
-    {
-        Animator.SetTrigger(hashFire);
-    }
     #endregion
 
     #region CharacterBodyMove
@@ -342,82 +323,20 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion
 
-    #region GunMoveMotion
-    
-    public void SetWeaponPosition()
+    #region callbackWhenShootMotion
+
+    public void SetWeaponFireAnimation()
     {
-        Vector3 weaponPosition = new Vector3(weaponBob.x + weaponRebound.x + weaponOffX + weaponRebound.x,
-            weaponBob.y + weaponRebound.y + weaponOffY , weaponBob.z + weaponRebound.z + weaponOffZ);
-        fisrtPersonViewWeapon.transform.localPosition = weaponPosition;
-    }
-
-    public void UpdateWeaponBob(float xMovement,float YMovement)
-    {
-        if (UnityService.DeltaTime > 0f)
-        {
-            var bobFactor = (xMovement + YMovement * 0.5f) * 0.5f;
-
-            float xBobValue = Mathf.Sin(UnityService.TimeAtFrame * BobFrequency) * BobAmount * bobFactor;
-            float yBobValue = ((Mathf.Sin(UnityService.TimeAtFrame * BobFrequency * 2f) * 0.5f) + 0.5f) * BobAmount * bobFactor;
-
-            weaponBob.x = xBobValue;
-            weaponBob.y = Mathf.Abs(yBobValue);
-        }
-    }
-
-    public void UpdateWeaponReboundWhenShoot()
-    {
-        if (UnityService.DeltaTime > 0f)
-        {
-            float xReboundValue = Mathf.Sin(UnityService.TimeAtFrame *90f) * weaponClass.ShakeMagnitudePos * 0.025f;
-
-            float yReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 70f) * weaponClass.ShakeMagnitudePos * 0.1f;
-
-            float zReboundValue = Mathf.Sin(UnityService.TimeAtFrame * 50f) * weaponClass.ShakeMagnitudePos * 0.1f;
-
-            weaponRebound.x = xReboundValue;
-            weaponRebound.y = yReboundValue;
-            weaponRebound.z = zReboundValue;
-        }
-    }
-
-    public IEnumerator KeepUpdateWeaponRebound()
-    {
-        var timeAtShoot = UnityService.TimeAtFrame;
-        //the UpdateRebound  will continue in corutine during delay
-        while(timeAtShoot + weaponClass.Delay > UnityService.TimeAtFrame)
-        {
-            this.UpdateWeaponReboundWhenShoot();
-            yield return null;
-        }
-    }
-
-    public void StartReboundCoroutine()
-    {
-        StartCoroutine(KeepUpdateWeaponRebound());
+        if (HasWeapon)
+            Animator.SetTrigger(hashFire);
     }
 
     public void ShakeCameraWhenShoot()
     {
-
-        StartCoroutine(CameraCtrl.ShakeCamera(weaponClass.ShakeDuration, weaponClass.ShakeMagnitudePos, weaponClass.ShakeMagnitudeRot));
+        StartCoroutine(CameraCtrl.ShakeCamera(WeaponManager.FirstWeaponClass.ShakeDuration, WeaponManager.FirstWeaponClass.ShakeMagnitudePos, WeaponManager.FirstWeaponClass.ShakeMagnitudeRot));
     }
 
     #endregion
-
-
-    private GameObject InitilizeHoldingWeapon(Transform weaponHolderTr)
-    {
-        GameObject weaponTargetHolding = Instantiate(Resources.Load<GameObject>("GunPrefabs/AK74Weapon")) as GameObject;
-
-        weaponTargetHolding.transform.parent = weaponHolderTr;
-        weaponTargetHolding.transform.localScale = new Vector3(180f, 180f, 180f);
-        weaponTargetHolding.transform.localPosition = new Vector3(26.7f, 7f, -3.4f);
-        weaponTargetHolding.transform.localRotation = Quaternion.Euler(2.725f, -128.081f, 87.86401f);
-        return weaponTargetHolding;
-    }
-
-
 
     public void TransitionToState(State nextState)
     {
@@ -431,8 +350,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         if(IsHoldingRifle)
         {
-            weaponClass.Fire(CameraTr.transform.position, CameraTr.transform.forward);
-
+            WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward);
         }
     }
     private void UpdateUserInput()
@@ -447,12 +365,19 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
         if (UnityService.GetKeyUp(KeyCode.Z))
         {
-            IsHoldingRifle = !IsHoldingRifle;
+            if(HasWeapon)
+                IsHoldingRifle = !IsHoldingRifle;
         }
     }
 
     //weapon
-    public void UpdateTheTexturWhenCameraviewChange()
+    public void UpdateTheTexturWhenCameraViewChange()
+    {
+        this.UpdateCharacterTexture();
+        this.UpdateWeaponTexture();
+    }
+
+    private void UpdateCharacterTexture()
     {
         var currentViewMode = CameraCtrl.CurrentViewMode;
         var renderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
@@ -460,28 +385,57 @@ public class PlayerStateController : MonoBehaviour, IStateController
         if (currentViewMode == CameraViewType.First)
         {
             renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-            this.SetFirstPersonWeaponVisible(true);
-            this.SetThirdPersonWeaponVisible(false);
         }
         else if (currentViewMode == CameraViewType.Third)
         {
             renderer.shadowCastingMode = ShadowCastingMode.On;
-            this.SetFirstPersonWeaponVisible(false);
-            this.SetThirdPersonWeaponVisible(true);
-
         }
     }
-    private void SetFirstPersonWeaponVisible(bool boolValue)
+
+    private void UpdateWeaponTexture()
     {
-        var weaponMeshs = fisrtPersonViewWeapon.GetComponentsInChildren<MeshRenderer>();
-        foreach (MeshRenderer mesh in weaponMeshs)
-            mesh.enabled = boolValue;
+        var currentViewMode = CameraCtrl.CurrentViewMode;
+        if (currentViewMode == CameraViewType.First)
+        {
+            if (HasWeapon)
+            {
+                if (IsHoldingRifle)
+                {
+
+                    WeaponManager.SetFirstPersonWeaponVisible(true);
+                    WeaponManager.SetThirdPersonWeaponVisible(false);
+                }
+                else
+                {
+                    WeaponManager.SetFirstPersonWeaponVisible(false);
+                    WeaponManager.SetThirdPersonWeaponVisible(false);
+                }
+            }
+        }
+        else if (currentViewMode == CameraViewType.Third)
+        {
+            if (HasWeapon)
+            {
+                if (IsHoldingRifle)
+                {
+                    WeaponManager.SetFirstPersonWeaponVisible(false);
+                    WeaponManager.SetThirdPersonWeaponVisible(true);
+                }
+                else
+                {
+                    WeaponManager.SetFirstPersonWeaponVisible(false);
+                    WeaponManager.SetThirdPersonWeaponVisible(false);
+                }
+            }
+        }
     }
-    private void SetThirdPersonWeaponVisible(bool boolValues)
+
+    public void UnEquipWeapon()
     {
-        var weaponMeshs = thirdPersonViewWeapon.GetComponentsInChildren<MeshRenderer>();
-        foreach (MeshRenderer mesh in weaponMeshs)
-            mesh.enabled = boolValues;
+        IsHoldingRifle = false;
+        HasWeapon = false;
+        WeaponManager.SetFirstPersonWeaponActive(false);
+        WeaponManager.SetThirdPersonWeaponActive(false);
     }
 
     public void TakeDamage(float Damage)

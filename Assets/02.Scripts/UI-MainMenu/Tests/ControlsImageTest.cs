@@ -11,7 +11,7 @@ public class ControlsImageTest : MonoBehaviour
     public void controls_show_in_order_when_pressing_next()
     {
         //SETUP
-        MyMenuButton button = new MyMenuButton();
+        MenuButton button = new MenuButton();
         bcInstructions script = new bcInstructions();
         //ARRANGE
         script.InternalImageID = new int[3];
@@ -27,7 +27,7 @@ public class ControlsImageTest : MonoBehaviour
     public void controls_go_back_to_first_insructions()
     {
         //SETUP
-        MyMenuButton button = new MyMenuButton();
+        MenuButton button = new MenuButton();
         bcInstructions script = new bcInstructions();
         //ARRANGE
         script.InternalImageID = new int[3];

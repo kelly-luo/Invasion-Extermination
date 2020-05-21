@@ -10,8 +10,8 @@ public class ButtonClicked : MonoBehaviour
     public void frame_appears_Menu()
     {
         //ARRANGE
-        MyMenuButton button = new MyMenuButton();
-        OptionClicked optionClick = new OptionClicked();
+        MenuButton button = new MenuButton();
+        bcMainMenu optionClick = new bcMainMenu();
         GameObject frame = new GameObject();
         frame.SetActive(false);
         optionClick.setFrame(frame);
@@ -28,8 +28,8 @@ public class ButtonClicked : MonoBehaviour
     public void frame_disappears_Menu()
     {
         //ARRANGE
-        MyMenuButton button = new MyMenuButton();
-        OptionClicked optionClick = new OptionClicked();
+        MenuButton button = new MenuButton();
+        bcMainMenu optionClick = new bcMainMenu();
         GameObject frame = new GameObject();
         frame.SetActive(false);
         optionClick.setFrame(frame);

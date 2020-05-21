@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class FlexibleGridLayout : LayoutGroup
 {
-   public enum FitType
+    //https://www.youtube.com/watch?v=CGsEJToeXmA&t=3s <- Code from this tutorial
+    public enum FitType
     {
         Uniform,
         Width,
@@ -56,9 +57,12 @@ public class FlexibleGridLayout : LayoutGroup
 
         float parentWidth = rectTransform.rect.width;
         float parentHeight = rectTransform.rect.height;
+        //Original Youtube line: float cellWidth = (parentWidth / (float)columns) - ((spacing.x / (float)columns) * 2) - (padding.left / (float)columns) - (padding.right / (float)columns);
 
-        float cellWidth = (parentWidth / (float)columns) - ((spacing.x / (float)columns) * 2) - (padding.left / (float)columns) - (padding.right / (float)columns);
-        float cellHeight = (parentHeight / (float)rows) - ((spacing.y / (float)rows) * 2) - (padding.top / (float)rows) - (padding.bottom / (float)rows);
+        //Fixed:  ((spacing.x / (float)columns) * 2) changed 2 to (columns-1)
+        float cellWidth = (parentWidth / (float)columns) - ((spacing.x / (float)columns) * (columns-1)) - (padding.left / (float)columns) - (padding.right / (float)columns);
+        //Fixed:  ((spacing.x / (float)rows) * 2) changed 2 to (rows-1)
+        float cellHeight = (parentHeight / (float)rows) - ((spacing.y / (float)rows) * (rows - 1)) - (padding.top / (float)rows) - (padding.bottom / (float)rows);
 
         cellSize.x = fitX ? cellWidth : cellSize.x;
         cellSize.y = fitY ? cellHeight : cellSize.y;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    public Inventory PlayerInventory { get; set; }
+    private Inventory PlayerInventory { get; set; }
 
     private int maxSlot;
     private int maxWeapons;
@@ -22,16 +22,16 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject Secondary;
 
 
-    public int temp;
-   
     void Start()
     {
-        Intialize();
+   
     }
-    public void Intialize()
+    public void Intialize(Inventory inventory)
     {
+        PlayerInventory = inventory;
+
+
         currentSlotUsed = 0;
-        PlayerInventory = new Inventory();
         maxSlot = inventorySlotPanel.transform.childCount;
         slots = new GameObject[maxSlot];
 
@@ -48,18 +48,18 @@ public class InventoryManager : MonoBehaviour
         }
 
         //TempCODE
-        ItemCreater();
+       // ItemCreater();
     }
 
-    //Remove when Items become avaliable
-    private void ItemCreater()
-    {
-        for(int i = 0; i < 10; i++)
-        {
-            PlayerInventory.Add(new Item(Random.Range(0, 5), Random.Range(0, 20), Random.Range(1, 100), 1));
-        }
-    }
-    //Remove when Items become avaliable
+    ////Remove when Items become avaliable
+    //private void ItemCreater()
+    //{
+    //    for(int i = 0; i < 10; i++)
+    //    {
+    //        PlayerInventory.Add(new Item(Random.Range(0, 5), Random.Range(0, 20), Random.Range(1, 100), 1));
+    //    }
+    //}
+    ////Remove when Items become avaliable
 
     public void UpdateInventoryGUI()
     {
@@ -80,7 +80,7 @@ public class InventoryManager : MonoBehaviour
       
         for (int i = PlayerInventory.GetSize()  ; i < slots.Length; i++)
         {
-             slots[i].GetComponent<MenuButton>().disableButton();
+            slots[i].GetComponent<MenuButton>().disableButton();
             slots[i].SetActive(false);
         }
     }
@@ -108,12 +108,10 @@ public class InventoryManager : MonoBehaviour
 
         if (PlayerInventory.ContainsKey(key))
         {
-
             Item RemovedItem = PlayerInventory.FindItem(key);
             PlayerInventory.Remove(RemovedItem);
 
             UpdateWeaponSlots();
-
         }
     }
 
@@ -137,11 +135,13 @@ public class InventoryManager : MonoBehaviour
 
     public void InventoryVisible()
     {
+        if(inventoryPanel != null)
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
     }
 
     void Update()
     {
+        if(PlayerInventory != null)
         if (currentSlotUsed != PlayerInventory.GetSize()) UpdateInventoryGUI();
     }
 }

@@ -1878,7 +1878,6 @@ GameObject:
   - component: {fileID: 436551140}
   - component: {fileID: 436551139}
   - component: {fileID: 436551138}
-  - component: {fileID: 436551141}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -1990,18 +1989,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 436551136}
   m_CullTransparentMesh: 0
---- !u!114 &436551141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436551136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fcc5b48a1d2d8142bfeb2f7c06b1508, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &438668955
 GameObject:
   m_ObjectHideFlags: 0
@@ -4157,11 +4144,11 @@ MonoBehaviour:
   moneyView: {fileID: 848811865}
   ammoView: {fileID: 1547645950}
   invManager: {fileID: 1556465326}
-  money: 0
-  score: 0
-  ammo: 0
-  health: 65
-  test: 0
+  playerInformation: {fileID: 1616689218}
+  displaymoney: 0
+  displayscore: 0
+  displayammo: 0
+  displayhealth: 0
 --- !u!114 &1056195656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5591,7 +5578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1426384688
 Transform:
   m_ObjectHideFlags: 0
@@ -6248,7 +6235,6 @@ MonoBehaviour:
   weaponInstances: {fileID: 1426384687}
   Primary: {fileID: 1733722269}
   Secondary: {fileID: 299187418}
-  temp: 0
 --- !u!1001 &1578248222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6570,6 +6556,22 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 358909972}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1616689218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616689217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b046507b0c37dca4d84b55b71ec09810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Level>k__BackingField: 0
+  <Score>k__BackingField: 0
+  <Money>k__BackingField: 0
+  <Health>k__BackingField: 100
 --- !u!114 &1616689219
 MonoBehaviour:
   m_ObjectHideFlags: 0

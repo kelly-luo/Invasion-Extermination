@@ -17,7 +17,7 @@ public class ButtonClicked : MonoBehaviour
         optionClick.setFrame(frame);
         button.setButtonClicked(optionClick);
         //ACT
-        button.click(null);
+        button.OnPointerClick(null);
         //ASSERT
         bool actual = frame.activeSelf;
         Assert.AreEqual(true, actual);
@@ -34,12 +34,32 @@ public class ButtonClicked : MonoBehaviour
         frame.SetActive(false);
         optionClick.setFrame(frame);
         button.setButtonClicked(optionClick);
-        button.click(null);
+        button.OnPointerClick(null);
         //ACT
-        button.click(null);
+        button.OnPointerClick(null);
         //ASSERT
         bool actual = frame.activeSelf;
         Assert.AreEqual(false, actual);
     }
+
+    [Test]
+    public void test_button_click_when_disable()
+    {
+        //ARRANGE
+        MenuButton button = new MenuButton();
+        bcMainMenu optionClick = new bcMainMenu();
+        GameObject frame = new GameObject();
+        frame.SetActive(false);
+        optionClick.setFrame(frame);
+        button.setButtonClicked(optionClick);
+
+        //ACT
+        button.disableButton();
+        button.OnPointerClick(null);
+        //ASSERT
+        bool actual = frame.activeSelf;
+        Assert.AreEqual(false, actual);
+    }
+
 
 }

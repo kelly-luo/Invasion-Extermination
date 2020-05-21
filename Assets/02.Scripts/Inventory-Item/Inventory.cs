@@ -15,17 +15,26 @@ public class Inventory
     
     public void Add(Item item)
     {
-        if (inventory.Count < 24) { 
-            inventory.Add(item.InstanceId, item);
-            if (Primary == null)
+        if (inventory.Count < 24) {
+            if (!inventory.ContainsKey(item.InstanceId))
             {
-                SetPrimary(item);
+                inventory.Add(item.InstanceId, item);
+                if (Primary == null)
+                {
+                    SetPrimary(item);
+                }
+                else if (Secondary == null)
+                {
+                    SetSecondary(item);
+                }
             }
-            else if (Secondary == null)
+            else
             {
-                SetSecondary(item);
+                inventory.TryGetValue(item.InstanceId, out Item value);
+                value.Amount += item.Amount;
+                inventory[item.InstanceId] = value;
             }
-       
+
         }
     }
 

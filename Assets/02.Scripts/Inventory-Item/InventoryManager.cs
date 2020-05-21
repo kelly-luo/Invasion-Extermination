@@ -11,15 +11,15 @@ public class InventoryManager : MonoBehaviour
     private int maxWeapons;
     private int currentSlotUsed;
 
-    public GameObject inventoryPanel;
-    public GameObject inventorySlotPanel;
+    [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private GameObject inventorySlotPanel;
     private GameObject[] slots;
 
-    public GameObject weaponInstances;
+    [SerializeField] private GameObject weaponInstances;
     private GameObject[] weaponInstance;
 
-    public GameObject Primary;
-    public GameObject Secondary;
+    [SerializeField] private GameObject Primary;
+    [SerializeField] private GameObject Secondary;
 
 
     public int temp;
@@ -54,38 +54,40 @@ public class InventoryManager : MonoBehaviour
     //Remove when Items become avaliable
     private void ItemCreater()
     {
-        PlayerInventory.Add(new Item(0, 0, 100, 100));
-        PlayerInventory.Add(new Item(1, 1, 100, 100));
-        PlayerInventory.Add(new Item(2, 2, 100, 100));
-        PlayerInventory.Add(new Item(1, 3, 100, 100));
-        PlayerInventory.Add(new Item(3, 4, 100, 100));
-        PlayerInventory.Add(new Item(4, 5, 100, 100));
+        for(int i = 0; i < 10; i++)
+        {
+            PlayerInventory.Add(new Item(Random.Range(0, 5), Random.Range(0, 20), Random.Range(1, 100), 1));
+        }
     }
+    //Remove when Items become avaliable
 
     public void UpdateInventoryGUI()
     {
         UpdateWeaponSlots();
         currentSlotUsed = PlayerInventory.GetSize();
-        Image slotImage;
-        GameObject currentSlot;
+        int slotNo = -1;
         foreach(KeyValuePair<int,Item> Weapon in PlayerInventory.inventory)
         {
-            //Debug.Log(Weapon.Key + " , " + Weapon.Value.Id);
-            currentSlot = slots[Weapon.Key].transform.GetChild(0).gameObject;
-            slotImage = currentSlot.GetComponent<Image>();
-            slotImage.sprite = weaponInstance[Weapon.Value.Id].GetComponent<SpriteRenderer>().sprite;
-            if (!currentSlot.activeSelf) currentSlot.SetActive(true);
-        }
+            slotNo++;
+           // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
 
-        for(int i = PlayerInventory.GetSize()  ; i < slots.Length; i++)
+            bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
+
+            slotInfo.InstanceId = Weapon.Key;
+            slotInfo.setSprite(weaponInstance[Weapon.Value.Id].GetComponent<SpriteRenderer>().sprite);
+            slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.Amount);
+        }
+      
+        for (int i = PlayerInventory.GetSize()  ; i < slots.Length; i++)
         {
-            slots[i].GetComponent<MenuButton>().disableButton();
+             slots[i].GetComponent<MenuButton>().disableButton();
+            slots[i].SetActive(false);
         }
     }
 
     public void SetPrimary(int key)
     {
-        if (PlayerInventory.ContainsKey(key)) 
+        if (PlayerInventory.ContainsKey(key))
         {
             PlayerInventory.SetPrimary(key);
             UpdateWeaponSlots();
@@ -103,13 +105,13 @@ public class InventoryManager : MonoBehaviour
 
     public void RemoveItem(int key)
     {
+
         if (PlayerInventory.ContainsKey(key))
         {
-            //Debug.Log("Removed="+key);
+
             Item RemovedItem = PlayerInventory.FindItem(key);
             PlayerInventory.Remove(RemovedItem);
 
-            slots[key].transform.GetChild(0).gameObject.SetActive(false);
             UpdateWeaponSlots();
 
         }

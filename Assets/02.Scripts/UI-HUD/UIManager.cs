@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    private string FormatValue(int value)
+    static public string FormatValue(int value)
     {
         if(value < 10)
         {

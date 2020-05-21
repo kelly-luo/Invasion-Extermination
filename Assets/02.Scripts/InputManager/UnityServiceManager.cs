@@ -52,4 +52,14 @@ public class UnityServiceManager : IUnityServiceManager
     {
         return Input.GetMouseButton(button);
     }
+
+    public int Range(int min, int max)
+    {
+        return Random.Range(min, max);
+    }
+
+    public Collider[] OverlapSphere(Vector3 position, float viewRange, int layerMask)
+    {
+        return Physics.OverlapSphere(position, viewRange, layerMask);
+    }
 }

@@ -2,16 +2,19 @@
 
 public class PlayerInformation : MonoBehaviour
 {
+
     [field: SerializeField] public int Level { get; set; }
     [field: SerializeField] public int Score { get; set; }
     [field: SerializeField] public int Money { get; set; }
     [field: SerializeField] public float Health { get; set; }
+     public Inventory PlayerInventory { get; set; }
 
     private Transform transform;
     // Start is called before the first frame update
     void Start()
     {
         transform = GetComponent<Transform>();
+        PlayerInventory = new Inventory();
     }
 
     public void SavePlayer()

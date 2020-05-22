@@ -69,7 +69,7 @@ public class MonsterController : MonoBehaviour, IStateController
     private List<GameObject> skins = new List<GameObject>();
 
     private float lastStateUpdateTime;
-    private float stateDelay= 0.3f;
+    private float stateDelay= 0.6f;
     #region Speed Value     
     private readonly float patrolSpeed = 1.5f;
 
@@ -160,8 +160,6 @@ public class MonsterController : MonoBehaviour, IStateController
 
     void Update()
     {
-        this.LookTowardMovingDirection();
-        this.UpdateCurrentMovePoint();
         if (Agent.isStopped == false)
         {
             Quaternion rot = Quaternion.LookRotation(Agent.desiredVelocity);
@@ -173,7 +171,6 @@ public class MonsterController : MonoBehaviour, IStateController
             if (lastStateUpdateTime + stateDelay < UnityService.TimeAtFrame)
             {
                 CurrentState.UpdateState(this);
-                lastStateUpdateTime = UnityService.TimeAtFrame;
             }
         }
         else
@@ -181,6 +178,13 @@ public class MonsterController : MonoBehaviour, IStateController
             CurrentState.UpdateState(this);
         }
     }
+
+    void LateUpdate()
+    {
+        this.LookTowardMovingDirection();
+        this.UpdateCurrentMovePoint();
+    }
+
 
     private void InitilizeWaypointGroup()
     {

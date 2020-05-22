@@ -17,11 +17,12 @@ public class CameraControl : MonoBehaviour , ICameraControl
     {
         private List<ICameraView> cameraViewList = new List<ICameraView>();
 
+        private int viewListIdx = 0;
         public ICameraView CurrentView
         {
             get { return cameraViewList[viewListIdx]; }
         }
-        private int viewListIdx = 0;
+
         public int ViewListIdx
         {
             get { return viewListIdx; }

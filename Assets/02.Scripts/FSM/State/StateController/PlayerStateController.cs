@@ -249,7 +249,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         //you might be wondering why did i put the x on z axis 
         //it is because the I found that local Transform of the Neck bone in model was reversed. 
-        neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
+        //neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
 
     }
 

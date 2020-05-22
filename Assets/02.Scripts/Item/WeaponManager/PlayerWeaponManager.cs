@@ -51,9 +51,10 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
     private IUnityServiceManager UnityService = UnityServiceManager.Instance;
 
 
-    public void Attack(Vector3 playerPosition, Vector3 shootDirection)
+    public IEnumerator Attack(Vector3 playerPosition, Vector3 shootDirection)
     {
         FirstWeaponClass.Fire(playerPosition, shootDirection);
+        yield return null;
     }
 
     

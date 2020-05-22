@@ -1,18 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using IEGame.FiniteStateMachine;
 
-public class PlayerInAimDecision : MonoBehaviour
+[CreateAssetMenu(menuName = "PluggableScript/EnemyDecision/PlayerInAimDecision")]
+public class PlayerInAimDecision : Decision
 {
-    // Start is called before the first frame update
-    void Start()
+    public override bool Decide(IStateController controller)
     {
-        
-    }
+        var monsterController = controller as MonsterController;
+        bool isView = false; 
+        RaycastHit hit;
+        Vector3 dir = (monsterController.PlayerTr.position -
+            monsterController.ObjectTransform.position).normalized;
+        if (Physics.Raycast(monsterController.ObjectTransform.position,
+            monsterController.ObjectTransform.forward, out hit, monsterController.viewRange, monsterController.LayerMask))
+        {
+            isView = (hit.collider.CompareTag("Player"));
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return isView;
     }
 }

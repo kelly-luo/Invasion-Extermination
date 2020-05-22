@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9df323f006cda7c4e80d7a4ccdfb7db6, type: 3}
+  m_Name: EnemyTraceState
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: 7b587dcd0fdab324eab451e6b1f13ae8, type: 2}
+  transitions:
+  - decision: {fileID: 11400000, guid: abe65af7b623009429ef9273046bfb40, type: 2}
+    trueState: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783, type: 2}
+    falseState: {fileID: 11400000, guid: 34ad407fb3244d844a5b5bb5ebc69dab, type: 2}
+  - decision: {fileID: 11400000, guid: 73da6caa8609da042b06ca227025f6a9, type: 2}
+    trueState: {fileID: 11400000, guid: d7920d3a3cd17ef419d8c0fb1f427480, type: 2}
+    falseState: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783, type: 2}

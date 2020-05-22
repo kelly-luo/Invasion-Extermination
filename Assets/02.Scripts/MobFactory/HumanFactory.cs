@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HumanFactory : MobFactory<HumanFactory>
+public class HumanFactory : MobFactory
 {
-
+    public GameObject Avatar;
 
     public override GameObject CreateMob()
     {
-        throw new System.NotImplementedException();
+        return Instantiate(Avatar);
     }
 }

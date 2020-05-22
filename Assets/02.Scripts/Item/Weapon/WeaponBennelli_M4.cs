@@ -7,6 +7,7 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
 {
 
     #region ID
+
     public int EntityID { get; }
     public readonly int instanceID;
     public int InstanceID
@@ -16,8 +17,8 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
     #endregion
 
     #region Bullet
-    public int MaxBullet { get; } = 30;
-    private int numOfBullet = 0;
+    public int MaxBullet { get; } = 7;
+    private int numOfBullet = 7;
     public int NumOfBullet
     {
         get { return numOfBullet; }
@@ -32,13 +33,36 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
 
     #region Shake Setting
 
-    public float ShakeDuration { get; } = 0.05f;
+    public float ShakeDuration { get; } = 0.04f;
 
-    public float ShakeMagnitudePos { get; } = 0.03f;
+    public float ShakeMagnitudePos { get; } = 0.2f;
 
     public float ShakeMagnitudeRot { get; } = 0.1f;
 
+    #endregion
+
+    #region Shooting Setting 
+
+    public float Damage { get; set; } = 70;
+
+    public float Delay { get; set; } = 0.5f;
+
+    public float RequiredScore { get; }
+
     private bool isShooting = false;
+
+    private float lastShootTime = 0f;
+
+    #region LayerMask
+    private int enemyLayer;
+    private int obstacleLayer;
+    private int layerMask;
+    #endregion
+
+    #region Gizmos
+    private Vector3 playerPositions;
+    private Vector3 shootDirections;
+    #endregion
 
     public bool IsShooting
     {
@@ -50,12 +74,6 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
 
     #endregion
 
-    public float Damage { get; set; } = 20;
-
-    public float Delay { get; set; }
-
-    public float RequiredScore { get; }
-
     #region Delegate Event
 
     public Action OnShotFire { get; set; }
@@ -63,9 +81,32 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
     public Action OnReload { get; set; }
     #endregion
 
+    #region Audio
+    private AudioSource audio;
+
+    public AudioClip fireSfx;
+    #endregion
+
     public int LimitStacking { get; }
 
     public float ReloadTime { get; set; }
+
+    public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
+
+
+    void Start()
+    {
+        audio = GetComponent<AudioSource>();
+
+        this.SetLayer();
+    }
+
+    public void SetLayer()
+    {
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        obstacleLayer = LayerMask.NameToLayer("Obstacle");
+        layerMask = (1 << enemyLayer) | (1 << obstacleLayer);
+    }
 
     public void Reload(ref int numOfBulletLeft)
     {
@@ -88,14 +129,35 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
 
     public GameObject Fire(Vector3 playerPosition, Vector3 shootDirection)
     {
-        RaycastHit hit;
-        // required delay
-        OnShotFire?.Invoke();
+        playerPositions = playerPosition;
+        shootDirections = shootDirection;
+        if (lastShootTime + Delay > UnityService.TimeAtFrame)
+            return null;
 
-        if (Physics.Raycast(gameObject.transform.position, gameObject.transform.forward, out hit, 100))
+        isShooting = true;
+        lastShootTime = UnityService.TimeAtFrame;
+
+        // required delay
+        if (NumOfBullet > 0)
+        {
+            OnShotFire?.Invoke();
+            audio.PlayOneShot(fireSfx, 0.5f);
+        }
+        RaycastHit hit;
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, 300, layerMask))
         {
 
-            return hit.transform.gameObject;
+            isShooting = false;
+            var hitObject = hit.transform.gameObject;
+            Debug.Log(hitObject.tag.ToString());
+
+            if (hitObject.CompareTag("Enemy"))
+            {
+                var control = hitObject.GetComponent<PlayerStateController>();
+                control.TakeDamage(Damage);
+                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 50);
+            }
+            return hitObject;
 
             //do the related action with monster here
         }
@@ -103,6 +165,11 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
         {
             return null;
         }
-
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(playerPositions, playerPositions + (40 * shootDirections));
+    }
+
 }

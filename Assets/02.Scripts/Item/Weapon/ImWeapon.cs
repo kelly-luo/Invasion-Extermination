@@ -35,6 +35,7 @@ public interface ImWeapon : ImItem
 
     GameObject Fire(Vector3 playerPosition, Vector3 shootDirection);
 
+    void SetLayer();
 
     void Reload(ref int numOfBulletLeft);
 }

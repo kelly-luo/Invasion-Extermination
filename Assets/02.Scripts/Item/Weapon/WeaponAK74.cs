@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-    
+
 public class WeaponAK74 : MonoBehaviour, ImWeapon
 {
 
@@ -18,7 +18,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     #region Bullet
     public int MaxBullet { get; } = 30;
-    private int numOfBullet = 0;
+    private int numOfBullet = 30;
     public int NumOfBullet
     {
         get { return numOfBullet; }
@@ -40,7 +40,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     public float ShakeMagnitudeRot { get; } = 0.1f;
 
     #endregion
-
+    
     #region Shooting Setting 
 
     public float Damage { get; set; } = 20;
@@ -51,7 +51,18 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     private bool isShooting = false;
 
-    private float lastShootTime = 0f; 
+    private float lastShootTime = 0f;
+
+    #region LayerMask
+    private int enemyLayer;
+    private int obstacleLayer;
+    private int layerMask;
+    #endregion
+
+    #region Gizmos
+    private Vector3 playerPositions;
+    private Vector3 shootDirections;
+    #endregion
 
     public bool IsShooting
     {
@@ -70,12 +81,33 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     public Action OnReload { get; set; }
     #endregion
 
+    #region Audio
+    private AudioSource audio;
+
+    public AudioClip fireSfx;
+    #endregion
+
     public int LimitStacking { get; }
 
     public float ReloadTime { get; set; }
 
     public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
 
+
+
+    void Start()
+    {
+        audio = GetComponent<AudioSource>();
+
+        this.SetLayer();
+    }
+
+    public void SetLayer()
+    {
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+        obstacleLayer = LayerMask.NameToLayer("Obstacle");
+        layerMask = (1 << enemyLayer) | (1 << obstacleLayer);
+    }
 
     public void Reload(ref int numOfBulletLeft)
     {
@@ -98,20 +130,34 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     public GameObject Fire(Vector3 playerPosition,Vector3 shootDirection)
     {
+        playerPositions = playerPosition;
+        shootDirections = shootDirection;
         if (lastShootTime + Delay > UnityService.TimeAtFrame)
             return null;
+
         isShooting = true;
         lastShootTime = UnityService.TimeAtFrame;
 
-        // required delay
-        OnShotFire?.Invoke();
+        if (NumOfBullet > 0)
+        {
+            OnShotFire?.Invoke();
+            audio.PlayOneShot(fireSfx, 0.3f);
+        }
 
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 100))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
         {
 
             isShooting = false;
-            return hit.transform.gameObject;
+            var hitObject = hit.transform.gameObject;
+
+            if (hitObject.CompareTag("Enemy"))
+            {
+                var control = hitObject.GetComponent<MonsterController>();
+                control.TakeDamage(Damage);
+                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 50);
+            }
+            return hitObject;
 
             //do the related action with monster here
         }
@@ -119,5 +165,10 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         {
             return null;
         }
+    }
+
+    void OnDrawGizmos( )
+    {
+        Gizmos.DrawLine(playerPositions, playerPositions +(70 * shootDirections));
     }
 }

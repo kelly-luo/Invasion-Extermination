@@ -20,7 +20,7 @@ public class PlayerTranslate : ICharacterTranslate
         {
             if(value)
             {
-                Speed = 3.0f;
+                Speed = 4.5f;
             }
             else
             {
@@ -40,7 +40,7 @@ public class PlayerTranslate : ICharacterTranslate
         {
             if (value)
             {
-                Speed = 1f;
+                Speed = 1.5f;
             }
 
         }

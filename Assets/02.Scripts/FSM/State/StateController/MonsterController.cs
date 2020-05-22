@@ -21,15 +21,34 @@ public class MonsterController : MonoBehaviour, IStateController
     [field: SerializeField]
     public State RemainState { get; set; }
     #endregion
+
     #region Animation
     public Animator Animator { get; set; }
+
+    private readonly int hashDieIdx = Animator.StringToHash("DieIdx");
+    private readonly int hashSpeed = Animator.StringToHash("Speed");
+    private readonly int hashCanMove = Animator.StringToHash("CanMove");
+    private readonly int hashDie = Animator.StringToHash("Die");
+    private readonly int hashIsHoldingWeapon = Animator.StringToHash("IsHoldingWeapon");
+    private readonly int hashReload = Animator.StringToHash("Reload");
+    private readonly int hashFire = Animator.StringToHash("Fire");
+
     #endregion
+
+    #region Weapon
+    public bool isHoldingWeapon;
+
+    public GameObject weapon;
+    public WeaponM1911 WeaponClass { get; set; }
+    #endregion
+
 
     public ObjectStats Stats { get; set; }
 
     public Transform ObjectTransform { get; set; }
 
     public Transform PlayerTr { get; set; }
+    private Transform weaponHolderTr;
 
     public ICharacterTranslate MonsterTranslate {get; set;}
     public IUnityServiceManager UnityService { get; set; }
@@ -49,12 +68,13 @@ public class MonsterController : MonoBehaviour, IStateController
 
     private List<GameObject> skins = new List<GameObject>();
 
+    private float lastStateUpdateTime;
+    private float stateDelay= 0.3f;
     #region Speed Value     
-    private readonly float patrolSpeed = 20.5f;
+    private readonly float patrolSpeed = 1.5f;
 
-    private readonly float traceSpeed = 2.8f;
+    private readonly float traceSpeed = 2.3f;
     #endregion
-
 
     public float Speed
     {
@@ -70,6 +90,8 @@ public class MonsterController : MonoBehaviour, IStateController
             patrolling = value;
             if (patrolling)
             {
+                Animator.SetBool(hashCanMove, true);
+                Animator.SetFloat(hashSpeed, patrolSpeed);
                 Agent.speed = patrolSpeed;
 
                 damping = 1.0f;
@@ -87,20 +109,27 @@ public class MonsterController : MonoBehaviour, IStateController
         {
             traceTarget = value;
             Agent.speed = traceSpeed;
-
+            Animator.SetBool(hashCanMove, true);
+            Animator.SetFloat(hashSpeed, traceSpeed);
             damping = 7.0f;
             this.TraceTargetPos(traceTarget);
         }
     }
 
 
+
     void Awake()
     {
-        this.Stats = new MonsterStats();
+        var transforms = GetComponentsInChildren<Transform>();
+        foreach (Transform tr in transforms)
+        {
+            if (tr.gameObject.name == "RWeaponHolder")
+                weaponHolderTr = tr;
+        }
+            this.Stats = new MonsterStats();
+        Stats.HP = 100;
         this.ObjectTransform = gameObject.transform;
         this.Animator = GetComponent<Animator>();
-
-        this.MonsterTranslate = new MonsterTranslate(ObjectTransform);
 
     }
 
@@ -110,15 +139,43 @@ public class MonsterController : MonoBehaviour, IStateController
 
         InitilizeSkinType();
         InitilizeWaypointGroup();
+
         Agent = GetComponent<NavMeshAgent>();
         Agent.autoBraking = false;
         Agent.updateRotation = false;
         Agent.speed = patrolSpeed;
 
         PlayerTr = GameObject.FindGameObjectWithTag("Player").transform;
-
+        
         PlayerLayer = UnityEngine.LayerMask.NameToLayer("Player");
         ObstacleLayer = UnityEngine.LayerMask.NameToLayer("Obstacle");
+        LayerMask = 1 << PlayerLayer;
+
+    }
+
+
+    void Update()
+    {
+        this.LookTowardMovingDirection();
+        this.UpdateCurrentMovePoint();
+        if (Agent.isStopped == false)
+        {
+            Quaternion rot = Quaternion.LookRotation(Agent.desiredVelocity);
+
+            ObjectTransform.rotation = Quaternion.Slerp(ObjectTransform.rotation, rot, UnityService.DeltaTime * damping);
+        }
+        if (isHoldingWeapon )
+        {
+            if (lastStateUpdateTime + stateDelay < UnityService.TimeAtFrame)
+            {
+                CurrentState.UpdateState(this);
+                lastStateUpdateTime = UnityService.TimeAtFrame;
+            }
+        }
+        else
+        {
+            CurrentState.UpdateState(this);
+        }
     }
 
     private void InitilizeWaypointGroup()
@@ -130,8 +187,30 @@ public class MonsterController : MonoBehaviour, IStateController
             //removing the waypoint folder
             WayPoints.RemoveAt(0);
             NextWayPointIndex = UnityService.Range(0, WayPoints.Count);
-            Debug.Log(WayPoints[1].position.ToString());
         }
+
+    }
+
+    private void SetFireAnimtion()
+    {
+        Animator.SetTrigger(hashFire);
+    }
+
+    private void SetReloadAnimation()
+    {
+
+    }
+
+    public void EquipWeapon(GameObject weapon)
+    {
+        isHoldingWeapon = true;
+        Animator.SetBool(hashIsHoldingWeapon, true);
+        WeaponClass = weapon.GetComponent<WeaponM1911>();
+        weapon.transform.parent = weaponHolderTr;
+        WeaponClass.OnShotFire += SetFireAnimtion;
+        weapon.transform.localScale = new Vector3(180f, 180f, 180f);
+        weapon.transform.localRotation = Quaternion.Euler(-194.79f, 57.67899f, -97.009f);
+        weapon.transform.localPosition = new Vector3(22.8f, 9.3f, -7.5f);
     }
 
     private void InitilizeSkinType()
@@ -149,13 +228,6 @@ public class MonsterController : MonoBehaviour, IStateController
         skins[skinTypeIdx].SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        this.LookTowardMovingDirection();
-        this.UpdateCurrentMovePoint();
-        CurrentState.UpdateState(this);
-    }
 
     public void TransitionToState(State nextState)
     {
@@ -212,13 +284,46 @@ public class MonsterController : MonoBehaviour, IStateController
         }
     }
 
+    public void Attack()
+    {
+        Agent.isStopped = true;
+        Agent.velocity = Vector3.zero;
+        patrolling = false;
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        StartCoroutine(AttackCoroutine());
+    }
+    private IEnumerator AttackCoroutine()
+    {
+        if (isHoldingWeapon)
+        {
+            WeaponClass.Fire(ObjectTransform.position + new Vector3(0, 1.5f, 0), ObjectTransform.forward);
+        }
+        yield return null;
+    }
+
     public void TakeDamage(float Damage)
     {
+
         Stats.HP -= Damage;
+        if (Stats.HP <= 0)
+            this.OnDeath();
     }
 
     public void OnDeath()
     {
+        isHoldingWeapon = false;
+        Animator.SetBool(hashIsHoldingWeapon, false);
+        this.gameObject.tag = "Untagged";
+        Animator.SetInteger(hashDieIdx, UnityService.Range(0, 3));
+        Animator.SetTrigger(hashDie);
+        GetComponent<CapsuleCollider>().enabled = false;
+
+        Agent.isStopped = true;
+        Agent.velocity = Vector3.zero;
+        patrolling = false;
+        var script = GetComponent<MonsterController>();
+        script.enabled = false;
 
     }
 

@@ -142,6 +142,19 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #region MonoBehaviour Base Function
     void Awake()
     {
+        SetBoneTransform();
+
+        Stats = new PlayerStats();
+        this.ObjectTransform = GetComponent<Transform>();
+        this.Animator = GetComponent<Animator>();
+        this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
+        PlayerTranslate = new PlayerTranslate(ObjectTransform);
+        actualHeadRot = headTr.localRotation;
+
+    }
+
+    private void SetBoneTransform()
+    {
         var transforms = GetComponentsInChildren<Transform>();
         foreach (Transform tr in transforms)
         {
@@ -152,14 +165,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
             if (tr.gameObject.name == "RWeaponHolder")
                 weaponHolderTr = tr;
         }
-
-        Stats = new PlayerStats();
-        this.ObjectTransform = GetComponent<Transform>();
-        this.Animator = GetComponent<Animator>();
-        this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
-        PlayerTranslate = new PlayerTranslate(ObjectTransform);
-        actualHeadRot = headTr.localRotation;
-
     }
 
     void Start()
@@ -350,7 +355,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         if(IsHoldingRifle)
         {
-            WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward);
+            StartCoroutine(WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward));
         }
     }
     private void UpdateUserInput()

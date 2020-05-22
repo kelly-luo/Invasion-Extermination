@@ -10,7 +10,7 @@ public class PlayerTranslate : ICharacterTranslate
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
     private bool isRunning = false;
-    public bool IsRunning 
+    public bool IsRunning
     {
         get
         {
@@ -18,7 +18,7 @@ public class PlayerTranslate : ICharacterTranslate
         }
         set
         {
-            if(value)
+            if (value)
             {
                 Speed = 4.5f;
             }

@@ -16,6 +16,9 @@ TagManager:
   - 
   - 
   - Ground
+  - Lighting
+  - 
+  - 
   - Obstacle
   - Player
   - Enemy

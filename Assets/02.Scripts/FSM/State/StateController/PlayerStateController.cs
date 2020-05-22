@@ -143,7 +143,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         SetBoneTransform();
 
-        Stats = new PlayerStats();
+        //Stats = new PlayerStats();
         this.ObjectTransform = GetComponent<Transform>();
         this.Animator = GetComponent<Animator>();
         this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();

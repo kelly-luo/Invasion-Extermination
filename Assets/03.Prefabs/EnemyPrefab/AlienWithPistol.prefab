@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 3132950753699696928}
   - component: {fileID: 3132950753699696929}
   - component: {fileID: 3132950753699696930}
-  m_Layer: 11
+  m_Layer: 14
   m_Name: AlienWithPistol
   m_TagString: Enemy
   m_Icon: {fileID: 0}

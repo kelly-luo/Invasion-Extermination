@@ -1570,7 +1570,9 @@ GameObject:
   - component: {fileID: 757804722010703269}
   - component: {fileID: 757804722010703268}
   - component: {fileID: 757804722010703267}
-  m_Layer: 0
+  - component: {fileID: 1784375280}
+  - component: {fileID: 1784375281}
+  m_Layer: 13
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1666,14 +1668,33 @@ MonoBehaviour:
     type: 2}
   <RemainState>k__BackingField: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783,
     type: 2}
-  <ObjectTransform>k__BackingField: {fileID: 0}
+  <ObjectTransform>k__BackingField: {fileID: 757804722365252282}
   <CameraRig>k__BackingField: {fileID: 0}
-  fisrtPersonViewWeapon: {fileID: 0}
-  weaponOffX: 0.21
-  weaponOffY: -0.11
-  weaponOffZ: 0.64
-  weaponBob: {x: 0, y: 0, z: 0}
-  weaponRebound: {x: 0, y: 0, z: 0}
+  weapon: {fileID: 0}
+--- !u!114 &1784375280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757804722365509030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dad3127eeac12d4b8ff57b9f62b17c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1784375281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757804722365509030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dad3127eeac12d4b8ff57b9f62b17c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &757804722365510938
 GameObject:
   m_ObjectHideFlags: 0

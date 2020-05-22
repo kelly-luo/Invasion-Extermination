@@ -27,11 +27,6 @@ namespace Tests
 
         }
 
-        public void CleanTest()
-        {
-            UnityEngine.Object.Destroy(target);
-            UnityEngine.Object.Destroy(weapon);
-        }
         // A Test behaves as an ordinary method
         [Test]
         public void BulletRunOut_BulletRunOutTest()

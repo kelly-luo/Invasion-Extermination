@@ -150,7 +150,11 @@ public class MonsterController : MonoBehaviour, IStateController
         PlayerLayer = UnityEngine.LayerMask.NameToLayer("Player");
         ObstacleLayer = UnityEngine.LayerMask.NameToLayer("Obstacle");
         LayerMask = 1 << PlayerLayer;
-
+        if (isHoldingWeapon)
+        {
+            Animator.SetBool(hashIsHoldingWeapon, true);
+            EquipWeapon(weapon);
+        }
     }
 
 
@@ -203,8 +207,6 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void EquipWeapon(GameObject weapon)
     {
-        isHoldingWeapon = true;
-        Animator.SetBool(hashIsHoldingWeapon, true);
         WeaponClass = weapon.GetComponent<WeaponM1911>();
         weapon.transform.parent = weaponHolderTr;
         WeaponClass.OnShotFire += SetFireAnimtion;

@@ -150,7 +150,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.Animator = GetComponent<Animator>();
         this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
         this.playerStats = GetComponent<PlayerInformation>();
-        playerStats.Health = 100;
+        playerStats.Health = 100f;
 
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
@@ -451,7 +451,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         WeaponManager.SetFirstPersonWeaponActive(false);
         WeaponManager.SetThirdPersonWeaponActive(false);
     }
-
+    //ChANGE
     public void TakeDamage(float Damage)
     {
         Debug.Log($"Player has taken {Damage}");

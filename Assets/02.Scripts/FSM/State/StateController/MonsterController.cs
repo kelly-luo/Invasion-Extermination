@@ -42,7 +42,7 @@ public class MonsterController : MonoBehaviour, IStateController
     public WeaponM1911 WeaponClass { get; set; }
     #endregion
 
-    private PlayerInformation playerInformation;
+    public PlayerInformation playerInformation;
 
     public ObjectStats Stats { get; set; }
 
@@ -345,7 +345,7 @@ public class MonsterController : MonoBehaviour, IStateController
         Animator.SetTrigger(hashDie);
         GetComponent<CapsuleCollider>().enabled = false;
 
-        Agent.isStopped = true;
+        //Agent.isStopped = true;
         Agent.velocity = Vector3.zero;
         patrolling = false;
         var script = GetComponent<MonsterController>();

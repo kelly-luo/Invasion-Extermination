@@ -15,8 +15,7 @@ public class PlayerFoundDecision : Decision
         Collider[] colliders = monsterController.UnityService
             .OverlapSphere(monsterController.ObjectTransform.position,
             monsterController.viewRange, 1 << monsterController.PlayerLayer);
-
-        if(colliders.Length == 1) //it means player found
+        if (colliders.Length == 1) //it means player found
         {
 
             Vector3 dir = (monsterController.PlayerTr.position
@@ -28,7 +27,7 @@ public class PlayerFoundDecision : Decision
                 isPlayerFound = true;
             }
         }
-
+        Debug.Log("PlayerFoundDecision return: " + isPlayerFound);
         return isPlayerFound;
     }
 }

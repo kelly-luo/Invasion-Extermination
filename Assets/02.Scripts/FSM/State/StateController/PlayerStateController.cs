@@ -16,12 +16,14 @@ public class PlayerStateController : MonoBehaviour, IStateController
     [field: SerializeField]
     public State RemainState { get; set; }
 
-    public ObjectStats Stats { get; set; }
+    public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
+
     #endregion state
 
     #region Unity Component
     [field: SerializeField]
     public Transform ObjectTransform { get; set; }
+    public PlayerInformation playerStats;
 
     #endregion
 
@@ -143,10 +145,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         SetBoneTransform();
 
-        //Stats = new PlayerStats();
         this.ObjectTransform = GetComponent<Transform>();
         this.Animator = GetComponent<Animator>();
         this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
+        this.playerStats = GetComponent<PlayerInformation>();
+        playerStats.Health = 100;
+
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
 
@@ -444,12 +448,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
-
+        Debug.Log($"Player has taken {Damage}");
+        playerStats.Health -= Damage;
+        if (playerStats.Health <= 0)
+            Debug.Log("Player died. Respawning now.");
+            this.OnDeath();
     }
 
     public void OnDeath()
     {
-
+        // Howard to add/link to respawn method
     }
 }
 

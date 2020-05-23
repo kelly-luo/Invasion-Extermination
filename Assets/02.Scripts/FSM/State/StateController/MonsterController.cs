@@ -7,12 +7,12 @@ using UnityEngine.AI;
 public class MonsterController : MonoBehaviour, IStateController
 {
     //Range of detecting the player.
-    public float viewRange = 30.0f;
+    public float viewRange = 70.0f;
 
-    public float failTraceRange = 100.0f;
+    public float failTraceRange = 300.0f;
 
     [Range(0, 360)]
-    public float viewAngle = 120.0f;
+    public float viewAngle = 100.0f;
 
     #region state
     [field: SerializeField]
@@ -70,6 +70,9 @@ public class MonsterController : MonoBehaviour, IStateController
 
     private float lastStateUpdateTime;
     private float stateDelay= 0.6f;
+
+    public float DistancePlayerAndEnemy { get; set; }
+
     #region Speed Value     
     private readonly float patrolSpeed = 1.5f;
 
@@ -126,8 +129,8 @@ public class MonsterController : MonoBehaviour, IStateController
             if (tr.gameObject.name == "RWeaponHolder")
                 weaponHolderTr = tr;
         }
-            this.Stats = new MonsterStats();
-        Stats.HP = 100;
+        this.Stats = new MonsterStats();
+        this.Stats.Health = 100f;
         this.ObjectTransform = gameObject.transform;
         this.Animator = GetComponent<Animator>();
 
@@ -160,29 +163,26 @@ public class MonsterController : MonoBehaviour, IStateController
 
     void Update()
     {
+        DistancePlayerAndEnemy = (PlayerTr.position - ObjectTransform.position).sqrMagnitude;
+        Debug.Log("DistancePlayerAndEnemy " + DistancePlayerAndEnemy.ToString());
         if (Agent.isStopped == false)
         {
             Quaternion rot = Quaternion.LookRotation(Agent.desiredVelocity);
 
             ObjectTransform.rotation = Quaternion.Slerp(ObjectTransform.rotation, rot, UnityService.DeltaTime * damping);
         }
-        if (isHoldingWeapon )
-        {
-            if (lastStateUpdateTime + stateDelay < UnityService.TimeAtFrame)
-            {
-                CurrentState.UpdateState(this);
-            }
-        }
-        else
-        {
-            CurrentState.UpdateState(this);
-        }
+
+
+        CurrentState.UpdateState(this);
+
+
     }
 
     void LateUpdate()
     {
         this.LookTowardMovingDirection();
-        this.UpdateCurrentMovePoint();
+        if(patrolling)
+            this.UpdateCurrentMovePoint();
     }
 
 
@@ -263,6 +263,7 @@ public class MonsterController : MonoBehaviour, IStateController
     public void Stop()
     { //Stop All
         Agent.isStopped = true;
+        Agent.speed = 0;
         Agent.velocity = Vector3.zero;
         patrolling = false;
     }
@@ -274,7 +275,7 @@ public class MonsterController : MonoBehaviour, IStateController
         {
             Quaternion rot = Quaternion.LookRotation(Agent.desiredVelocity);
 
-            ObjectTransform.rotation = Quaternion.Slerp(ObjectTransform.rotation, rot, Time.deltaTime * damping);
+            ObjectTransform.rotation = Quaternion.Slerp(ObjectTransform.rotation, rot, UnityService.DeltaTime * damping);
         }
     }
 
@@ -288,6 +289,18 @@ public class MonsterController : MonoBehaviour, IStateController
             //goto next waypoint 
             this.MoveWayPoint();
         }
+    }
+    
+    public void RotateToPlayer()
+    {
+        Stop();
+
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Quaternion lookOnLook = Quaternion.LookRotation(PlayerTr.position - ObjectTransform.position);
+        ObjectTransform.rotation =
+            Quaternion.Slerp(ObjectTransform.rotation, lookOnLook, UnityService.DeltaTime * damping *10);
+  
     }
 
     public void Attack()
@@ -310,9 +323,10 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
-
-        Stats.HP -= Damage;
-        if (Stats.HP <= 0)
+        Debug.Log($"Monster has taken {Damage}");
+        Stats.Health -= Damage;
+        if (Stats.Health <= 0)
+            Debug.Log("Monster has died.");
             this.OnDeath();
     }
 

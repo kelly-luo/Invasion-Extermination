@@ -148,16 +148,14 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
         {
             var hitObject = hit.collider.gameObject;
-            Debug.Log(hitObject.tag.ToString());
-            if (hitObject.CompareTag("Enemy"))
+            if(hitObject.CompareTag(("Enemy")))
             {
                 var control = hitObject.GetComponent<MonsterController>();
                 control.TakeDamage(Damage);
+                isShooting = false;
             }
 
 
-
-            isShooting = false;
             return hitObject;
 
             //do the related action with monster here

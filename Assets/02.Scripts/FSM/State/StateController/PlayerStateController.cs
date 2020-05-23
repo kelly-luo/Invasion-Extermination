@@ -196,6 +196,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.UpdateUserInput();
         this.CurrentState.UpdateState(this);
 
+
         if (UnityService.GetMouseButtonUp(0))
         {
             this.Attack();
@@ -209,8 +210,11 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             this.WeaponManager.UpdateFirstPersonViewWeaponPosition();
         }
-        this.RotateNeck();
-        this.RotateHeadAndAvatar(CameraCtrl.YRot);
+        if (CameraCtrl != null)
+        {
+            this.RotateNeck();
+            this.RotateHeadAndAvatar(CameraCtrl.YRot);
+        }
     }
     #endregion
 
@@ -464,6 +468,15 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         spawn.SetSpawn();
         playerStats.health = 100f;
+
+    }
+
+    private void OnApplicationQuit()
+    {
+        foreach(PlayerWeaponManager manager in gameObject.GetComponents<PlayerWeaponManager>())
+        {
+            Destroy(manager);
+        }
     }
 }
 

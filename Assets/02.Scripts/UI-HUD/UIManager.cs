@@ -16,13 +16,15 @@ public class UIManager : MonoBehaviour
 
     public InventoryManager invManager;
 
-    [SerializeField] private PlayerInformation playerInformation;
+    public PlayerInformation playerInformation;
 
     //Temp values, change to 0 after testing
     public int displaymoney;
     public int displayscore;
     public int displayammo;
     public int displayhealth;
+
+    public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
     void Start()
     {
@@ -40,8 +42,10 @@ public class UIManager : MonoBehaviour
             SetScore(playerInformation.Score);
         }
 
+      
+
         invManager.Intialize(playerInformation.PlayerInventory);
-        //invManager.UpdateWeaponSlots();
+        invManager.UpdateWeaponSlots();
     }
 
     private void Update()
@@ -51,10 +55,12 @@ public class UIManager : MonoBehaviour
         // if (displayammo != playerInformation.Ammo) SetScore(playerInformation.Ammo);
         if (displayscore != playerInformation.Score) SetScore(playerInformation.Score);
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (UnityService.GetKeyUp(KeyCode.I))
         {
             invManager.InventoryVisible();
         }
+
+
     }
     public void SetHealth(float fhealth)
     {

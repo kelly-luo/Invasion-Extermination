@@ -8,7 +8,7 @@ public class WeaponM249 : MonoBehaviour,ImWeapon
 
     #region ID
 
-    public int EntityID { get; }
+    public int EntityID { get; } = 4;
     public readonly int instanceID;
     public int InstanceID
     {

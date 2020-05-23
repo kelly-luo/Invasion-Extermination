@@ -127,12 +127,97 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 757804722552012256}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &359059527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359059526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dad3127eeac12d4b8ff57b9f62b17c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &359059531 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 757804722365252282, guid: 4076d52969ee0e64681f17132eddd003,
     type: 3}
   m_PrefabInstance: {fileID: 757804722552012256}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &395095807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 395095811}
+  - component: {fileID: 395095810}
+  - component: {fileID: 395095809}
+  - component: {fileID: 395095808}
+  m_Layer: 0
+  m_Name: GameMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &395095808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395095807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e076880af8de91f449a2b6baccd582af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Avatar: {fileID: 5142144469805748907, guid: 57271a203f6be1a4788d27f333eb9ca4, type: 3}
+--- !u!114 &395095809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395095807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c4108af5ddffeb4ca2d595c394c92ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pistol: {fileID: 1694449805434718, guid: 6f1a7354265853f44b0ed5e2e43676ad, type: 3}
+  avatar: {fileID: 3132950753699696931, guid: bd3c95990744dd844ac4d68b5c474948, type: 3}
+--- !u!114 &395095810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395095807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1362c0a6c78c1e43ac1811c4bae9275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ishand: 0
+--- !u!4 &395095811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395095807}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -121.53125, y: -16.96875, z: 40.01953}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &525973572
 GameObject:
   m_ObjectHideFlags: 0

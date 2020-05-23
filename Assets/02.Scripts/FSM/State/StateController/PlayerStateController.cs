@@ -146,7 +146,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         //Stats = new PlayerStats();
         this.ObjectTransform = GetComponent<Transform>();
         this.Animator = GetComponent<Animator>();
-        this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
+        this.WeaponManager = gameObject.GetComponent<PlayerWeaponManager>();
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
 
@@ -190,6 +190,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.UpdateUserInput();
         this.CurrentState.UpdateState(this);
 
+
         if (UnityService.GetMouseButtonUp(0))
         {
             this.Attack();
@@ -203,8 +204,11 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             this.WeaponManager.UpdateFirstPersonViewWeaponPosition();
         }
-        this.RotateNeck();
-        this.RotateHeadAndAvatar(CameraCtrl.YRot);
+        if (CameraCtrl != null)
+        {
+            this.RotateNeck();
+            this.RotateHeadAndAvatar(CameraCtrl.YRot);
+        }
     }
     #endregion
 
@@ -450,6 +454,14 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public void OnDeath()
     {
 
+    }
+
+    private void OnApplicationQuit()
+    {
+        foreach(PlayerWeaponManager manager in gameObject.GetComponents<PlayerWeaponManager>())
+        {
+            Destroy(manager);
+        }
     }
 }
 

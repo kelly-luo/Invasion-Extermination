@@ -26,6 +26,7 @@ public abstract class MobFactory : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public abstract GameObject CreateMob();
+    public abstract GameObject CreateMob(Vector3 spawnLocation);
 
+    public abstract GameObject CreateMobWithWeapon(Vector3 spawnLocation);
 }

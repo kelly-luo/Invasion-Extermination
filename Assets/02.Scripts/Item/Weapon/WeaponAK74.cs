@@ -145,22 +145,11 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, 70) && (hit.collider.CompareTag("Enemy")|| hit.collider.CompareTag("Human")))
         {
+            hit.collider.gameObject.GetComponent<MonsterController>().TakeDamage(Damage);
             var hitObject = hit.collider.gameObject;
-            Debug.Log(hitObject.tag.ToString());
-            if (hitObject.CompareTag("Enemy"))
-            {
-                var control = hitObject.GetComponent<MonsterController>();
-                control.TakeDamage(Damage);
-            }
-
-
-
-            isShooting = false;
             return hitObject;
-
-            //do the related action with monster here
         }
         else
         {

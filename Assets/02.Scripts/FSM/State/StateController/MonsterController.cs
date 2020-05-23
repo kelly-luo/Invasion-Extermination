@@ -126,8 +126,8 @@ public class MonsterController : MonoBehaviour, IStateController
             if (tr.gameObject.name == "RWeaponHolder")
                 weaponHolderTr = tr;
         }
-            this.Stats = new MonsterStats();
-        Stats.HP = 100;
+         this.Stats = new MonsterStats();
+        Stats.HP = 100f;
         this.ObjectTransform = gameObject.transform;
         this.Animator = GetComponent<Animator>();
 
@@ -310,7 +310,6 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
-
         Stats.HP -= Damage;
         if (Stats.HP <= 0)
             this.OnDeath();

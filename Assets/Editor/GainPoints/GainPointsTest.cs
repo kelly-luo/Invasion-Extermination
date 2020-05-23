@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -23,8 +24,16 @@ namespace Tests
             //playerGun = player.AddComponent<WeaponAK74>();
             playerInformation = player.AddComponent<PlayerInformation>();
 
-            monster = new GameObject();
-            monsterController = monster.AddComponent<MonsterController>();
+            Object playerPrefab = AssetDatabase.LoadAssetAtPath("03.Prefabs/EnemyPrefab/AlienWithPistol.prefab", typeof(Object));
+
+            //Instantiate prefab if it exists
+            if (playerPrefab != null)
+            {
+                PrefabUtility.InstantiatePrefab(playerPrefab);
+            }
+            //monster = PrefabUtility.InstantiatePrefab(Resources.Load<GameObject>("03.Prefabs/EnemyPrefab/AlienWithPistol"));
+            //monster = Resources.Load(Path, typeof(GameObject)) as GameObject;
+            //monsterController = monster.AddComponent<MonsterController>();
             //enemyGun = monster.AddComponent<WeaponM1911>();
 
 
@@ -44,7 +53,7 @@ namespace Tests
 
         // Test for player not gaining points when enemy has not died
         [UnityTest]
-        public IEnumerator GainPointsTest_NotGainPointsAfterKillMonster()
+        public IEnumerator GainPointsTest_NotGainPointsWhenMonsterNotDead()
         {
             monsterController.Stats.Health = 100f;
             monsterController.TakeDamage(20f);

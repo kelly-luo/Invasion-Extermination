@@ -5,16 +5,11 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public class Spawn : MonoBehaviour
+public class Spawn
 {
     public Transform player { get; set; }
     public List<Transform> SpawnPoints { get; set; } = new List<Transform>();
     public IUnityServiceManager UnityService { get; set; }
-
-    public void Start()
-    {
-        Initialize();
-    }
 
     public Spawn()
     {

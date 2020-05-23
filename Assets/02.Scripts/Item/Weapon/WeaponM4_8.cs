@@ -141,19 +141,20 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 200, layerMask))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
         {
-
-            isShooting = false;
-            var hitObject = hit.transform.gameObject;
-            if (hitObject.tag == "Enemy")
+            var hitObject = hit.collider.gameObject;
+            if (hitObject.CompareTag(("Enemy")))
             {
                 var control = hitObject.GetComponent<MonsterController>();
                 control.TakeDamage(Damage);
-                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 200);
+                isShooting = false;
             }
-            
+
+
             return hitObject;
+
+            //do the related action with monster here
         }
         else
         {

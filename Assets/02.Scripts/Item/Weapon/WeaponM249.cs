@@ -144,16 +144,14 @@ public class WeaponM249 : MonoBehaviour,ImWeapon
         RaycastHit hit;
         if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
         {
-
-            isShooting = false;
-            var hitObject = hit.transform.gameObject;
-
-            if (hitObject.tag == "Enemy")
+            var hitObject = hit.collider.gameObject;
+            if (hitObject.CompareTag(("Enemy")))
             {
                 var control = hitObject.GetComponent<MonsterController>();
                 control.TakeDamage(Damage);
-                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 200);
+                isShooting = false;
             }
+
 
             return hitObject;
 
@@ -163,8 +161,7 @@ public class WeaponM249 : MonoBehaviour,ImWeapon
         {
             return null;
         }
-    }
-
+    } 
     void OnDrawGizmos()
     {
         Gizmos.DrawLine(playerPositions, playerPositions + (70 * shootDirections));

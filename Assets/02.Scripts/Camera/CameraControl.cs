@@ -10,8 +10,6 @@ using UnityEngine.EventSystems;
 public class CameraControl : MonoBehaviour , ICameraControl
 
 {
-
-
     [Serializable]
     public class CameraMode
     {

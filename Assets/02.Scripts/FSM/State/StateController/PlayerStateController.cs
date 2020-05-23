@@ -149,7 +149,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.Animator = GetComponent<Animator>();
         this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
         this.playerStats = GetComponent<PlayerInformation>();
-        playerStats.Health = 100f;
+        playerStats.Health = 100;
 
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
@@ -457,7 +457,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void OnDeath()
     {
-        // Howard to add/link to respawn method
+        spawn.SetSpawn();
+        playerStats.health = 100f;
+    }
+
+    private void OnApplicationQuit()
+    {
+        foreach (PlayerWeaponManager manager in gameObject.GetComponents<PlayerWeaponManager>())
+        {
+            Destroy(manager);
+        }
     }
 }
 

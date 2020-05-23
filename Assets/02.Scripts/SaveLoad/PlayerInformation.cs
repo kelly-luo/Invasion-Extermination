@@ -6,7 +6,11 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public int Level { get; set; }
     [field: SerializeField] public int Score { get; set; }
     [field: SerializeField] public int Money { get; set; }
-    [field: SerializeField] public float Health { get; set; }
+    [field: SerializeField] public float Health 
+    { 
+        get { return Health; }
+        set { if (Health <= 0) { Health = 0; } else Health = value; } // Do not allow health to go below 0
+    }
      public Inventory PlayerInventory { get; set; }
 
     private Transform transform;

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9df323f006cda7c4e80d7a4ccdfb7db6, type: 3}
+  m_Name: EnemyRotateToPlayerState
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: 97e82e44a4ed3044a9844de08a4dd46b, type: 2}
+  transitions:
+  - decision: {fileID: 11400000, guid: 73da6caa8609da042b06ca227025f6a9, type: 2}
+    trueState: {fileID: 11400000, guid: d7920d3a3cd17ef419d8c0fb1f427480, type: 2}
+    falseState: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783, type: 2}
+  - decision: {fileID: 11400000, guid: 31eefdd696aba57418a82dca71de1156, type: 2}
+    trueState: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783, type: 2}
+    falseState: {fileID: 11400000, guid: 5c55e4123cb2f30468e99b14731bb9cd, type: 2}

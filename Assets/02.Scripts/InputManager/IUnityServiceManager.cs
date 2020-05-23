@@ -13,14 +13,15 @@ public interface IUnityServiceManager
     bool GetKeyDown(KeyCode key);
 
     bool GetMouseButtonUp(int button);
-
+        
     float DeltaTime { get; }
 
+    int UnityRandomRange(int min, int max);
+  
     float TimeAtFrame { get; }
 
     Vector3 InsideUnitSphere { get; }
 
     Collider[] OverlapSphere(Vector3 position, float viewRange, int layerMask);
-
 
 }

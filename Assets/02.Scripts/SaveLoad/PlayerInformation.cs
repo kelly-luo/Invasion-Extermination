@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 public class PlayerInformation : MonoBehaviour
 {
@@ -6,20 +7,63 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public int Level { get; set; }
     [field: SerializeField] public int Score { get; set; }
     [field: SerializeField] public int Money { get; set; }
-    [field: SerializeField] public float Health { get; set; }
-     public Inventory PlayerInventory { get; set; }
+
+    [field: SerializeField] public float health;
+
+    [field: SerializeField] public float Health 
+    { 
+        get { return health; }
+        set { if (health <= 0) { health = 0; } else health = value; } // Do not allow health to go below 0
+    }
+
+    public Inventory PlayerInventory = new Inventory();
+
+    public PlayerStateController player;
 
     private Transform transform;
-    // Start is called before the first frame update
+
+    public GameObject[] guns;
+
+    public int equipped;
+
     void Start()
     {
         transform = GetComponent<Transform>();
-        PlayerInventory = new Inventory();
+        if (player.HasWeapon)
+        {
+            player.UnEquipWeapon();
+        }
+
+        for (int i = 0; i < guns.Length; i++)
+        {
+           PlayerInventory.Add(new Item(guns[i].GetComponent<ImWeapon>().EntityID,i,100,1));
+        }
+        equipped = PlayerInventory.Primary.Id;
     }
+
+    void Update()
+    {
+
+
+       if(equipped != PlayerInventory.selected.Id)
+        {
+            player.UnEquipWeapon();
+            for (int i = 0; i < guns.Length; i++)
+            {
+                if (PlayerInventory.selected.Id == guns[i].GetComponent<ImWeapon>().EntityID)
+                {
+                    player.EquipWeapon(guns[i]);
+                    player.IsHoldingRifle = true;
+                    equipped = guns[i].GetComponent<ImWeapon>().EntityID;
+                }
+            }
+        }
+    }
+
 
     public void SavePlayer()
     {
-        Debug.Log("Button save going through");
+
         SaveSystem.SavePlayer(this);
     }
 
@@ -38,7 +82,6 @@ public class PlayerInformation : MonoBehaviour
         this.Level = data.Level;
         this.Score = data.Score;
 
-        Debug.Log($"Player was LOADED. Health:{this.Health} Level:{this.Level} Money:{this.Money} Score:{this.Score}" +
-            $"Position: x={transform.position[0]} y={transform.position[1]} y={transform.position[2]}");
+
     }
 }

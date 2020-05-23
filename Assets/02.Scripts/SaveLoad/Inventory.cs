@@ -9,6 +9,8 @@ public class Inventory
     
     public Item Primary { get; set; }
     public Item Secondary { get; set; }
+
+    public Item selected;
     //key = instance id, value = Item
     public Dictionary<int, Item> inventory = new Dictionary<int, Item>();
 
@@ -22,6 +24,7 @@ public class Inventory
                 if (Primary == null)
                 {
                     SetPrimary(item);
+                    selected = Primary;
                 }
                 else if (Secondary == null)
                 {
@@ -43,6 +46,16 @@ public class Inventory
         return inventory.ContainsKey(itemID);
     }
 
+    public void selectPrimary()
+    {
+        if(Primary != null)selected = Primary; 
+    }
+
+    public void selectSecondary()
+    {
+        if(Secondary != null)selected = Secondary;
+    }
+
     public bool Remove(Item item)
     {
             if (Primary == item) SetPrimary(null);
@@ -55,12 +68,14 @@ public class Inventory
     {
         if (Secondary == item) Secondary = Primary;
         Primary = item;
+        selectPrimary();
     }
 
     public void SetSecondary(Item item)
     {
         if (Primary == item) Primary = Secondary;
         Secondary = item;
+        selectSecondary();
     }
 
     public void SetPrimary(int key)

@@ -140,6 +140,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
     public IWeaponManager WeaponManager { get; set; }
 
+    public Spawn spawn;
+
     #region MonoBehaviour Base Function
     void Awake()
     {
@@ -153,6 +155,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
+
+        spawn = new Spawn();
 
     }
 

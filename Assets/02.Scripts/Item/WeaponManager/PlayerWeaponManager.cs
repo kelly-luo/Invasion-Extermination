@@ -154,12 +154,14 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
     }
     public void SetFirstPersonWeaponActive(bool boolValue)
     {
-        FirstPersonViewWeapon.SetActive(boolValue);
+        if(FirstPersonViewWeapon != null)
+            FirstPersonViewWeapon.SetActive(boolValue);
     }
 
     public void SetThirdPersonWeaponActive(bool boolValue)
     {
-        ThirdPersonViewWeapon.SetActive(boolValue);
+        if (ThirdPersonViewWeapon != null)
+            ThirdPersonViewWeapon.SetActive(boolValue);
     }
 
     public void AddOnShootFireEvent(Action eventMethod)

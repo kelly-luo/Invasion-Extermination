@@ -207,8 +207,11 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             this.WeaponManager.UpdateFirstPersonViewWeaponPosition();
         }
-        this.RotateNeck();
-        this.RotateHeadAndAvatar(CameraCtrl.YRot);
+        if (CameraCtrl != null)
+        {
+            this.RotateNeck();
+            this.RotateHeadAndAvatar(CameraCtrl.YRot);
+        }
     }
     #endregion
 
@@ -450,14 +453,19 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         Debug.Log($"Player has taken {Damage}");
         playerStats.Health -= Damage;
-        if (playerStats.Health <= 0)
+        if (playerStats.Health <= 0) {
             Debug.Log("Player died. Respawning now.");
-        this.OnDeath();
+            this.OnDeath();
+        }
+            
+        
     }
 
     public void OnDeath()
     {
-        // Howard to add/link to respawn method
+        spawn.SetSpawn();
+        playerStats.health = 100f;
+
     }
 
     private void OnApplicationQuit()

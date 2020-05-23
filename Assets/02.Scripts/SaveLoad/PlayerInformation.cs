@@ -8,7 +8,7 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public int Score { get; set; }
     [field: SerializeField] public int Money { get; set; }
 
-    [field: SerializeField] public float health;
+    [field: SerializeField] public float health = 100f;
 
     [field: SerializeField] public float Health 
     { 

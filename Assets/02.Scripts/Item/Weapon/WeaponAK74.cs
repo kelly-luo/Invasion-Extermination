@@ -148,7 +148,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
         {
             var hitObject = hit.collider.gameObject;
-            if(hitObject.CompareTag(("Enemy")))
+            if (hitObject.CompareTag(("Enemy")) || hitObject.CompareTag(("Human")))
             {
                 var control = hitObject.GetComponent<MonsterController>();
                 control.TakeDamage(Damage);

@@ -15,8 +15,9 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     [field: SerializeField]
     public State RemainState { get; set; }
-
     public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
+
+    public Spawn spawn;
 
     #endregion state
 
@@ -154,6 +155,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
 
+        spawn = new Spawn();
     }
 
     private void SetBoneTransform()
@@ -450,14 +452,18 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         Debug.Log($"Player has taken {Damage}");
         playerStats.Health -= Damage;
-        if (playerStats.Health <= 0)
+        if (playerStats.Health <= 0) {
             Debug.Log("Player died. Respawning now.");
             this.OnDeath();
+        }
+            
+        
     }
 
     public void OnDeath()
     {
-        // Howard to add/link to respawn method
+        spawn.SetSpawn();
+        playerStats.health = 100f;
     }
 }
 

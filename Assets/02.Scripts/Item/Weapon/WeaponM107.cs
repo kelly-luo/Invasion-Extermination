@@ -140,16 +140,17 @@ public class WeaponM107 : MonoBehaviour, ImWeapon
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 500) && (hit.collider.CompareTag("Enemy")
-            || hit.collider.CompareTag("Human")))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
         {
             var hitObject = hit.collider.gameObject;
-            Debug.Log(hitObject.tag.ToString());
+            if (hitObject.CompareTag(("Enemy")))
+            {
+                var control = hitObject.GetComponent<MonsterController>();
+                control.TakeDamage(Damage);
+                isShooting = false;
+            }
 
-            var control = hitObject.GetComponent<MonsterController>();
-            control.TakeDamage(Damage);
-            hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 200);
-            isShooting = false;
+
             return hitObject;
 
             //do the related action with monster here

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
@@ -116,7 +116,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         get { return isHoldingRifle; }
         set
-        {           
+        {
             if (HasWeapon)
             {
                 Animator.SetBool(hashIsHoldingRifle, value);
@@ -149,7 +149,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.Animator = GetComponent<Animator>();
         this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
         this.playerStats = GetComponent<PlayerInformation>();
-        playerStats.Health = 100;
+        playerStats.Health = 100f;
 
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
@@ -232,7 +232,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             zSpeed = 0.5f;
         }
-        if(zSpeed <= 0f )
+        if (zSpeed <= 0f)
         {
             IsRunning = false;
         }
@@ -356,7 +356,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void Attack()
     {
-        if(IsHoldingRifle)
+        if (IsHoldingRifle)
         {
             StartCoroutine(WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward));
         }
@@ -373,7 +373,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
         if (UnityService.GetKeyUp(KeyCode.Z))
         {
-            if(HasWeapon)
+            if (HasWeapon)
                 IsHoldingRifle = !IsHoldingRifle;
         }
     }
@@ -452,13 +452,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
         playerStats.Health -= Damage;
         if (playerStats.Health <= 0)
             Debug.Log("Player died. Respawning now.");
-            this.OnDeath();
+        this.OnDeath();
     }
 
     public void OnDeath()
     {
-        spawn.SetSpawn();
-        playerStats.health = 100f;
+        // Howard to add/link to respawn method
     }
 
     private void OnApplicationQuit()
@@ -469,8 +468,5 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
     }
 }
-
-
-
 
 

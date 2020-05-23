@@ -145,7 +145,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         SetBoneTransform();
 
-        //Stats = new PlayerStats();
         this.ObjectTransform = GetComponent<Transform>();
         this.Animator = GetComponent<Animator>();
         this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
@@ -458,7 +457,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void OnDeath()
     {
-
+        // Howard to add/link to respawn method
     }
 }
 

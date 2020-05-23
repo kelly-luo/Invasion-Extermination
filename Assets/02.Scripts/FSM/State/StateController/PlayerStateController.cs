@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
@@ -15,9 +15,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     [field: SerializeField]
     public State RemainState { get; set; }
-    public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
 
-    public Spawn spawn;
+    public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
 
     #endregion state
 
@@ -117,7 +116,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         get { return isHoldingRifle; }
         set
-        {           
+        {
             if (HasWeapon)
             {
                 Animator.SetBool(hashIsHoldingRifle, value);
@@ -150,12 +149,11 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.Animator = GetComponent<Animator>();
         this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
         this.playerStats = GetComponent<PlayerInformation>();
-        playerStats.Health = 100;
+        playerStats.Health = 100f;
 
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
 
-        spawn = new Spawn();
     }
 
     private void SetBoneTransform()
@@ -196,7 +194,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.UpdateUserInput();
         this.CurrentState.UpdateState(this);
 
-
         if (UnityService.GetMouseButtonUp(0))
         {
             this.Attack();
@@ -210,11 +207,8 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             this.WeaponManager.UpdateFirstPersonViewWeaponPosition();
         }
-        if (CameraCtrl != null)
-        {
-            this.RotateNeck();
-            this.RotateHeadAndAvatar(CameraCtrl.YRot);
-        }
+        this.RotateNeck();
+        this.RotateHeadAndAvatar(CameraCtrl.YRot);
     }
     #endregion
 
@@ -238,7 +232,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             zSpeed = 0.5f;
         }
-        if(zSpeed <= 0f )
+        if (zSpeed <= 0f)
         {
             IsRunning = false;
         }
@@ -362,7 +356,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void Attack()
     {
-        if(IsHoldingRifle)
+        if (IsHoldingRifle)
         {
             StartCoroutine(WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward));
         }
@@ -379,7 +373,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
         if (UnityService.GetKeyUp(KeyCode.Z))
         {
-            if(HasWeapon)
+            if (HasWeapon)
                 IsHoldingRifle = !IsHoldingRifle;
         }
     }
@@ -456,31 +450,23 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         Debug.Log($"Player has taken {Damage}");
         playerStats.Health -= Damage;
-        if (playerStats.Health <= 0) {
+        if (playerStats.Health <= 0)
             Debug.Log("Player died. Respawning now.");
-            this.OnDeath();
-        }
-            
-        
+        this.OnDeath();
     }
 
     public void OnDeath()
     {
-        spawn.SetSpawn();
-        playerStats.health = 100f;
-
+        // Howard to add/link to respawn method
     }
 
     private void OnApplicationQuit()
     {
-        foreach(PlayerWeaponManager manager in gameObject.GetComponents<PlayerWeaponManager>())
+        foreach (PlayerWeaponManager manager in gameObject.GetComponents<PlayerWeaponManager>())
         {
             Destroy(manager);
         }
     }
 }
-
-
-
 
 

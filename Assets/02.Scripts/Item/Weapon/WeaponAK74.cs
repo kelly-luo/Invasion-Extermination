@@ -8,7 +8,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     #region ID
 
-    public int EntityID { get; }
+    public int EntityID { get; } = 0;
     public readonly int instanceID;
     public int InstanceID
     {
@@ -167,6 +167,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
             return null;
         }
     }
+
 
     void OnDrawGizmos( )
     {

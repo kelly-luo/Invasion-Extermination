@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 
 namespace US8Tests_SaveLoad
 {
-    public class SaveLoadTest
+    public class SaveLoadingTest
     {
         private PlayerInformation playerInformation;
         private GameObject player;

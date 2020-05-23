@@ -449,8 +449,10 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
-        Stats.Health -= Damage;
-        if (Stats.Health <= 0)
+        Debug.Log($"Player has taken {Damage}");
+        playerStats.Health -= Damage;
+        if (playerStats.Health <= 0)
+            Debug.Log("Player died. Respawning now.");
             this.OnDeath();
     }
 

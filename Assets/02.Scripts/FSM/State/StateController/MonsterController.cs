@@ -310,9 +310,10 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
-
+        Debug.Log($"Monster has taken {Damage}");
         Stats.Health -= Damage;
         if (Stats.Health <= 0)
+            Debug.Log("Monster has died.");
             this.OnDeath();
     }
 

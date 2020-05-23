@@ -144,16 +144,18 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
             audio.PlayOneShot(fireSfx, 0.5f);
         }
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 40) && (hit.collider.CompareTag("Enemy")
-            || hit.collider.CompareTag("Human")))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, 30, layerMask))
         {
             var hitObject = hit.collider.gameObject;
-            Debug.Log(hitObject.tag.ToString());
+            if (hitObject.CompareTag(("Enemy")) || hitObject.CompareTag(("Human")))
+            {
+                var control = hitObject.GetComponent<MonsterController>();
+                control.TakeDamage(Damage);
+                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 200);
+                isShooting = false;
+            }
 
-            var control = hitObject.GetComponent<MonsterController>();
-            control.TakeDamage(Damage);
-            hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 200);
-            isShooting = false;
+           
             return hitObject;
 
             //do the related action with monster here

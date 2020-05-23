@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    private Inventory PlayerInventory { get; set; }
+    private Inventory playerInventory;
 
     private int maxSlot;
     private int maxWeapons;
@@ -21,14 +21,12 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject Primary;
     [SerializeField] private GameObject Secondary;
 
+    public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
-    void Start()
-    {
-   
-    }
+    bool visible = true;
     public void Intialize(Inventory inventory)
     {
-        PlayerInventory = inventory;
+        playerInventory = inventory;
 
 
         currentSlotUsed = 0;
@@ -46,27 +44,18 @@ public class InventoryManager : MonoBehaviour
         {
             weaponInstance[i] = weaponInstances.transform.GetChild(i).gameObject;
         }
+        UpdateWeaponSlots();
 
-        //TempCODE
-       // ItemCreater();
     }
 
-    ////Remove when Items become avaliable
-    //private void ItemCreater()
-    //{
-    //    for(int i = 0; i < 10; i++)
-    //    {
-    //        PlayerInventory.Add(new Item(Random.Range(0, 5), Random.Range(0, 20), Random.Range(1, 100), 1));
-    //    }
-    //}
-    ////Remove when Items become avaliable
+
 
     public void UpdateInventoryGUI()
     {
         UpdateWeaponSlots();
-        currentSlotUsed = PlayerInventory.GetSize();
+        currentSlotUsed = playerInventory.GetSize();
         int slotNo = -1;
-        foreach(KeyValuePair<int,Item> Weapon in PlayerInventory.inventory)
+        foreach(KeyValuePair<int,Item> Weapon in playerInventory.inventory)
         {
             slotNo++;
            // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
@@ -74,11 +63,11 @@ public class InventoryManager : MonoBehaviour
             bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
 
             slotInfo.InstanceId = Weapon.Key;
-            slotInfo.setSprite(weaponInstance[Weapon.Value.Id].GetComponent<SpriteRenderer>().sprite);
+            slotInfo.setSprite(getImage(Weapon.Value.Id));
             slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.Amount);
         }
       
-        for (int i = PlayerInventory.GetSize()  ; i < slots.Length; i++)
+        for (int i = playerInventory.GetSize()  ; i < slots.Length; i++)
         {
             slots[i].GetComponent<MenuButton>().disableButton();
             slots[i].SetActive(false);
@@ -87,29 +76,31 @@ public class InventoryManager : MonoBehaviour
 
     public void SetPrimary(int key)
     {
-        if (PlayerInventory.ContainsKey(key))
+        if (playerInventory.ContainsKey(key))
         {
-            PlayerInventory.SetPrimary(key);
+            playerInventory.SetPrimary(key);
             UpdateWeaponSlots();
+   
         }
     }
 
     public void SetSecondary(int key)
     {
-        if (PlayerInventory.ContainsKey(key))
+        if (playerInventory.ContainsKey(key))
         {
-            PlayerInventory.SetSecondary(key);
+            playerInventory.SetSecondary(key);
             UpdateWeaponSlots();
+          
         }
     }
 
     public void RemoveItem(int key)
     {
 
-        if (PlayerInventory.ContainsKey(key))
+        if (playerInventory.ContainsKey(key))
         {
-            Item RemovedItem = PlayerInventory.FindItem(key);
-            PlayerInventory.Remove(RemovedItem);
+            Item RemovedItem = playerInventory.FindItem(key);
+            playerInventory.Remove(RemovedItem);
 
             UpdateWeaponSlots();
         }
@@ -117,31 +108,68 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateWeaponSlots()
     {
-        if(PlayerInventory.Primary != null)
-        { 
-            Primary.GetComponent<Image>().sprite = weaponInstance[PlayerInventory.Primary.Id].GetComponent<SpriteRenderer>().sprite;
+        if(playerInventory.Primary != null)
+        {     
+            Primary.GetComponent<Image>().sprite = getImage(playerInventory.Primary.Id);
             if (!Primary.activeSelf) Primary.SetActive(true);
         }
         else
             Primary.SetActive(false);
         
-        if (PlayerInventory.Secondary != null)
+        if (playerInventory.Secondary != null)
         {
-            Secondary.GetComponent<Image>().sprite = weaponInstance[PlayerInventory.Secondary.Id].GetComponent<SpriteRenderer>().sprite;
+            Secondary.GetComponent<Image>().sprite = getImage(playerInventory.Secondary.Id);
             if (!Secondary.activeSelf) Secondary.SetActive(true);
         }else
             Secondary.SetActive(false);
     }
+    
+
+    private Sprite getImage(int id)
+    {
+        int EntityId;
+        for (int i = 0; i < maxWeapons; i++)
+        {
+            EntityId = weaponInstance[i].GetComponent<Enity_ID>().EntityId;
+            if(EntityId == id) return weaponInstance[i].GetComponent<SpriteRenderer>().sprite;
+        }
+        return null;
+    }
 
     public void InventoryVisible()
     {
-        if(inventoryPanel != null)
-        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        if (inventoryPanel != null)
+            //inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+            if (visible)
+            {
+                inventoryPanel.transform.localScale = new Vector3(0, 0, 0);
+                visible = false;
+            }
+            else
+            {
+                inventoryPanel.transform.localScale = new Vector3(1, 1, 1);
+                visible = true;
+            }
+           
+            
     }
 
     void Update()
     {
-        if(PlayerInventory != null)
-        if (currentSlotUsed != PlayerInventory.GetSize()) UpdateInventoryGUI();
+        if (playerInventory != null)
+        {
+            if (currentSlotUsed != playerInventory.GetSize()) UpdateInventoryGUI();
+        }
+
+        if (UnityService.GetKeyUp(KeyCode.Alpha1))
+        {
+            playerInventory.selectPrimary();
+        }
+
+        if (UnityService.GetKeyUp(KeyCode.Alpha2))
+        {
+            playerInventory.selectSecondary();
+        }
+
     }
 }

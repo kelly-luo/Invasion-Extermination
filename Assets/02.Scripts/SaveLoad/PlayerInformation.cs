@@ -2,21 +2,28 @@
 
 public class PlayerInformation : MonoBehaviour
 {
+
     [field: SerializeField] public int Level { get; set; }
     [field: SerializeField] public int Score { get; set; }
     [field: SerializeField] public int Money { get; set; }
-    [field: SerializeField] public float Health { get; set; }
+    [field: SerializeField] public float Health 
+    { 
+        get { return Health; }
+        set { if (Health <= 0) { Health = 0; } else Health = value; } // Do not allow health to go below 0
+    }
+     public Inventory PlayerInventory { get; set; }
 
     private Transform transform;
     // Start is called before the first frame update
     void Start()
     {
         transform = GetComponent<Transform>();
+        PlayerInventory = new Inventory();
     }
 
     public void SavePlayer()
     {
-        Debug.Log("Button save going through");
+
         SaveSystem.SavePlayer(this);
     }
 
@@ -35,7 +42,6 @@ public class PlayerInformation : MonoBehaviour
         this.Level = data.Level;
         this.Score = data.Score;
 
-        Debug.Log($"Player was LOADED. Health:{this.Health} Level:{this.Level} Money:{this.Money} Score:{this.Score}" +
-            $"Position: x={transform.position[0]} y={transform.position[1]} y={transform.position[2]}");
+
     }
 }

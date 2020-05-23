@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IUnityServiceManager 
 {
+    int Range(int max, int min);
+
     float GetAxis(string inputKey);
 
     bool GetKeyUp(KeyCode key);
@@ -15,4 +17,11 @@ public interface IUnityServiceManager
     float DeltaTime { get; }
 
     int UnityRandomRange(int min, int max);
+  
+    float TimeAtFrame { get; }
+
+    Vector3 InsideUnitSphere { get; }
+
+    Collider[] OverlapSphere(Vector3 position, float viewRange, int layerMask);
+
 }

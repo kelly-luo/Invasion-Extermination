@@ -51,7 +51,7 @@ namespace Tests
         }
 
         [Test]
-        public void RotateView_RotationMinClampTest()
+        public void RotateView_RotationMinClampTest()   
         {
             SetUpTest();
 

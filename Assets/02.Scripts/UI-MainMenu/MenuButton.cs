@@ -49,8 +49,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
     {
         if (enable)
         {
-      
-            animator.SetBool("Pressed", true);
+            if (animator != null) animator.SetBool("Pressed", true);
             pressed = true;
             click(eventData);
         }
@@ -61,7 +60,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
     {
         if (enable)
         {
-            animator.SetBool("Selected", true);
+            if (animator != null) animator.SetBool("Selected", true);
         }
      
     }
@@ -70,14 +69,18 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
     {
         if (enable)
         {
-            animator.SetBool("Selected", false);
+            if (animator != null) animator.SetBool("Selected", false);
         }
       
     }
 
     public void click(PointerEventData eventData)
     {
-        buttonClicked.ButtonEvent(eventData);
+        if (enable)
+        {
+            buttonClicked.ButtonEvent(eventData);
+        }
+    
     }
 
 
@@ -89,7 +92,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
     public void disableButton()
     {
         enable = false;
-        animator.SetBool("Selected", false);
+        if(animator != null) animator.SetBool("Selected", false);
     }
 
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
+using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 [ExecuteInEditMode]
 public class PlayerStateController : MonoBehaviour, IStateController
@@ -14,12 +16,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
     [field: SerializeField]
     public State RemainState { get; set; }
 
-    [field: SerializeField]
-    public ObjectStats Stats { get; set; }
+    public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
+
     #endregion state
 
+    #region Unity Component
     [field: SerializeField]
-    public Transform Transform { get; set; }
+    public Transform ObjectTransform { get; set; }
+    public PlayerInformation playerStats;
+
+    #endregion
 
     #region Camera Setting
     [field: SerializeField]
@@ -35,10 +41,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     private readonly int hashXDirectionSpeed = Animator.StringToHash("XDirectionSpeed");
     private readonly int hashZDirectionSpeed = Animator.StringToHash("ZDirectionSpeed");
+    private readonly int hashFire = Animator.StringToHash("Fire");
 
     private readonly int hashSpeed = Animator.StringToHash("Speed");
 
     private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
+    private readonly int hashIsHoldingRifle = Animator.StringToHash("IsHoldingRifle");
     private bool isRunning = false;
     public bool IsRunning
     {
@@ -50,7 +58,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             if (isRunning != value)
             {
-                playerTranslate.IsRunning = value;
+                PlayerTranslate.IsRunning = value;
                 Animator.SetBool(hashIsRunning, value);
                 isRunning = value;
             }
@@ -77,7 +85,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             if (isSitting != value)
             {
-                playerTranslate.IsSitting = value;
+                PlayerTranslate.IsSitting = value;
                 Animator.SetBool(hashIsSitting, value);
                 isSitting = value;
             }
@@ -100,26 +108,66 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #region Input Values
     public float Vertical { get; set; }
     public float Horizontal { get; set; }
+
+    public bool HasWeapon { get; set; }
+
+    private bool isHoldingRifle = false;
+    public bool IsHoldingRifle
+    {
+        get { return isHoldingRifle; }
+        set
+        {           
+            if (HasWeapon)
+            {
+                Animator.SetBool(hashIsHoldingRifle, value);
+                isHoldingRifle = value;
+                this.UpdateTheTexturWhenCameraViewChange();
+            }
+
+        }
+    }
     #endregion
 
-    public float StateTimeElapsed { get; set; }
+    #region Weapon Setting
+
+    public GameObject weapon;
+    private Transform weaponHolderTr;
+
+    #endregion
 
     // state will change depends on this class (speed) 
-    public ICharacterTranslate playerTranslate { get; set; }
-    public IUnityServiceManager UnityService { get; set; }
+    public ICharacterTranslate PlayerTranslate { get; set; }
+    public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
+    public IWeaponManager WeaponManager { get; set; }
 
     #region MonoBehaviour Base Function
     void Awake()
     {
-        neckTr = GameObject.Find("Neck").transform;
-        headTr = GameObject.Find("Head").transform;
+        SetBoneTransform();
 
+        this.ObjectTransform = GetComponent<Transform>();
+        this.Animator = GetComponent<Animator>();
+        this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
+        this.playerStats = GetComponent<PlayerInformation>();
+        playerStats.Health = 100;
 
-        Transform = GetComponent<Transform>();
-        Animator = GetComponent<Animator>();
-        playerTranslate = new PlayerTranslate(Transform);
+        PlayerTranslate = new PlayerTranslate(ObjectTransform);
         actualHeadRot = headTr.localRotation;
 
+    }
+
+    private void SetBoneTransform()
+    {
+        var transforms = GetComponentsInChildren<Transform>();
+        foreach (Transform tr in transforms)
+        {
+            if (tr.gameObject.name == "Neck")
+                neckTr = tr;
+            if (tr.gameObject.name == "Head")
+                headTr = tr;
+            if (tr.gameObject.name == "RWeaponHolder")
+                weaponHolderTr = tr;
+        }
     }
 
     void Start()
@@ -128,47 +176,75 @@ public class PlayerStateController : MonoBehaviour, IStateController
         CameraRigTr = CameraRig.GetComponent<Transform>();
         CameraTr = CameraCtrl.GetCameraTransform();
 
-        if (UnityService == null)
-        {
-            UnityService = new UnityServiceManager();
-        }
+
+        gameObject.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+
+
+        this.UpdateTheTexturWhenCameraViewChange();
+
+        CameraCtrl.OnViewChange += UpdateTheTexturWhenCameraViewChange;
+        this.EquipWeapon(weapon);
+
     }
 
     void Update()
     {
-        // adding check active function .
+        //update scene
 
+        this.UpdateUserInput();
+        this.CurrentState.UpdateState(this);
 
-        //update scene\
-        CurrentState.UpdateState(this);
-        if (UnityService.GetKeyUp(KeyCode.LeftShift))
+        if (UnityService.GetMouseButtonUp(0))
         {
-            IsRunning = !isRunning;
+            this.Attack();
         }
-        if (UnityService.GetKeyUp(KeyCode.LeftControl))
-        {
-            IsRunning = !isSitting;
-        }
-
-
     }
+
 
     void LateUpdate()
     {
-        RotateNeck();
-        RotateHeadAndAvatar(CameraCtrl.YRot);
+        if (IsHoldingRifle)
+        {
+            this.WeaponManager.UpdateFirstPersonViewWeaponPosition();
+        }
+        this.RotateNeck();
+        this.RotateHeadAndAvatar(CameraCtrl.YRot);
     }
     #endregion
+
+    public void EquipWeapon(GameObject Weapon)
+    {
+        this.HasWeapon = true;
+        this.WeaponManager.EquipNewWeapon(Weapon, CameraTr, weaponHolderTr);
+        this.WeaponManager.AddOnShootFireEvent(ShakeCameraWhenShoot);
+        this.WeaponManager.AddOnShootFireEvent(SetWeaponFireAnimation);
+        this.UpdateTheTexturWhenCameraViewChange();
+
+    }
+
 
     #region animation method
     public void MoveAnimation(float xSpeed, float zSpeed)
     {
-        Animator.SetFloat(hashXDirectionSpeed, xSpeed);
-        Animator.SetFloat(hashZDirectionSpeed, zSpeed);
+        this.WeaponManager.UpdateWeaponBob(xSpeed, zSpeed);
 
-        if ((xSpeed > 0) || (xSpeed < 0) || (zSpeed > 0) || (zSpeed < 0))
-            this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body . 
+        if (!isRunning && zSpeed > 0.5f)
+        {
+            zSpeed = 0.5f;
+        }
+        if(zSpeed <= 0f )
+        {
+            IsRunning = false;
+        }
+
+        this.Animator.SetFloat(hashXDirectionSpeed, xSpeed);
+        this.Animator.SetFloat(hashZDirectionSpeed, zSpeed);
+
+
+        if (((xSpeed > 0) || (xSpeed < 0) || (zSpeed > 0) || (zSpeed < 0)) || IsHoldingRifle)
+            this.RotateAvatarTowardSight();// minus the amount of the value of angle to the head to lotate the body while moving the body .
     }
+
     #endregion
 
     #region CharacterBodyMove
@@ -177,7 +253,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         //you might be wondering why did i put the x on z axis 
         //it is because the I found that local Transform of the Neck bone in model was reversed. 
-        neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
+        //neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
 
     }
 
@@ -201,7 +277,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 actualHeadRot = headTr.localRotation;
 
-                Transform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
+                ObjectTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
@@ -222,7 +298,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 headTr.localRotation *= Quaternion.Euler(0f, angleUpToLimit, 0f);
                 actualHeadRot = headTr.localRotation;
 
-                Transform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
+                ObjectTransform.localRotation *= Quaternion.Euler(0, leftoverAngle, 0f);
 
             }
             else
@@ -237,17 +313,17 @@ public class PlayerStateController : MonoBehaviour, IStateController
     private void RotateAvatarTowardSight()
     {
         var rotationSpeed = 150f;
-        var bodyRot = Transform.localRotation;
+        var bodyRot = ObjectTransform.localRotation;
         var lookRotation = Quaternion.LookRotation(CameraRigTr.forward);
 
         float angle = Quaternion.Angle(transform.rotation, lookRotation);
         float timeToComplete = angle / rotationSpeed;
         float donePercentage = Mathf.Min(1F, UnityService.DeltaTime / timeToComplete);
 
-        Transform.localRotation = Quaternion.Slerp(Transform.localRotation, lookRotation, donePercentage);
+        ObjectTransform.localRotation = Quaternion.Slerp(ObjectTransform.localRotation, lookRotation, donePercentage);
 
         //take the amount of change in body rotation 
-        var ChangeRotBody = Transform.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
+        var ChangeRotBody = ObjectTransform.localRotation.eulerAngles.y - bodyRot.eulerAngles.y;
         //add to Head Rotation
         headRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
         actualHeadRot *= Quaternion.Euler(0f, -ChangeRotBody, 0f);
@@ -255,30 +331,133 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion
 
-    //check attack timer (so player do not "attack" every frames); 
-    public bool CheckIsAttackReady(float duration)
+    #region callbackWhenShootMotion
+
+    public void SetWeaponFireAnimation()
     {
-        StateTimeElapsed += UnityService.DeltaTime;
-        return (StateTimeElapsed >= duration);
+        if (HasWeapon)
+            Animator.SetTrigger(hashFire);
     }
 
-    public void OnExitState()
+    public void ShakeCameraWhenShoot()
     {
-        StateTimeElapsed = 0;
+        StartCoroutine(CameraCtrl.ShakeCamera(WeaponManager.FirstWeaponClass.ShakeDuration, WeaponManager.FirstWeaponClass.ShakeMagnitudePos, WeaponManager.FirstWeaponClass.ShakeMagnitudeRot));
     }
+
+    #endregion
 
     public void TransitionToState(State nextState)
     {
         if (nextState != RemainState)
         {
             CurrentState = nextState;
-            this.OnExitState();
         }
     }
 
-    public void onMouseClick()
+    public void Attack()
     {
-        Debug.Log("ur cool");
+        if(IsHoldingRifle)
+        {
+            StartCoroutine(WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward));
+        }
+    }
+    private void UpdateUserInput()
+    {
+        if (UnityService.GetKeyUp(KeyCode.LeftShift))
+        {
+            IsRunning = !isRunning;
+        }
+        if (UnityService.GetKeyUp(KeyCode.LeftControl))
+        {
+            IsRunning = !isSitting;
+        }
+        if (UnityService.GetKeyUp(KeyCode.Z))
+        {
+            if(HasWeapon)
+                IsHoldingRifle = !IsHoldingRifle;
+        }
+    }
+
+    //weapon
+    public void UpdateTheTexturWhenCameraViewChange()
+    {
+        this.UpdateCharacterTexture();
+        this.UpdateWeaponTexture();
+    }
+
+    private void UpdateCharacterTexture()
+    {
+        var currentViewMode = CameraCtrl.CurrentViewMode;
+        var renderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+
+        if (currentViewMode == CameraViewType.First)
+        {
+            renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+        }
+        else if (currentViewMode == CameraViewType.Third)
+        {
+            renderer.shadowCastingMode = ShadowCastingMode.On;
+        }
+    }
+
+    private void UpdateWeaponTexture()
+    {
+        var currentViewMode = CameraCtrl.CurrentViewMode;
+        if (currentViewMode == CameraViewType.First)
+        {
+            if (HasWeapon)
+            {
+                if (IsHoldingRifle)
+                {
+
+                    WeaponManager.SetFirstPersonWeaponVisible(true);
+                    WeaponManager.SetThirdPersonWeaponVisible(false);
+                }
+                else
+                {
+                    WeaponManager.SetFirstPersonWeaponVisible(false);
+                    WeaponManager.SetThirdPersonWeaponVisible(false);
+                }
+            }
+        }
+        else if (currentViewMode == CameraViewType.Third)
+        {
+            if (HasWeapon)
+            {
+                if (IsHoldingRifle)
+                {
+                    WeaponManager.SetFirstPersonWeaponVisible(false);
+                    WeaponManager.SetThirdPersonWeaponVisible(true);
+                }
+                else
+                {
+                    WeaponManager.SetFirstPersonWeaponVisible(false);
+                    WeaponManager.SetThirdPersonWeaponVisible(false);
+                }
+            }
+        }
+    }
+
+    public void UnEquipWeapon()
+    {
+        IsHoldingRifle = false;
+        HasWeapon = false;
+        WeaponManager.SetFirstPersonWeaponActive(false);
+        WeaponManager.SetThirdPersonWeaponActive(false);
+    }
+
+    public void TakeDamage(float Damage)
+    {
+        Debug.Log($"Player has taken {Damage}");
+        playerStats.Health -= Damage;
+        if (playerStats.Health <= 0)
+            Debug.Log("Player died. Respawning now.");
+            this.OnDeath();
+    }
+
+    public void OnDeath()
+    {
+        // Howard to add/link to respawn method
     }
 }
 

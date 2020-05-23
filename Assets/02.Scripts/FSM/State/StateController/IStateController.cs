@@ -12,14 +12,12 @@ namespace IEGame.FiniteStateMachine
         //stats of something that inherit from ObjectStats
         ObjectStats Stats { get; set; }
 
-        Transform Transform { get; set; }
-
-        float StateTimeElapsed { get; set; }
+        Transform ObjectTransform { get; set; }
 
         void TransitionToState(State nextState);
 
-        bool CheckIsAttackReady(float duration);
+        void TakeDamage(float Damage);
 
-        void OnExitState();
+        void OnDeath();
     }
 }

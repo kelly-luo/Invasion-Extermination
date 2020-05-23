@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.TestTools;
 
 namespace Tests
@@ -33,7 +35,7 @@ namespace Tests
             monsterController.playerInformation = playerInformation;
             monsterController.Animator = prefab.GetComponent<Animator>();
             monsterController.UnityService = UnityServiceManager.Instance;
-
+            monsterController.Agent = prefab.GetComponent<NavMeshAgent>();
         }
 
         // Test to gain points when the player kills enemy
@@ -47,14 +49,15 @@ namespace Tests
         }
 
         // Test for player not gaining points when enemy has not died
-        [UnityTest]
-        public void PointsTest_NotGainPointsWhenMonsterNotDead()
+        [Test]
+        public void GainPointsTest_NotGainPointsWhenMonsterNotDead()
         {
             monsterController.Stats.Health = 100f;
             monsterController.TakeDamage(20f);
 
             Assert.AreEqual(10, playerInformation.Score);
 
+            //yield return null;
         }
     }
 }

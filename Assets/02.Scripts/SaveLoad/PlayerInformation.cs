@@ -19,7 +19,7 @@ public class PlayerInformation : MonoBehaviour
 
     public void SavePlayer()
     {
-        Debug.Log("Button save going through");
+
         SaveSystem.SavePlayer(this);
     }
 
@@ -38,7 +38,6 @@ public class PlayerInformation : MonoBehaviour
         this.Level = data.Level;
         this.Score = data.Score;
 
-        Debug.Log($"Player was LOADED. Health:{this.Health} Level:{this.Level} Money:{this.Money} Score:{this.Score}" +
-            $"Position: x={transform.position[0]} y={transform.position[1]} y={transform.position[2]}");
+
     }
 }

@@ -10,6 +10,10 @@ public class TraceAction : Action
     {
         var monsterController = controller as MonsterController;
 
-        monsterController.TraceTarget = monsterController.PlayerTr.position;
+        if (monsterController.DistancePlayerAndEnemy > monsterController.viewRange && monsterController.DistancePlayerAndEnemy <= monsterController.failTraceRange)
+        {
+            Debug.Log("Trace Action");
+            monsterController.TraceTarget = monsterController.PlayerTr.position;
+        }
     }
 }

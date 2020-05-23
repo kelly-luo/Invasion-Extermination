@@ -140,8 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbdb581c998fd9f4987820bede7457c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRange: 30
-  failTraceRange: 100
+  viewRange: 70
+  failTraceRange: 120
   viewAngle: 120
   <CurrentState>k__BackingField: {fileID: 11400000, guid: 34ad407fb3244d844a5b5bb5ebc69dab,
     type: 2}

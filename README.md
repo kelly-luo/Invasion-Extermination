@@ -10,56 +10,43 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Examples will be given further on
-```
+In terms of running the project on Unity development environment, it is required to download Unity Hub and Unity please refer to the section *Built With* to know what version.
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-The steps will stated below when available
-
+To run the game for Sprint 1:
 ```
-Examples will be given further on
+1. Download the project files
+2. Navigate to folder "SPRINT 1 APPLICATION"
+3. Within the folder there is a Invasion_Extermination.exe that can be run to start the built game
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explanation of how to run the automated tests for this system will be explained further on
-
-### Break down into end to end tests
-
-Explanation of what these tests test and why will be explained further on
-
 ```
-Examples will be given further on
+1. In order to run the unit tests, open up the Unity project via Unity Hub with the Unity Version 2019.3.7f1.
+2. Once opened, proceed to "Window" > "General" > "Test Runner"
+3. Proceed to run PlayMode or EditMode depending on if they are PlayMode or EditMode tests.
 ```
+
+Note: Tests run as normal tests NUnit Test Runner with the [Test] and with the [UnityTest] tests allows test to skip frame.
 
 ### And coding style tests
 
-Explanation of what these tests test and why will be explained further on
+TDD (Test Driven Development) procedure was followed to create a unit test for each user story (Has a git hub tag for end and start of user story) before starting the coding. The unit tests test the functionality of each user story and make sure that they work.
 
-```
-Examples will be given further on
-```
-
-## Deployment
-
-Additional notes about how to deploy this on a live system will be explained further on
+Unit tests in Unity are executed using Unity Testing Framework which uses a integration of the [NUnit Library](https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-nunit).
 
 ## Built With
 
-* [Unity Version 2019.3.7f1](https://unity3d.com/get-unity/download/archive) - main platform
-* [Visual Studios 2019](https://visualstudio.microsoft.com/vs/) - Used to code script
+* [Unity Version 2019.3.7f1](https://unity3d.com/get-unity/download/archive) - main development environment platform
+* [Unity Hub 2.3.1](https://unity3d.com/hub/whats-new) - management and initiation of Unity platform
+* [Visual Studios 2019](https://visualstudio.microsoft.com/vs/) - Used to code script and solve merge conflicts
+* [Unity Testing Framework 1.1.14](https://docs.unity3d.com/Packages/com.unity.test-framework@1.1/manual/index.html) - used to create unit tests
 
 ## Versioning
 
-For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+For the versions available for each user story completed, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 

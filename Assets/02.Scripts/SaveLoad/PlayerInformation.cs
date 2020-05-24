@@ -20,7 +20,7 @@ public class PlayerInformation : MonoBehaviour
 
     public PlayerStateController player;
 
-    private Transform transform;
+    public Transform transform;
 
     public GameObject[] guns;
 

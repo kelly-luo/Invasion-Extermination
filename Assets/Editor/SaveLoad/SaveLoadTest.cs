@@ -17,6 +17,8 @@ namespace US8Tests_SaveLoad
             // create a GameObject to attach the PlayerInformation component
             player = new GameObject();
             playerInformation = player.AddComponent<PlayerInformation>();
+            player.AddComponent<Transform>();
+            playerInformation.transform = player.GetComponent<Transform>();
 
             // first initialise the player's stats and position
             Vector3 position1 = new Vector3(1f, -7f, 2.55f);
@@ -25,14 +27,6 @@ namespace US8Tests_SaveLoad
             playerInformation.Level = 10;
             playerInformation.Score = 3501;
             playerInformation.Money = 999999;
-        }
-
-        // Every unit tests it will tear down the object
-        [TearDown]
-        public void Teardown()
-        {
-            //Dispose the player object
-            Object.Destroy(player);
         }
 
         // Test if the save file exists in the location 

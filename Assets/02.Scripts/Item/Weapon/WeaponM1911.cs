@@ -141,7 +141,8 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
         if (NumOfBullet > 0)
         {
             OnShotFire?.Invoke();
-            audio.PlayOneShot(fireSfx, 0.5f);
+            if(audio != null)
+                audio.PlayOneShot(fireSfx, 0.5f);
         }
         RaycastHit hit;
         if (Physics.Raycast(playerPosition, shootDirection, out hit, 300, layerMask))

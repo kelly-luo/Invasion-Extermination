@@ -141,7 +141,8 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         if (NumOfBullet > 0)
         {
             OnShotFire?.Invoke();
-            audio.PlayOneShot(fireSfx, 0.3f);
+            if (audio != null)
+                audio.PlayOneShot(fireSfx, 0.3f);
         }
 
         RaycastHit hit;

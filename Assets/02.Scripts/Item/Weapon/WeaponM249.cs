@@ -138,7 +138,8 @@ public class WeaponM249 : MonoBehaviour,ImWeapon
         if (NumOfBullet > 0)
         {
             OnShotFire?.Invoke();
-            audio.PlayOneShot(fireSfx, 0.5f);
+            if (audio != null)
+                audio.PlayOneShot(fireSfx, 0.5f);
         }
 
 

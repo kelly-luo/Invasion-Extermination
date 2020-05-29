@@ -30,12 +30,18 @@ namespace Tests
                 prefab = (GameObject)PrefabUtility.InstantiatePrefab(playerPrefab);
             }
 
+            SetUpNewMob();
+        }
+
+        public void SetUpNewMob()
+        {
             monsterController = prefab.AddComponent<MonsterController>();
             monsterController.Stats = new MonsterStats();
             monsterController.playerInformation = playerInformation;
             monsterController.Animator = prefab.GetComponent<Animator>();
             monsterController.UnityService = UnityServiceManager.Instance;
             monsterController.Agent = prefab.GetComponent<NavMeshAgent>();
+            monsterController.Agent.isStopped = true;
         }
 
         // Test to gain points when the player kills enemy

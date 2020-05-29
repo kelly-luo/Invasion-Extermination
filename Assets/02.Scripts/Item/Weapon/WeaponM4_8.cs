@@ -137,7 +137,8 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
         if (NumOfBullet > 0)
         {
             OnShotFire?.Invoke();
-            audio.PlayOneShot(fireSfx, 0.5f);
+            if (audio != null)
+                audio.PlayOneShot(fireSfx, 0.5f);
         }
 
         RaycastHit hit;

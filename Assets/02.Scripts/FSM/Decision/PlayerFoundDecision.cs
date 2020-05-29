@@ -27,7 +27,7 @@ public class PlayerFoundDecision : Decision
                 isPlayerFound = true;
             }
         }
-        Debug.Log("PlayerFoundDecision return: " + isPlayerFound);
+
         return isPlayerFound;
     }
 }

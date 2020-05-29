@@ -45,7 +45,7 @@ public class PlayerInformation : MonoBehaviour
     {
 
 
-       if(equipped != PlayerInventory.selected.Id)
+        if(equipped != PlayerInventory.selected.Id)
         {
             player.UnEquipWeapon();
             for (int i = 0; i < guns.Length; i++)

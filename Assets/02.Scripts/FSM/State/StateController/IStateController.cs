@@ -10,7 +10,11 @@ namespace IEGame.FiniteStateMachine
 
         void TransitionToState(State nextState);
 
+        void EquipWeapon(GameObject Weapon);
+
         void TakeDamage(float Damage);
+
+        void Attack();
 
         void OnDeath();
     }

@@ -46,6 +46,7 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
     public ImWeapon ThirdWeaponClass { get; set; }
 
     public GameObject ThirdPersonViewWeapon { get; set; }
+
     public GameObject FirstPersonViewWeapon { get; set; }
 
     private IUnityServiceManager UnityService = UnityServiceManager.Instance;
@@ -57,8 +58,8 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
         yield return null;
     }
 
-    
-    
+
+
     #region Initialize  
 
     public void EquipNewWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr, Transform thirdPersonViewWeaponHolderTr)
@@ -73,7 +74,18 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
         this.InitializeThirdPersonWeapon(thirdPersonViewWeaponHolderTr);
     }
 
-    private void InitializeThirdPersonWeapon(Transform thirdPersonViewWeaponHolderTr)
+    public void UnEquipCurrentWeapon()
+    {
+        FirstPersonViewWeapon.transform.parent = null; // take off from parent
+        //set scale to 0
+        FirstPersonViewWeapon.transform.localScale = new Vector3(0, 0, 0);
+
+        SetFirstPersonWeaponActive(false);
+
+        Destroy(ThirdPersonViewWeapon);
+    }
+
+private void InitializeThirdPersonWeapon(Transform thirdPersonViewWeaponHolderTr)
     {
         ThirdPersonViewWeapon = GameObject.Instantiate(FirstPersonViewWeapon, thirdPersonViewWeaponHolderTr);
         ThirdPersonViewWeapon.transform.localScale = new Vector3(180f, 180f, 180f);
@@ -90,11 +102,10 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
         FirstPersonViewWeapon.transform.parent = fisrtPersonViewWeaponHolderTr;
         FirstPersonViewWeapon.transform.localScale = new Vector3(1f, 1f, 1f);
         WeaponOffSet = new Vector3(0.21f, -0.11f, 0.64f);
-        FirstPersonViewWeapon.transform.localRotation = Quaternion.Euler(0f, 180f,0f);
+        FirstPersonViewWeapon.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
         FirstWeaponClass = FirstPersonViewWeapon.GetComponent<ImWeapon>();
     }
     #endregion
-
 
     #region Update Weapon
     public void UpdateFirstPersonViewWeaponPosition()
@@ -154,7 +165,7 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
     }
     public void SetFirstPersonWeaponActive(bool boolValue)
     {
-        if(FirstPersonViewWeapon != null)
+        if (FirstPersonViewWeapon != null)
             FirstPersonViewWeapon.SetActive(boolValue);
     }
 

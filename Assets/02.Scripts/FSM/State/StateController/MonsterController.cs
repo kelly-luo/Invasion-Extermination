@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class MonsterController : MonoBehaviour, IStateController
 {
+
     //Range of detecting the player.
     public float viewRange = 70.0f;
 
@@ -40,50 +41,48 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public GameObject weapon;
     public WeaponM1911 WeaponClass { get; set; }
+
+    private Transform weaponHolderTr;
     #endregion
 
-    public PlayerInformation playerInformation;
-
+    #region Character Information
     public ObjectStats Stats { get; set; }
-
     public Transform ObjectTransform { get; set; }
 
+    #endregion
+
+    #region Target Information
+    public PlayerInformation playerInformation;
     public Transform PlayerTr { get; set; }
-    private Transform weaponHolderTr;
+    #endregion
 
-    public ICharacterTranslate MonsterTranslate {get; set;}
-    public IUnityServiceManager UnityService { get; set; }
-
-
-    public List<Transform> WayPoints { get; set; } = new List<Transform>();
-
-    public int NextWayPointIndex { get; set; }
-    
-    public NavMeshAgent Agent { get; set; }
-
-    private float damping = 1.0f;
-
+    #region layermask
     public int PlayerLayer { get; set; }
     public int ObstacleLayer { get; set; }
     public int LayerMask { get; set; }
+    #endregion
 
-    private List<GameObject> skins = new List<GameObject>();
 
-    private float lastStateUpdateTime;
-    private float stateDelay= 0.6f;
+    #region PatrolWayPoints
+    public List<Transform> WayPoints { get; set; } = new List<Transform>();
+    public int NextWayPointIndex { get; set; }
 
-    public float DistancePlayerAndEnemy { get; set; }
+    #endregion
+
 
     #region Speed Value     
     private readonly float patrolSpeed = 1.5f;
 
     private readonly float traceSpeed = 2.3f;
-    #endregion
 
     public float Speed
     {
         get { return Agent.velocity.magnitude; }
     }
+    #endregion
+
+    #region State Value properties
+    public float DistancePlayerAndEnemy { get; set; }
 
     private bool patrolling;
     public bool Patrolling
@@ -105,6 +104,7 @@ public class MonsterController : MonoBehaviour, IStateController
         }
     }
 
+
     private Vector3 traceTarget;
     public Vector3 TraceTarget
     {
@@ -119,9 +119,18 @@ public class MonsterController : MonoBehaviour, IStateController
             this.TraceTargetPos(traceTarget);
         }
     }
+    #endregion
 
 
+    public NavMeshAgent Agent { get; set; }
 
+    private float damping = 1.0f;
+
+    private List<GameObject> skins = new List<GameObject>();
+
+    public IUnityServiceManager UnityService { get; set; }
+
+    #region MonoBehaviour Base Function
     void Awake()
     {
         var transforms = GetComponentsInChildren<Transform>();
@@ -145,17 +154,9 @@ public class MonsterController : MonoBehaviour, IStateController
 
         InitilizeSkinType();
         InitilizeWaypointGroup();
+        InitilizeNavAgent();
+        InitilizeLayerMask();
 
-        Agent = GetComponent<NavMeshAgent>();
-        Agent.autoBraking = false;
-        Agent.updateRotation = false;
-        Agent.speed = patrolSpeed;
-
-        PlayerTr = GameObject.FindGameObjectWithTag("Player").transform;
-        
-        PlayerLayer = UnityEngine.LayerMask.NameToLayer("Player");
-        ObstacleLayer = UnityEngine.LayerMask.NameToLayer("Obstacle");
-        LayerMask = 1 << PlayerLayer;
         if (isHoldingWeapon)
         {
             Animator.SetBool(hashIsHoldingWeapon, true);
@@ -167,27 +168,51 @@ public class MonsterController : MonoBehaviour, IStateController
     void Update()
     {
         DistancePlayerAndEnemy = (PlayerTr.position - ObjectTransform.position).sqrMagnitude;
-        Debug.Log("DistancePlayerAndEnemy " + DistancePlayerAndEnemy.ToString());
-        if (Agent.isStopped == false)
-        {
-            Quaternion rot = Quaternion.LookRotation(Agent.desiredVelocity);
-
-            ObjectTransform.rotation = Quaternion.Slerp(ObjectTransform.rotation, rot, UnityService.DeltaTime * damping);
-        }
-
 
         CurrentState.UpdateState(this);
-
-
     }
 
     void LateUpdate()
     {
         this.LookTowardMovingDirection();
-        if(patrolling)
+        if (patrolling)
             this.UpdateCurrentMovePoint();
     }
 
+    #endregion
+
+    private void InitilizeLayerMask()
+    {
+        PlayerTr = GameObject.FindGameObjectWithTag("Player").transform;
+
+        PlayerLayer = UnityEngine.LayerMask.NameToLayer("Player");
+        ObstacleLayer = UnityEngine.LayerMask.NameToLayer("Obstacle");
+
+        LayerMask = 1 << PlayerLayer;
+    }
+
+    private void InitilizeNavAgent()
+    {
+        Agent = GetComponent<NavMeshAgent>();
+        Agent.autoBraking = false;
+        Agent.updateRotation = false;
+        Agent.speed = patrolSpeed;
+    }
+
+    private void InitilizeSkinType()
+    {
+        var objects = gameObject.transform.GetComponentsInChildren<Transform>();
+
+        foreach (Transform oj in objects)
+            if (oj.name.StartsWith("Character"))
+            {
+                oj.gameObject.SetActive(false);
+                skins.Add(oj.gameObject);
+            }
+        int skinTypeIdx = UnityService.Range(0, skins.Count);
+
+        skins[skinTypeIdx].SetActive(true);
+    }
 
     private void InitilizeWaypointGroup()
     {
@@ -212,32 +237,8 @@ public class MonsterController : MonoBehaviour, IStateController
 
     }
 
-    public void EquipWeapon(GameObject weapon)
-    {
-        WeaponClass = weapon.GetComponent<WeaponM1911>();
-        weapon.transform.parent = weaponHolderTr;
-        WeaponClass.OnShotFire += SetFireAnimtion;
-        weapon.transform.localScale = new Vector3(180f, 180f, 180f);
-        weapon.transform.localRotation = Quaternion.Euler(-194.79f, 57.67899f, -97.009f);
-        weapon.transform.localPosition = new Vector3(22.8f, 9.3f, -7.5f);
-    }
 
-    private void InitilizeSkinType()
-    {
-        var objects = gameObject.transform.GetComponentsInChildren<Transform>();
-
-        foreach (Transform oj in objects)
-            if (oj.name.StartsWith("Character"))
-            {
-                oj.gameObject.SetActive(false);
-                skins.Add(oj.gameObject);
-            }
-        int skinTypeIdx = UnityService.Range(0, skins.Count);
-
-        skins[skinTypeIdx].SetActive(true);
-    }
-
-
+    #region State Related Method
     public void TransitionToState(State nextState)
     {
         if (nextState != RemainState)
@@ -245,8 +246,6 @@ public class MonsterController : MonoBehaviour, IStateController
             CurrentState = nextState;
         }
     }
-
-
     private void TraceTargetPos(Vector3 pos)
     {
         if (Agent.isPathStale) return;
@@ -262,14 +261,10 @@ public class MonsterController : MonoBehaviour, IStateController
 
         Agent.isStopped = false;
     }
+    #endregion
 
-    public void Stop()
-    { //Stop All
-        Agent.isStopped = true;
-        Agent.speed = 0;
-        Agent.velocity = Vector3.zero;
-        patrolling = false;
-    }
+    #region Movement Related Method
+
 
     private void LookTowardMovingDirection()
     {
@@ -293,35 +288,43 @@ public class MonsterController : MonoBehaviour, IStateController
             this.MoveWayPoint();
         }
     }
-    
+
     public void RotateToPlayer()
     {
-        Stop();
+        StopAgent();
 
         Animator.SetBool(hashCanMove, false);
         Animator.SetFloat(hashSpeed, 0f);
         Quaternion lookOnLook = Quaternion.LookRotation(PlayerTr.position - ObjectTransform.position);
         ObjectTransform.rotation =
-            Quaternion.Slerp(ObjectTransform.rotation, lookOnLook, UnityService.DeltaTime * damping *10);
-  
-    }
+            Quaternion.Slerp(ObjectTransform.rotation, lookOnLook, UnityService.DeltaTime * damping * 10);
 
-    public void Attack()
-    {
+    }
+    #endregion
+
+    public void StopAgent()
+    { //Stop All
         Agent.isStopped = true;
+        Agent.speed = 0;
         Agent.velocity = Vector3.zero;
         patrolling = false;
-        Animator.SetBool(hashCanMove, false);
-        Animator.SetFloat(hashSpeed, 0f);
-        StartCoroutine(AttackCoroutine());
     }
-    private IEnumerator AttackCoroutine()
+
+    public void EquipWeapon(GameObject weapon)
     {
-        if (isHoldingWeapon)
-        {
-            WeaponClass.Fire(ObjectTransform.position + new Vector3(0, 1.5f, 0), ObjectTransform.forward);
-        }
-        yield return null;
+        //Set Weapon Class
+        WeaponClass = weapon.GetComponent<WeaponM1911>();
+        //Set(or Subscribe) call back method(or event) on fire happen
+        WeaponClass.OnShotFire += SetFireAnimtion;
+        SetWeaponPosition(weapon);
+
+    }
+    private void SetWeaponPosition(GameObject weapon)
+    {
+        weapon.transform.parent = weaponHolderTr;
+        weapon.transform.localScale = new Vector3(180f, 180f, 180f);
+        weapon.transform.localRotation = Quaternion.Euler(-194.79f, 57.67899f, -97.009f);
+        weapon.transform.localPosition = new Vector3(22.8f, 9.3f, -7.5f);
     }
 
     public void TakeDamage(float Damage)
@@ -333,25 +336,45 @@ public class MonsterController : MonoBehaviour, IStateController
             this.OnDeath();
     }
 
+    public void Attack()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+
+        StartCoroutine(AttackCoroutine());
+    }
+    private IEnumerator AttackCoroutine()
+    {
+        if (isHoldingWeapon)
+        {
+            WeaponClass.Fire(ObjectTransform.position + new Vector3(0, 1.5f, 0), ObjectTransform.forward);
+        }
+        yield return null;
+    }
+
     public void OnDeath()
     {
         //player gains points
         this.playerInformation.Score += 10;
 
-        isHoldingWeapon = false;
-        Animator.SetBool(hashIsHoldingWeapon, false);
+        StopAgent();
+
+        TurnOffWeaponAnimation();
+
         this.gameObject.tag = "Untagged";
+
         Animator.SetInteger(hashDieIdx, UnityService.Range(0, 3));
         Animator.SetTrigger(hashDie);
-        GetComponent<CapsuleCollider>().enabled = false;
 
-        Agent.isStopped = true;
-        Agent.velocity = Vector3.zero;
-        patrolling = false;
+        GetComponent<CapsuleCollider>().enabled = false;
+        
         var script = GetComponent<MonsterController>();
         script.enabled = false;
-
     }
-
-
+    private void TurnOffWeaponAnimation()
+    {
+        isHoldingWeapon = false;
+        Animator.SetBool(hashIsHoldingWeapon, false);
+    }
 }

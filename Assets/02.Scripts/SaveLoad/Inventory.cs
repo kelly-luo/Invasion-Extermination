@@ -17,7 +17,8 @@ public class Inventory
     
     public void Add(Item item)
     {
-        if (inventory.Count < 24) {
+        if (inventory.Count < 24) 
+        {
             if (!inventory.ContainsKey(item.InstanceId))
             {
                 inventory.Add(item.InstanceId, item);
@@ -33,12 +34,16 @@ public class Inventory
             }
             else
             {
-                inventory.TryGetValue(item.InstanceId, out Item value);
-                value.Amount += item.Amount;
-                inventory[item.InstanceId] = value;
+                StackUpItem(item);
             }
-
         }
+    }
+
+    private void StackUpItem(Item item)
+    {
+        inventory.TryGetValue(item.InstanceId, out Item value);
+        value.Amount += item.Amount;
+        inventory[item.InstanceId] = value;
     }
 
     public bool ContainsKey(int itemID)
@@ -46,36 +51,41 @@ public class Inventory
         return inventory.ContainsKey(itemID);
     }
 
-    public void selectPrimary()
+    public void SelectPrimary()
     {
-        if(Primary != null)selected = Primary; 
+        if(Primary != null)
+            selected = Primary; 
     }
 
-    public void selectSecondary()
+    public void SelectSecondary()
     {
-        if(Secondary != null)selected = Secondary;
+        if(Secondary != null)
+            selected = Secondary;
     }
 
     public bool Remove(Item item)
     {
-            if (Primary == item) SetPrimary(null);
-            else if (Secondary == item) SetSecondary(null);
-
-            return inventory.Remove(item.InstanceId);
+        if (Primary == item) 
+            SetPrimary(null);
+        else if (Secondary == item) 
+            SetSecondary(null);
+        return inventory.Remove(item.InstanceId);
     }
 
     public void SetPrimary(Item item)
     {
-        if (Secondary == item) Secondary = Primary;
+        if (Secondary == item) 
+            Secondary = Primary;
         Primary = item;
-        selectPrimary();
+        SelectPrimary();
     }
 
     public void SetSecondary(Item item)
     {
-        if (Primary == item) Primary = Secondary;
+        if (Primary == item) 
+            Primary = Secondary;
         Secondary = item;
-        selectSecondary();
+        SelectSecondary();
     }
 
     public void SetPrimary(int key)
@@ -94,8 +104,8 @@ public class Inventory
     public Item FindItem(int key)
     {
         if (ContainsKey(key) == false) return null;
+
         return inventory[key];
-        
     }
 
     public int GetSize()

@@ -13,6 +13,8 @@ public interface IWeaponManager
 
     void EquipNewWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr, Transform thirdPersonViewWeaponHolderTr);
 
+    void UnEquipCurrentWeapon();
+
     void UpdateWeaponBob(float XMovement, float YMovement);
 
     void UpdateFirstPersonViewWeaponPosition();
@@ -30,5 +32,6 @@ public interface IWeaponManager
     IEnumerator Attack(Vector3 playerPosition, Vector3 shootDirection);
 
     void AddOnShootFireEvent(Action eventMethod);
+
 
 }

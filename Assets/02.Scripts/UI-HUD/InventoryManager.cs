@@ -28,7 +28,6 @@ public class InventoryManager : MonoBehaviour
     {
         playerInventory = inventory;
 
-
         currentSlotUsed = 0;
         maxSlot = inventorySlotPanel.transform.childCount;
         slots = new GameObject[maxSlot];
@@ -163,12 +162,12 @@ public class InventoryManager : MonoBehaviour
 
         if (UnityService.GetKeyUp(KeyCode.Alpha1))
         {
-            playerInventory.selectPrimary();
+            playerInventory.SelectPrimary();
         }
 
         if (UnityService.GetKeyUp(KeyCode.Alpha2))
         {
-            playerInventory.selectSecondary();
+            playerInventory.SelectSecondary();
         }
 
     }

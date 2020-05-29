@@ -20,7 +20,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion state
 
-    #region Unity Component
+    #region Character Information
     [field: SerializeField]
     public Transform ObjectTransform { get; set; }
     public PlayerInformation playerStats;
@@ -145,11 +145,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
     #region MonoBehaviour Base Function
     void Awake()
     {
-        SetBoneTransform();
+        InitilizeBoneTransform();
 
         this.ObjectTransform = GetComponent<Transform>();
         this.Animator = GetComponent<Animator>();
-        this.WeaponManager = gameObject.AddComponent<PlayerWeaponManager>();
+        this.WeaponManager = gameObject.GetComponent<PlayerWeaponManager>();
+
         this.playerStats = GetComponent<PlayerInformation>();
         playerStats.Health = 100f;
 
@@ -160,33 +161,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     }
 
-    private void SetBoneTransform()
-    {
-        var transforms = GetComponentsInChildren<Transform>();
-        foreach (Transform tr in transforms)
-        {
-            if (tr.gameObject.name == "Neck")
-                neckTr = tr;
-            if (tr.gameObject.name == "Head")
-                headTr = tr;
-            if (tr.gameObject.name == "RWeaponHolder")
-                weaponHolderTr = tr;
-        }
-    }
-
     void Start()
     {
-        CameraCtrl = CameraRig.GetComponent<CameraControl>();
-        CameraRigTr = CameraRig.GetComponent<Transform>();
-        CameraTr = CameraCtrl.GetCameraTransform();
-
+        InitilizeCameraSetting();
 
         gameObject.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
 
-
         this.UpdateTheTexturWhenCameraViewChange();
-
+        //Set(or Subscribe) call back method(or event) on Camera View Change(e.g. first person to first)
         CameraCtrl.OnViewChange += UpdateTheTexturWhenCameraViewChange;
+
         this.EquipWeapon(weapon);
 
     }
@@ -194,16 +178,10 @@ public class PlayerStateController : MonoBehaviour, IStateController
     void Update()
     {
         //update scene
-
         this.UpdateUserInput();
+
         this.CurrentState.UpdateState(this);
-
-        if (UnityService.GetMouseButtonUp(0))
-        {
-            this.Attack();
-        }
     }
-
 
     void LateUpdate()
     {
@@ -218,17 +196,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
     }
     #endregion
-
-    public void EquipWeapon(GameObject Weapon)
-    {
-        this.HasWeapon = true;
-        this.WeaponManager.EquipNewWeapon(Weapon, CameraTr, weaponHolderTr);
-        this.WeaponManager.AddOnShootFireEvent(ShakeCameraWhenShoot);
-        this.WeaponManager.AddOnShootFireEvent(SetWeaponFireAnimation);
-        this.UpdateTheTexturWhenCameraViewChange();
-
-    }
-
 
     #region animation method
     public void MoveAnimation(float xSpeed, float zSpeed)
@@ -260,7 +227,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         //you might be wondering why did i put the x on z axis 
         //it is because the I found that local Transform of the Neck bone in model was reversed. 
-        //neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
+        neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
 
     }
 
@@ -353,23 +320,33 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     #endregion
 
-    public void TransitionToState(State nextState)
+    private void InitilizeBoneTransform()
     {
-        if (nextState != RemainState)
+        var transforms = GetComponentsInChildren<Transform>();
+        foreach (Transform tr in transforms)
         {
-            CurrentState = nextState;
+            if (tr.gameObject.name == "Neck")
+                neckTr = tr;
+            if (tr.gameObject.name == "Head")
+                headTr = tr;
+            if (tr.gameObject.name == "RWeaponHolder")
+                weaponHolderTr = tr;
         }
     }
 
-    public void Attack()
+    private void InitilizeCameraSetting()
     {
-        if (IsHoldingRifle)
-        {
-            StartCoroutine(WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward));
-        }
+        CameraCtrl = CameraRig.GetComponent<CameraControl>();
+        CameraRigTr = CameraRig.GetComponent<Transform>();
+        CameraTr = CameraCtrl.GetCameraTransform();
     }
+
     private void UpdateUserInput()
     {
+        if (UnityService.GetMouseButtonUp(0))
+        {
+            this.Attack();
+        }
         if (UnityService.GetKeyUp(KeyCode.LeftShift))
         {
             IsRunning = !isRunning;
@@ -384,7 +361,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 IsHoldingRifle = !IsHoldingRifle;
         }
     }
-
     //weapon
     public void UpdateTheTexturWhenCameraViewChange()
     {
@@ -445,39 +421,55 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
     }
 
+    public void TransitionToState(State nextState)
+    {
+        if (nextState != RemainState)
+        {
+            CurrentState = nextState;
+        }
+    }
+
+    public void EquipWeapon(GameObject Weapon)
+    {
+        this.weapon = Weapon;
+        this.HasWeapon = true;
+        this.WeaponManager.EquipNewWeapon(Weapon, CameraTr, weaponHolderTr);
+        this.WeaponManager.AddOnShootFireEvent(ShakeCameraWhenShoot);
+        this.WeaponManager.AddOnShootFireEvent(SetWeaponFireAnimation);
+
+        this.UpdateTheTexturWhenCameraViewChange();
+    }
+
     public void UnEquipWeapon()
     {
+        WeaponManager.UnEquipCurrentWeapon();
         IsHoldingRifle = false;
         HasWeapon = false;
-        WeaponManager.SetFirstPersonWeaponActive(false);
-        WeaponManager.SetThirdPersonWeaponActive(false);
+    }
+
+    public void Attack()
+    {
+        if (IsHoldingRifle)
+        {
+            StartCoroutine(WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward));
+        }
     }
 
     public void TakeDamage(float Damage)
     {
-        Debug.Log($"Player has taken {Damage}");
+        Debug.Log($"Player has taken {Damage.ToString()}");
         playerStats.Health -= Damage;
-        if (playerStats.Health <= 0) {
+        if (playerStats.Health <= 0)
+        {
             Debug.Log("Player died. Respawning now.");
             this.OnDeath();
         }
-            
-        
     }
 
     public void OnDeath()
     {
         spawn.SetSpawn();
         playerStats.health = 100f;
-
-    }
-
-    private void OnApplicationQuit()
-    {
-        foreach (PlayerWeaponManager manager in gameObject.GetComponents<PlayerWeaponManager>())
-        {
-            Destroy(manager);
-        }
     }
 }
 

@@ -367,9 +367,7 @@ public class MonsterController : MonoBehaviour, IStateController
         Animator.SetInteger(hashDieIdx, UnityService.Range(0, 3));
         Animator.SetTrigger(hashDie);
 
-
         GetComponent<CapsuleCollider>().enabled = false;
-
         
         var script = GetComponent<MonsterController>();
         script.enabled = false;

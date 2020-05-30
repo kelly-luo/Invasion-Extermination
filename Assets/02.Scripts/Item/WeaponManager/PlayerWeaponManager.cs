@@ -85,7 +85,7 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
         Destroy(ThirdPersonViewWeapon);
     }
 
-private void InitializeThirdPersonWeapon(Transform thirdPersonViewWeaponHolderTr)
+    private void InitializeThirdPersonWeapon(Transform thirdPersonViewWeaponHolderTr)
     {
         ThirdPersonViewWeapon = GameObject.Instantiate(FirstPersonViewWeapon, thirdPersonViewWeaponHolderTr);
         ThirdPersonViewWeapon.transform.localScale = new Vector3(180f, 180f, 180f);

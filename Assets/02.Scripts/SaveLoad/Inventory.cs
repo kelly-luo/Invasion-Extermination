@@ -7,21 +7,21 @@ using UnityEngine;
 public class Inventory
 {
     
-    public Item Primary { get; set; }
-    public Item Secondary { get; set; }
+    public ImItem Primary { get; set; }
+    public ImItem Secondary { get; set; }
 
-    public Item selected;
+    public ImItem selected;
     //key = instance id, value = Item
-    public Dictionary<int, Item> inventory = new Dictionary<int, Item>();
+    public Dictionary<int, ImItem> inventory = new Dictionary<int, ImItem>();
 
     
-    public void Add(Item item)
+    public void Add(ImItem item)
     {
         if (inventory.Count < 24) 
         {
-            if (!inventory.ContainsKey(item.InstanceId))
+            if (!inventory.ContainsKey(item.InstanceID))
             {
-                inventory.Add(item.InstanceId, item);
+                inventory.Add(item.InstanceID, item);
                 if (Primary == null)
                 {
                     SetPrimary(item);
@@ -39,11 +39,11 @@ public class Inventory
         }
     }
 
-    private void StackUpItem(Item item)
+    private void StackUpItem(ImItem item)
     {
-        inventory.TryGetValue(item.InstanceId, out Item value);
-        value.Amount += item.Amount;
-        inventory[item.InstanceId] = value;
+        inventory.TryGetValue(item.InstanceID, out ImItem value);
+        value.StackAmount += item.StackAmount;
+        inventory[item.InstanceID] = value;
     }
 
     public bool ContainsKey(int itemID)
@@ -63,16 +63,16 @@ public class Inventory
             selected = Secondary;
     }
 
-    public bool Remove(Item item)
+    public bool Remove(ImItem item)
     {
         if (Primary == item) 
             SetPrimary(null);
         else if (Secondary == item) 
             SetSecondary(null);
-        return inventory.Remove(item.InstanceId);
+        return inventory.Remove(item.InstanceID);
     }
 
-    public void SetPrimary(Item item)
+    public void SetPrimary(ImItem item)
     {
         if (Secondary == item) 
             Secondary = Primary;
@@ -80,7 +80,7 @@ public class Inventory
         SelectPrimary();
     }
 
-    public void SetSecondary(Item item)
+    public void SetSecondary(ImItem item)
     {
         if (Primary == item) 
             Primary = Secondary;
@@ -101,7 +101,7 @@ public class Inventory
         Remove(FindItem(key));
     }
 
-    public Item FindItem(int key)
+    public ImItem FindItem(int key)
     {
         if (ContainsKey(key) == false) return null;
 

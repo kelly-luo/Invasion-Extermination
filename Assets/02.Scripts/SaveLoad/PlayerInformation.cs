@@ -36,21 +36,25 @@ public class PlayerInformation : MonoBehaviour
 
         for (int i = 0; i < guns.Length; i++)
         {
-           PlayerInventory.Add(new Item(guns[i].GetComponent<ImWeapon>().EntityID,i,100,1));
+            var gun = guns[i].GetComponent<ImWeapon>();
+            gun.InstanceID = i;
+            gun.StackAmount = 1;
+
+            PlayerInventory.Add(gun);
         }
-        equipped = PlayerInventory.Primary.Id;
+        equipped = PlayerInventory.Primary.EntityID;
     }
 
     void Update()
     {
 
 
-        if(equipped != PlayerInventory.selected.Id)
+        if(equipped != PlayerInventory.selected.EntityID)
         {
             player.UnEquipWeapon();
             for (int i = 0; i < guns.Length; i++)
             {
-                if (PlayerInventory.selected.Id == guns[i].GetComponent<ImWeapon>().EntityID)
+                if (PlayerInventory.selected.EntityID == guns[i].GetComponent<ImWeapon>().EntityID)
                 {
                     player.EquipWeapon(guns[i]);
                     player.IsHoldingRifle = true;

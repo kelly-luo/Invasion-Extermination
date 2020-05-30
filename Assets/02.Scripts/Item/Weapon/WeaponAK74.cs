@@ -8,12 +8,14 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     #region ID
 
-    public int EntityID { get; } = 0;
-    public readonly int instanceID;
+    public int EntityID { get; set; } = 0;
+    private int instanceID;
     public int InstanceID
     {
         get { return instanceID; }
+        set { instanceID = value; }
     }
+    public int StackAmount { get; set; } = 1;
     #endregion
 
     #region Bullet
@@ -87,7 +89,9 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     public AudioClip fireSfx;
     #endregion
 
-    public int LimitStacking { get; }
+
+    
+    public int StackLimit { get; }
 
     public float ReloadTime { get; set; }
 

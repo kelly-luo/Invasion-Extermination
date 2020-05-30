@@ -7,12 +7,14 @@ public class WeaponM107 : MonoBehaviour, ImWeapon
 {
     #region ID
 
-    public int EntityID { get; } = 3;
-    public readonly int instanceID;
+    public int EntityID { get; set; } =3;
+    private int instanceID;
     public int InstanceID
     {
         get { return instanceID; }
+        set { instanceID = value; }
     }
+    public int StackAmount { get; set; } = 1;
     #endregion
 
     #region Bullet
@@ -85,7 +87,7 @@ public class WeaponM107 : MonoBehaviour, ImWeapon
     public AudioClip fireSfx;
     #endregion
 
-    public int LimitStacking { get; }
+    public int StackLimit { get; }
 
     public float ReloadTime { get; set; }
 

@@ -13,13 +13,13 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item item = new Item(1, 1, 2, 1);
+        VirtualItem item = new VirtualItem(1, 1, 2, 1);
 
         //ACT
         inventory.Add(item);
 
         //ASSERT
-        Assert.AreEqual(true, inventory.ContainsKey(item.InstanceId));
+        Assert.AreEqual(true, inventory.ContainsKey(item.InstanceID));
 
     }
 
@@ -28,9 +28,9 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 1);
-        Item itemTwo = new Item(2, 2, 5, 1);
-        Item itemThree = new Item(2, 3, 5, 1);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 1);
+        VirtualItem itemTwo = new VirtualItem(2, 2, 5, 1);
+        VirtualItem itemThree = new VirtualItem(2, 3, 5, 1);
 
         //ACT
         inventory.Add(itemOne);
@@ -38,9 +38,9 @@ public class InventoryTest
         inventory.Add(itemThree);
 
         //ASSERT
-        Assert.AreEqual(true, inventory.ContainsKey(itemOne.InstanceId));
-        Assert.AreEqual(true, inventory.ContainsKey(itemTwo.InstanceId));
-        Assert.AreEqual(true, inventory.ContainsKey(itemThree.InstanceId));
+        Assert.AreEqual(true, inventory.ContainsKey(itemOne.InstanceID));
+        Assert.AreEqual(true, inventory.ContainsKey(itemTwo.InstanceID));
+        Assert.AreEqual(true, inventory.ContainsKey(itemThree.InstanceID));
 
     }
 
@@ -49,14 +49,14 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item item = new Item(1, 1, 2, 1);
+        VirtualItem item = new VirtualItem(1, 1, 2, 1);
         inventory.Add(item);
 
         //ACT
         inventory.Remove(item);
 
         //ASSERT
-        Assert.AreEqual(false, inventory.ContainsKey(item.InstanceId));
+        Assert.AreEqual(false, inventory.ContainsKey(item.InstanceID));
     }
 
     [Test]
@@ -64,9 +64,9 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 1);
-        Item itemTwo = new Item(1, 2, 2, 1);
-        Item itemThree = new Item(1, 3, 2, 1);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 1);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 2, 1);
+        VirtualItem itemThree = new VirtualItem(1, 3, 2, 1);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
         inventory.Add(itemThree);
@@ -77,9 +77,9 @@ public class InventoryTest
         inventory.Remove(itemThree);
 
         //ASSERT
-        Assert.AreEqual(false, inventory.ContainsKey(itemOne.InstanceId));
-        Assert.AreEqual(false, inventory.ContainsKey(itemTwo.InstanceId));
-        Assert.AreEqual(false, inventory.ContainsKey(itemThree.InstanceId));
+        Assert.AreEqual(false, inventory.ContainsKey(itemOne.InstanceID));
+        Assert.AreEqual(false, inventory.ContainsKey(itemTwo.InstanceID));
+        Assert.AreEqual(false, inventory.ContainsKey(itemThree.InstanceID));
     }
 
     [Test]
@@ -87,7 +87,7 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item item = new Item(1, 1, 2, 1);
+        VirtualItem item = new VirtualItem(1, 1, 2, 1);
 
         //ACT
         inventory.Add(item);
@@ -101,8 +101,8 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 1);
-        Item itemTwo = new Item(1, 2, 2, 1);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 1);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 2, 1);
 
         //ACT
         inventory.Add(itemOne);
@@ -117,7 +117,7 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item item = new Item(1, 1, 2, 1);
+        VirtualItem item = new VirtualItem(1, 1, 2, 1);
         inventory.Add(item);
 
         //ACT
@@ -132,8 +132,8 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 1);
-        Item itemTwo = new Item(1, 2, 2, 1);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 1);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 2, 1);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
 
@@ -149,8 +149,8 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 1);
-        Item itemTwo = new Item(1, 2, 2, 1);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 1);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 2, 1);
         inventory.Add(itemOne);
 
         //ACT
@@ -165,8 +165,8 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 1);
-        Item itemTwo = new Item(1, 2, 2, 1);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 1);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 2, 1);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
 
@@ -181,9 +181,9 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 1);
-        Item itemTwo = new Item(1, 2, 2, 1);
-        Item itemThree = new Item(1, 3, 2, 1);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 1);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 2, 1);
+        VirtualItem itemThree = new VirtualItem(1, 3, 2, 1);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
         inventory.Add(itemThree);
@@ -200,9 +200,9 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 3);
-        Item itemTwo = new Item(1, 2, 9, 3);
-        Item itemThree = new Item(1, 3, 9, 3);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 3);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 9, 3);
+        VirtualItem itemThree = new VirtualItem(1, 3, 9, 3);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
         inventory.Add(itemThree);
@@ -219,9 +219,9 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 3);
-        Item itemTwo = new Item(1, 2, 9, 3);
-        Item itemThree = new Item(1, 3, 9, 3);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 3);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 9, 3);
+        VirtualItem itemThree = new VirtualItem(1, 3, 9, 3);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
         inventory.Add(itemThree);
@@ -238,8 +238,8 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 3);
-        Item itemTwo = new Item(1, 2, 9, 3);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 3);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 9, 3);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
 
@@ -256,8 +256,8 @@ public class InventoryTest
     {
         //ARRANGE
         Inventory inventory = new Inventory();
-        Item itemOne = new Item(1, 1, 2, 3);
-        Item itemTwo = new Item(1, 2, 9, 3);
+        VirtualItem itemOne = new VirtualItem(1, 1, 2, 3);
+        VirtualItem itemTwo = new VirtualItem(1, 2, 9, 3);
         inventory.Add(itemOne);
         inventory.Add(itemTwo);
 

@@ -54,7 +54,7 @@ public class InventoryManager : MonoBehaviour
         UpdateWeaponSlots();
         currentSlotUsed = playerInventory.GetSize();
         int slotNo = -1;
-        foreach(KeyValuePair<int,Item> Weapon in playerInventory.inventory)
+        foreach(KeyValuePair<int,ImItem> Weapon in playerInventory.inventory)
         {
             slotNo++;
            // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
@@ -62,8 +62,8 @@ public class InventoryManager : MonoBehaviour
             bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
 
             slotInfo.InstanceId = Weapon.Key;
-            slotInfo.setSprite(getImage(Weapon.Value.Id));
-            slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.Amount);
+            slotInfo.setSprite(GetImage(Weapon.Value.EntityID));
+            slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.StackAmount);
         }
       
         for (int i = playerInventory.GetSize()  ; i < slots.Length; i++)
@@ -98,7 +98,7 @@ public class InventoryManager : MonoBehaviour
 
         if (playerInventory.ContainsKey(key))
         {
-            Item RemovedItem = playerInventory.FindItem(key);
+            ImItem RemovedItem = playerInventory.FindItem(key);
             playerInventory.Remove(RemovedItem);
 
             UpdateWeaponSlots();
@@ -109,7 +109,7 @@ public class InventoryManager : MonoBehaviour
     {
         if(playerInventory.Primary != null)
         {     
-            Primary.GetComponent<Image>().sprite = getImage(playerInventory.Primary.Id);
+            Primary.GetComponent<Image>().sprite = GetImage(playerInventory.Primary.EntityID);
             if (!Primary.activeSelf) Primary.SetActive(true);
         }
         else
@@ -117,14 +117,14 @@ public class InventoryManager : MonoBehaviour
         
         if (playerInventory.Secondary != null)
         {
-            Secondary.GetComponent<Image>().sprite = getImage(playerInventory.Secondary.Id);
+            Secondary.GetComponent<Image>().sprite = GetImage(playerInventory.Secondary.EntityID);
             if (!Secondary.activeSelf) Secondary.SetActive(true);
         }else
             Secondary.SetActive(false);
     }
     
 
-    private Sprite getImage(int id)
+    private Sprite GetImage(int id)
     {
         int EntityId;
         for (int i = 0; i < maxWeapons; i++)

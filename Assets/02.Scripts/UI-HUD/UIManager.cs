@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
 
     public PlayerInformation playerInformation;
 
+    public GameObject GameMenuPanel;
+
     //Temp values, change to 0 after testing
     public int displaymoney;
     public int displayscore;
@@ -28,7 +30,6 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-
         Intialize();
     }
 
@@ -42,10 +43,11 @@ public class UIManager : MonoBehaviour
             SetScore(playerInformation.Score);
         }
 
-      
-
         invManager.Intialize(playerInformation.PlayerInventory);
         invManager.UpdateWeaponSlots();
+
+        if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
+        if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
     }
 
     private void Update()
@@ -55,29 +57,36 @@ public class UIManager : MonoBehaviour
         // if (displayammo != playerInformation.Ammo) SetScore(playerInformation.Ammo);
         if (displayscore != playerInformation.Score) SetScore(playerInformation.Score);
 
+        CheckInput();
+    }
+
+    public void CheckInput()
+    {
+
         if (UnityService.GetKeyUp(KeyCode.I))
         {
-            invManager.InventoryVisible();
+            if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
         }
 
-
-    }
-    public void SetHealth(float fhealth)
-    {
-        int health = Convert.ToInt32(fhealth);
-        if(health <= 0) displayhealth = 0;
-        else if(health >=100) displayhealth = 100;
-        else displayhealth = health;
-
-        if(healthView != null && healthFill != null) {
-            if (displayhealth <= 50 && displayhealth > 30) healthFill.color = Color.yellow;
-            else if (displayhealth <= 30) healthFill.color = Color.red;
-            else healthFill.color = Color.white;
-            healthView.value = displayhealth;
+        if (UnityService.GetKeyUp(KeyCode.Escape))
+        {
+            if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
         }
-        
+
+        if (UnityService.GetKeyUp(KeyCode.Alpha1))
+        {
+            if (invManager.PlayerInventory != null) invManager.PlayerInventory.SelectPrimary();
+        }
+
+        if (UnityService.GetKeyUp(KeyCode.Alpha2))
+        {
+            if (invManager.PlayerInventory != null) invManager.PlayerInventory.SelectSecondary();
+        }
     }
 
+
+
+    #region Displaying_Information
     public void SetScore(int score)
     {
         displayscore = score;
@@ -106,7 +115,25 @@ public class UIManager : MonoBehaviour
        
     }
 
+    public void SetHealth(float fhealth)
+    {
+        int health = Convert.ToInt32(fhealth);
+        if (health <= 0) displayhealth = 0;
+        else if (health >= 100) displayhealth = 100;
+        else displayhealth = health;
 
+        if (healthView != null && healthFill != null)
+        {
+            if (displayhealth <= 50 && displayhealth > 30) healthFill.color = Color.yellow;
+            else if (displayhealth <= 30) healthFill.color = Color.red;
+            else healthFill.color = Color.white;
+            healthView.value = displayhealth;
+        }
+
+    }
+
+    #endregion
+    #region Managing_UI
     static public string FormatValue(int value)
     {
         if(value < 10)
@@ -119,5 +146,16 @@ public class UIManager : MonoBehaviour
         }
 
     }
-
+    static public void VisibleOnScreen(GameObject panel)
+    {
+        if (panel.transform.localScale.x == 1)
+        {
+            panel.transform.localScale = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            panel.transform.localScale = new Vector3(1, 1, 1);
+        }
+    }
+    #endregion
 }

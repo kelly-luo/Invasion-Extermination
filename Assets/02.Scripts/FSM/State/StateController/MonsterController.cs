@@ -124,6 +124,20 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public NavMeshAgent Agent { get; set; }
 
+    private bool isAgentEnabled;
+    public bool IsAgentEnabled
+    {
+        get { return isAgentEnabled; }
+        set
+        {
+            if (value)
+            {
+                InitilizeNavAgent();
+                isAgentEnabled = value;
+            }
+        }
+    }
+
     private float damping = 1.0f;
 
     private List<GameObject> skins = new List<GameObject>();
@@ -154,7 +168,6 @@ public class MonsterController : MonoBehaviour, IStateController
 
         InitilizeSkinType();
         InitilizeWaypointGroup();
-        InitilizeNavAgent();
         InitilizeLayerMask();
 
         if (isHoldingWeapon)
@@ -358,7 +371,7 @@ public class MonsterController : MonoBehaviour, IStateController
         //player gains points
         this.playerInformation.Score += 10;
 
-        StopAgent();
+        if(isAgentEnabled) StopAgent();
 
         TurnOffWeaponAnimation();
 

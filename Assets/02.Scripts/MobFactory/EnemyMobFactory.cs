@@ -12,7 +12,7 @@ public class EnemyMobFactory : MobFactory
     {
 
         GameObject avatorThatReturn = Instantiate<GameObject>(Alien, SpawnLocation, Quaternion.identity);
-
+        avatorThatReturn.GetComponent<MonsterController>().IsAgentEnabled = true;
 
         return avatorThatReturn;
     }
@@ -20,7 +20,7 @@ public class EnemyMobFactory : MobFactory
     {
 
         GameObject avatorThatReturn = Instantiate(Human, SpawnLocation, Quaternion.identity) as GameObject;
-
+        avatorThatReturn.GetComponent<MonsterController>().IsAgentEnabled = true;
 
 
         return avatorThatReturn;

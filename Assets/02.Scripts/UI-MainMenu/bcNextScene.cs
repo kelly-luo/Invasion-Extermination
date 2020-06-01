@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class bcNextScene : ButtonClicked
 {
     public MapSelect mapSelect;
-    public string mapID;
+    private string mapID;
 
     public override void ButtonEvent(PointerEventData eventData)
     {

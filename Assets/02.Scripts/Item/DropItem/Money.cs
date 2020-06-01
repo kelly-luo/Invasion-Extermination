@@ -5,45 +5,58 @@ using UnityEngine;
 public class Money : MonoBehaviour, ImDropableItem
 {
 
-    public GameObject ObjectPrefab { get; set; }
+    public Transform ObjectTransform { get; set; }
 
-    public Vector3 InitialScale { get; set; }
+    public Vector3 InitialScale { get; set; } = new Vector3(1f, 1f, 1f);
 
-    public double MoneyAmonut { get; set; }
+    private Rigidbody rigidbody;
 
-    void Start()
+    public int MoneyAmount { get; set; } = 10;
+
+    public int PopingSpeed { get; set; } = 1000;
+    public int PopingRandomRangeRadius { get; set; } = 3;
+    
+    void Awake()
     {
-        
-    }
+        ObjectTransform = GetComponent<Transform>();
+        rigidbody = GetComponent<Rigidbody>();
 
-    void Update()
-    {
-        
     }
 
     void OnEnable()
     {
-        throw new System.NotImplementedException();
+        InitialSpawnLootPopUpEffect();
     }
 
     void OnDisable()
     {
-        throw new System.NotImplementedException();
+        gameObject.transform.localScale = new Vector3(0f, 0f, 0f);
     }
 
     void OnCollisionEnter(Collision coll)
     {
-        throw new System.NotImplementedException();
+        if (coll.collider.CompareTag("Player"))
+        {
+            OnCollisionWithPlayer(coll.gameObject);
+
+            gameObject.SetActive(false);
+        }
     }
 
-    public void InitialSpawnImpulseEffect()
+    public void InitialSpawnLootPopUpEffect()
     {
-        throw new System.NotImplementedException();
+        var yAmountOfForceVector = new Vector3(0f, 1f, 0f);
+        var zAmountOfForceVector = new Vector3(0f, 0f, UnityServiceManager.Instance.UnityRandomRange(-PopingRandomRangeRadius, PopingRandomRangeRadius) * 0.1f);
+        var xAmountOfForceVector = new Vector3(UnityServiceManager.Instance.UnityRandomRange(-PopingRandomRangeRadius, PopingRandomRangeRadius) * 0.1f, 0f, 0f);
+
+        var totalUnitVector = (yAmountOfForceVector + zAmountOfForceVector + xAmountOfForceVector).normalized;
+
+        rigidbody.AddForce(totalUnitVector * 1000);
     }
 
     public void OnCollisionWithPlayer(GameObject Player)
     {
-        throw new System.NotImplementedException();
+        Player.GetComponent<PlayerInformation>().Money += MoneyAmount;
     }
 
 }

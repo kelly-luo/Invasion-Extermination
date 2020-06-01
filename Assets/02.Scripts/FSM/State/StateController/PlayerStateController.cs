@@ -16,8 +16,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     [field: SerializeField]
     public State RemainState { get; set; }
 
-    public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
-
     #endregion state
 
     #region Character Information

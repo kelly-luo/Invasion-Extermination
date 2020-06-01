@@ -4,11 +4,11 @@ using UnityEngine;
 
 public interface ImDropableItem
 {
-    GameObject ObjectPrefab { get; set; }
+    Transform ObjectTransform { get; set; }
 
     Vector3 InitialScale { get; set; }
 
-    void InitialSpawnImpulseEffect();
+    void InitialSpawnLootPopUpEffect();
 
     void OnCollisionWithPlayer(GameObject Player);
 

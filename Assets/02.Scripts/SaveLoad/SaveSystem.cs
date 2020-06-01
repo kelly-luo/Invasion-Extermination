@@ -10,7 +10,7 @@ public static class SaveSystem
         string path = Application.persistentDataPath + "/playerSaveFile";
 
         FileStream stream = new FileStream(path, FileMode.Create);
-        PlayerStats data = new PlayerStats(player);
+        PlayerSaveData data = new PlayerSaveData(player);
 
         Debug.Log($"Player was SAVED. Health:{data.Health} Level:{data.Level} Money:{data.Money}" +
             $"Score:{data.Score} Position: x={data.position[0]} y={data.position[1]} y={data.position[2]}");
@@ -25,7 +25,7 @@ public static class SaveSystem
         sw.Close();
     }
 
-    public static PlayerStats LoadPlayer()
+    public static PlayerSaveData LoadPlayer()
     {
         string path = Application.persistentDataPath + "/playerSaveFile";
         if (File.Exists(path))
@@ -33,7 +33,7 @@ public static class SaveSystem
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            PlayerStats data = formatter.Deserialize(stream) as PlayerStats;
+            PlayerSaveData data = formatter.Deserialize(stream) as PlayerSaveData;
             stream.Close();
 
             return data;

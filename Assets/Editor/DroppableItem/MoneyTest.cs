@@ -8,27 +8,30 @@ namespace Tests
 {
     public class MoneyTest
     {
+        GameObject money;
+        GameObject player;
+        Money moneyClass;
+        PlayerInformation playerInfo;
 
         [SetUp]
         public void SetUpTest()
         {
+            money = new GameObject();
+            moneyClass = money.AddComponent<Money>();
 
+            player = new GameObject();
+            playerInfo = player.AddComponent<PlayerInformation>();
+
+            playerInfo.Money = 0;
         }
 
         [Test]
-        public void MoneyTestSimplePasses()
+        public void Money_InteractionWithPlayerTest()
         {
-            // Use the Assert class to test conditions
-        }
+            moneyClass.MoneyAmount = 10;
+            moneyClass.OnCollisionWithPlayer(player);
 
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator MoneyTestWithEnumeratorPasses()
-        {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
+            Assert.AreEqual(10, playerInfo.Money);
         }
     }
 }

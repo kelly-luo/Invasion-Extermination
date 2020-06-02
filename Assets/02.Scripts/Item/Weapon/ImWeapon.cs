@@ -8,8 +8,6 @@ public interface ImWeapon : ImItem
 
     float Damage { get; set; }
     
-
-
     int MaxBullet { get; }
 
     int NumOfBullet { get; set; }

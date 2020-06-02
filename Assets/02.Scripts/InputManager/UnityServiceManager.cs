@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class UnityServiceManager : IUnityServiceManager
@@ -57,7 +59,25 @@ public class UnityServiceManager : IUnityServiceManager
     {
         return Random.Range(min, max);
     }
-    
+
+    public float UnityRandomGaussian(float mean, float standDev)
+    {
+        float[] points = new float[100];
+        float min = mean;
+        float max = standDev * 3f;
+        float range = max - min;
+        float buckets = range / 20f;
+
+        for(int i = 0; i<20; i++)
+        {
+            for(int j = 0; j<5; j++)
+            {
+                points[j + i*5] = Random.Range(min, min + ((i+1) * buckets));
+            }
+        }
+        return points[Random.Range(0, 100)];
+    }
+
     public int Range(int min, int max)
     {
         return Random.Range(min, max);

@@ -17,6 +17,8 @@ public interface IUnityServiceManager
     float DeltaTime { get; }
 
     int UnityRandomRange(int min, int max);
+
+    float UnityRandomGaussian(float mean, float standDev);
   
     float TimeAtFrame { get; }
 

@@ -16,8 +16,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     [field: SerializeField]
     public State RemainState { get; set; }
 
-    public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
-
     #endregion state
 
     #region Character Information
@@ -228,7 +226,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
         //you might be wondering why did i put the x on z axis 
         //it is because the I found that local Transform of the Neck bone in model was reversed. 
         neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
-
     }
 
     private void RotateHeadAndAvatar(float yRot)
@@ -361,7 +358,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 IsHoldingRifle = !IsHoldingRifle;
         }
     }
-    //weapon
+    
     public void UpdateTheTexturWhenCameraViewChange()
     {
         this.UpdateCharacterTexture();

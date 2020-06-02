@@ -77,7 +77,7 @@ public class PlayerInformation : MonoBehaviour
 
     public void LoadPlayer()
     {
-        PlayerStats data = SaveSystem.LoadPlayer();
+        PlayerSaveData data = SaveSystem.LoadPlayer();
 
         Vector3 position;
         position.x = data.position[0];

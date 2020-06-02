@@ -5,26 +5,30 @@ using UnityEngine;
 using TMPro;
 using NSubstitute;
 using UnityEngine.UI;
+using UnityEngine.TestTools;
 
 public class UI_HUD_Test : MonoBehaviour
 {
-    public UIManager manager;
+    public UIManager uiManager;
 
     [SetUp]
-    public void Start()
+    public void SetUpTest()
     {
-        manager = new UIManager();
+        uiManager = new UIManager();
+        InventoryManager invManager = new InventoryManager();
+        invManager.inventoryPanel = new GameObject();
+        uiManager.invManager = invManager;
     }
 
     [Test]
     public void Check_If_Health_does_not_go_above_100()
     {
         //ARRANGE
-        manager.SetHealth(100);
+        uiManager.SetHealth(100);
         //ACT
-        manager.SetHealth(999);
+        uiManager.SetHealth(999);
         //ASSERT
-        int actual = manager.displayhealth;
+        int actual = uiManager.displayhealth;
         Assert.AreEqual(100,actual);
     }
 
@@ -32,11 +36,11 @@ public class UI_HUD_Test : MonoBehaviour
     public void Check_If_Health_does_not_go_less_than_0()
     {
         //ARRANGE
-        manager.SetHealth(100);
+        uiManager.SetHealth(100);
         //ACT
-        manager.SetHealth(-999);
+        uiManager.SetHealth(-999);
         //ASSERT
-        int actual = manager.displayhealth;
+        int actual = uiManager.displayhealth;
         Assert.AreEqual(0, actual);
     }
 
@@ -45,11 +49,11 @@ public class UI_HUD_Test : MonoBehaviour
     public void Check_If_Score_does_not_go_less_than_0()
     {
         //ARRANGE
-        manager.SetScore(100);
+        uiManager.SetScore(100);
         //ACT
-        manager.SetScore(-999);
+        uiManager.SetScore(-999);
         //ASSERT
-        int actual = manager.displayscore;
+        int actual = uiManager.displayscore;
         Assert.AreEqual(0, actual);
     }
 
@@ -57,11 +61,11 @@ public class UI_HUD_Test : MonoBehaviour
     public void Check_If_Money_does_not_go_less_than_0()
     {
         //ARRANGE
-        manager.SetMoney(100);
+        uiManager.SetMoney(100);
         //ACT
-        manager.SetMoney(-999);
+        uiManager.SetMoney(-999);
         //ASSERT
-        int actual = manager.displaymoney;
+        int actual = uiManager.displaymoney;
         Assert.AreEqual(0, actual);
     }
 
@@ -69,11 +73,11 @@ public class UI_HUD_Test : MonoBehaviour
     public void Check_If_Ammo_does_not_go_less_than_0()
     {
         //ARRANGE
-        manager.SetAmmo(100);
+        uiManager.SetAmmo(100);
         //ACT
-        manager.SetAmmo(-999);
+        uiManager.SetAmmo(-999);
         //ASSERT
-        int actual = manager.displayammo;
+        int actual = uiManager.displayammo;
         Assert.AreEqual(0, actual);
     }
 
@@ -89,10 +93,90 @@ public class UI_HUD_Test : MonoBehaviour
         Assert.AreEqual("03", actual);
     }
 
-
-    [Test]
-    public void Inventory_slot_appears_when_press_key_i()
+    [UnityTest]
+    public IEnumerator Inventory_slot_Appears_when_press_key_i()
     {
+        //Arrange
+        var uiManagertemp = new GameObject().AddComponent<UIManager>();
+        uiManagertemp.invManager = new GameObject().AddComponent<InventoryManager>();
+        uiManagertemp.invManager.inventoryPanel = new GameObject();
+        uiManagertemp.invManager.inventoryPanel.transform.localScale = new Vector3(0, 0, 0);
 
+        //Act
+        var unityService = Substitute.For<IUnityServiceManager>();
+        unityService.GetKeyUp(KeyCode.I).Returns(true);
+        uiManagertemp.UnityService = unityService;
+
+        uiManagertemp.CheckInput();
+        yield return null;
+
+        //Assert
+        float actual = uiManagertemp.invManager.inventoryPanel.transform.localScale.x;
+        Assert.AreEqual(1f, actual);
+    }
+
+    [UnityTest]
+    public IEnumerator Inventory_slot_Disppears_when_press_key_i()
+    {
+        //Arrange
+        var uiManagertemp = new GameObject().AddComponent<UIManager>();
+        uiManagertemp.invManager = new GameObject().AddComponent<InventoryManager>();
+        uiManagertemp.invManager.inventoryPanel = new GameObject();
+        uiManagertemp.invManager.inventoryPanel.transform.localScale = new Vector3(1, 1, 1);
+
+        //Act
+        var unityService = Substitute.For<IUnityServiceManager>();
+        unityService.GetKeyUp(KeyCode.I).Returns(true);
+        uiManagertemp.UnityService = unityService;
+
+        uiManagertemp.CheckInput();
+        yield return null;
+
+        //Assert
+        float actual = uiManagertemp.invManager.inventoryPanel.transform.localScale.x;
+        Assert.AreEqual(0f, actual);
+    }
+
+
+    [UnityTest]
+    public IEnumerator Game_Menu_appears_when_press_key_Escape()
+    {
+        //Arrange
+        var uiManagertemp = new GameObject().AddComponent<UIManager>();
+        uiManagertemp.GameMenuPanel = new GameObject();
+        uiManagertemp.GameMenuPanel.transform.localScale = new Vector3(0, 0, 0);
+
+        //Act
+        var unityService = Substitute.For<IUnityServiceManager>();
+        unityService.GetKeyUp(KeyCode.Escape).Returns(true);
+        uiManagertemp.UnityService = unityService;
+
+        uiManagertemp.CheckInput();
+        yield return null;
+
+        //Assert
+        float actual = uiManagertemp.GameMenuPanel.transform.localScale.x;
+        Assert.AreEqual(1f, actual);
+    }
+
+    [UnityTest]
+    public IEnumerator Game_Menu_disappears_when_press_key_Escape()
+    {
+        //Arrange
+        var uiManagertemp = new GameObject().AddComponent<UIManager>();
+        uiManagertemp.GameMenuPanel = new GameObject();
+        uiManagertemp.GameMenuPanel.transform.localScale = new Vector3(1, 1, 1);
+
+        //Act
+        var unityService = Substitute.For<IUnityServiceManager>();
+        unityService.GetKeyUp(KeyCode.Escape).Returns(true);
+        uiManagertemp.UnityService = unityService;
+
+        uiManagertemp.CheckInput();
+        yield return null;
+
+        //Assert
+        float actual = uiManagertemp.GameMenuPanel.transform.localScale.x;
+        Assert.AreEqual(0f, actual);
     }
 }

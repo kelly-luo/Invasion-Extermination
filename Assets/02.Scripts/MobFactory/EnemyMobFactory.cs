@@ -7,6 +7,7 @@ public class EnemyMobFactory : MobFactory
     public GameObject pistol;
     public GameObject Alien;
     public GameObject Human;
+    
 
     public override GameObject CreateMobWithWeapon(Vector3 SpawnLocation)
     {
@@ -16,6 +17,7 @@ public class EnemyMobFactory : MobFactory
 
         return avatorThatReturn;
     }
+
     public override GameObject CreateMob(Vector3 SpawnLocation)
     {
 

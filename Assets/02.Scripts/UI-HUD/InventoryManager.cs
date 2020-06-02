@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    private Inventory playerInventory;
+    public Inventory PlayerInventory { get; set; }
 
     private int maxSlot;
     private int maxWeapons;
     private int currentSlotUsed;
 
-    [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] public GameObject inventoryPanel;
     [SerializeField] private GameObject inventorySlotPanel;
     private GameObject[] slots;
 
@@ -26,7 +26,7 @@ public class InventoryManager : MonoBehaviour
     bool visible = true;
     public void Intialize(Inventory inventory)
     {
-        playerInventory = inventory;
+        PlayerInventory = inventory;
 
         currentSlotUsed = 0;
         maxSlot = inventorySlotPanel.transform.childCount;
@@ -52,9 +52,9 @@ public class InventoryManager : MonoBehaviour
     public void UpdateInventoryGUI()
     {
         UpdateWeaponSlots();
-        currentSlotUsed = playerInventory.GetSize();
+        currentSlotUsed = PlayerInventory.GetSize();
         int slotNo = -1;
-        foreach(KeyValuePair<int,ImItem> Weapon in playerInventory.inventory)
+        foreach(KeyValuePair<int,ImItem> Weapon in PlayerInventory.inventory)
         {
             slotNo++;
            // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
@@ -66,7 +66,7 @@ public class InventoryManager : MonoBehaviour
             slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.StackAmount);
         }
       
-        for (int i = playerInventory.GetSize()  ; i < slots.Length; i++)
+        for (int i = PlayerInventory.GetSize()  ; i < slots.Length; i++)
         {
             slots[i].GetComponent<MenuButton>().disableButton();
             slots[i].SetActive(false);
@@ -75,9 +75,9 @@ public class InventoryManager : MonoBehaviour
 
     public void SetPrimary(int key)
     {
-        if (playerInventory.ContainsKey(key))
+        if (PlayerInventory.ContainsKey(key))
         {
-            playerInventory.SetPrimary(key);
+            PlayerInventory.SetPrimary(key);
             UpdateWeaponSlots();
    
         }
@@ -85,9 +85,9 @@ public class InventoryManager : MonoBehaviour
 
     public void SetSecondary(int key)
     {
-        if (playerInventory.ContainsKey(key))
+        if (PlayerInventory.ContainsKey(key))
         {
-            playerInventory.SetSecondary(key);
+            PlayerInventory.SetSecondary(key);
             UpdateWeaponSlots();
           
         }
@@ -96,10 +96,10 @@ public class InventoryManager : MonoBehaviour
     public void RemoveItem(int key)
     {
 
-        if (playerInventory.ContainsKey(key))
+        if (PlayerInventory.ContainsKey(key))
         {
-            ImItem RemovedItem = playerInventory.FindItem(key);
-            playerInventory.Remove(RemovedItem);
+            ImItem RemovedItem = PlayerInventory.FindItem(key);
+            PlayerInventory.Remove(RemovedItem);
 
             UpdateWeaponSlots();
         }
@@ -107,17 +107,17 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateWeaponSlots()
     {
-        if(playerInventory.Primary != null)
+        if(PlayerInventory.Primary != null)
         {     
-            Primary.GetComponent<Image>().sprite = GetImage(playerInventory.Primary.EntityID);
+            Primary.GetComponent<Image>().sprite = GetImage(PlayerInventory.Primary.EntityID);
             if (!Primary.activeSelf) Primary.SetActive(true);
         }
         else
             Primary.SetActive(false);
         
-        if (playerInventory.Secondary != null)
+        if (PlayerInventory.Secondary != null)
         {
-            Secondary.GetComponent<Image>().sprite = GetImage(playerInventory.Secondary.EntityID);
+            Secondary.GetComponent<Image>().sprite = GetImage(PlayerInventory.Secondary.EntityID);
             if (!Secondary.activeSelf) Secondary.SetActive(true);
         }else
             Secondary.SetActive(false);
@@ -134,40 +134,11 @@ public class InventoryManager : MonoBehaviour
         }
         return null;
     }
-
-    public void InventoryVisible()
-    {
-        if (inventoryPanel != null)
-            //inventoryPanel.SetActive(!inventoryPanel.activeSelf);
-            if (visible)
-            {
-                inventoryPanel.transform.localScale = new Vector3(0, 0, 0);
-                visible = false;
-            }
-            else
-            {
-                inventoryPanel.transform.localScale = new Vector3(1, 1, 1);
-                visible = true;
-            }
-           
-            
-    }
-
     void Update()
     {
-        if (playerInventory != null)
+        if (PlayerInventory != null)
         {
-            if (currentSlotUsed != playerInventory.GetSize()) UpdateInventoryGUI();
-        }
-
-        if (UnityService.GetKeyUp(KeyCode.Alpha1))
-        {
-            playerInventory.SelectPrimary();
-        }
-
-        if (UnityService.GetKeyUp(KeyCode.Alpha2))
-        {
-            playerInventory.SelectSecondary();
+            if (currentSlotUsed != PlayerInventory.GetSize()) UpdateInventoryGUI();
         }
 
     }

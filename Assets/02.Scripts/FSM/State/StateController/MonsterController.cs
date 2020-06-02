@@ -340,15 +340,6 @@ public class MonsterController : MonoBehaviour, IStateController
         weapon.transform.localPosition = new Vector3(22.8f, 9.3f, -7.5f);
     }
 
-    public void TakeDamage(float Damage)
-    {
-        Debug.Log($"Monster has taken {Damage}");
-        Stats.Health -= Damage;
-        if (Stats.Health <= 0)
-            Debug.Log("Monster has died.");
-            this.OnDeath();
-    }
-
     public void Attack()
     {
         StopAgent();
@@ -366,10 +357,27 @@ public class MonsterController : MonoBehaviour, IStateController
         yield return null;
     }
 
+    public void TakeDamage(float Damage)
+    {
+        Debug.Log($"Monster has taken {Damage}");
+        Stats.Health -= Damage;
+        if (Stats.Health <= 0)
+            Debug.Log("Monster has died.");
+            this.OnDeath();
+    }
+
     public void OnDeath()
     {
-        //player gains points
-        this.playerInformation.Score += 10;
+        if(this.gameObject.tag == "Enemy")
+        {
+            //player killed a monster and gains 10 points
+            this.playerInformation.Score += 10;
+        }
+        else if(this.gameObject.tag == "Human")
+        {
+            //player killed a human and 20 points deducted
+            this.playerInformation.Score += -20;
+        }
 
         if(isAgentEnabled) StopAgent();
 

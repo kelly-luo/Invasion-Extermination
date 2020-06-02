@@ -469,7 +469,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public void OnDeath()
     {
         spawn.SetSpawn();
-        playerStats.health = 100f;
+        playerStats.Health = 100f;
     }
 }
 

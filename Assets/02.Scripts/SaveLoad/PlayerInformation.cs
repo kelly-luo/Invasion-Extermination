@@ -3,12 +3,16 @@ using UnityEngine;
 
 public class PlayerInformation : MonoBehaviour
 {
-
+    private int score = 0;
+    private float health = 100f;
     [field: SerializeField] public int Level { get; set; }
-    [field: SerializeField] public int Score { get; set; }
-    [field: SerializeField] public int Money { get; set; }
 
-    [field: SerializeField] public float health = 100f;
+    [field: SerializeField] public int Score
+    {
+        get { return score; }
+        set { if ((score += value) <= 0) { score = 0; } else score = value; } // Do not allow score to go below 0
+    }
+    [field: SerializeField] public int Money { get; set; }
 
     [field: SerializeField] public float Health 
     { 

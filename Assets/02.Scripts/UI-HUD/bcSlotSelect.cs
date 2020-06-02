@@ -33,11 +33,11 @@ public class bcSlotSelect : ButtonClicked
 
     public override void ButtonHover(PointerEventData eventData)
     {
-    
+        inventoryManager.DisplayHoverPanel(InstanceId);
     }
 
     public override void ButtonHoverExit(PointerEventData eventData)
     {
-       
+        inventoryManager.HideHoverPanel();
     }
 }

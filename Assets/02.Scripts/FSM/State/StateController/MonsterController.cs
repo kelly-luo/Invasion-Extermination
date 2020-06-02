@@ -378,7 +378,7 @@ public class MonsterController : MonoBehaviour, IStateController
     private void LootMoneyPopUp()
     {
       
-        var numberOfBill = UnityService.UnityRandomRange(1, 5);
+        var numberOfBill = UnityService.UnityRandomRange(1, 10);
         for (int i = 0; i < numberOfBill; i++)
         {
             var moneyBillObject = GameManager.Instance.GetMoneyBillObject();

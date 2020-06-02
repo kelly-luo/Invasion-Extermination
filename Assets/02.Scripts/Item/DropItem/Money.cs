@@ -25,6 +25,7 @@ public class Money : MonoBehaviour, ImDropableItem
 
     void OnEnable()
     {
+        gameObject.transform.localScale = new Vector3(6f, 6f, 6f);
         InitialSpawnLootPopUpEffect();
     }
 
@@ -51,12 +52,13 @@ public class Money : MonoBehaviour, ImDropableItem
 
         var totalUnitVector = (yAmountOfForceVector + zAmountOfForceVector + xAmountOfForceVector).normalized;
 
-        rigidbody.AddForce(totalUnitVector * 1000);
+        rigidbody.AddForce(totalUnitVector * 15);
     }
 
     public void OnCollisionWithPlayer(GameObject Player)
     {
         Player.GetComponent<PlayerInformation>().Money += MoneyAmount;
+        Debug.Log($"player got : {MoneyAmount.ToString()}");
     }
 
 }

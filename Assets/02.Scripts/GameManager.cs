@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour
     public List<Transform> SpawnPoints { get; set; } = new List<Transform>();
 
     private static GameManager instance = null;
+    public static GameManager Instance
+    {
+        get { return instance; }
+    }
+
     [Header("Enemy Create Info")]
     public int numberOfAlien;
 
@@ -86,9 +91,11 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
     void Update()
     {
     }
+
     #region Enemy Spawn method
     private IEnumerator CreateEnemy()
     {
@@ -171,6 +178,5 @@ public class GameManager : MonoBehaviour
         }
     }
     #endregion
-
 
 }

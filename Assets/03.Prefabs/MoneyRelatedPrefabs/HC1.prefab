@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 412816149206823051}
   - component: {fileID: 5720527586151389202}
   - component: {fileID: -8010493063811139450}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: HC1
-  m_TagString: Untagged
+  m_TagString: Loot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,8 +93,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.031239953, y: 0.06416974, z: 0.018467339}
-  m_Center: {x: 0, y: 0, z: 0.009233669}
+  m_Size: {x: 0.2, y: 0.2, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5720527586151389202
 Rigidbody:
   m_ObjectHideFlags: 0

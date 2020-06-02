@@ -87,7 +87,7 @@ namespace Tests
             monsterController.Stats.Health = 100f;
             monsterController.TakeDamage(20f);
 
-            Assert.AreEqual(10, playerInformation.Score);
+            Assert.AreEqual(0, playerInformation.Score);
 
             playerInformation.Score = 0; // reset score for each test
         }

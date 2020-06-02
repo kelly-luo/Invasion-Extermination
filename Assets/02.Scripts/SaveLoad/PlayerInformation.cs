@@ -3,21 +3,21 @@ using UnityEngine;
 
 public class PlayerInformation : MonoBehaviour
 {
-    private int score = 0;
-    private float health = 100f;
     [field: SerializeField] public int Level { get; set; }
 
+    private int score = 0;
     [field: SerializeField] public int Score
     {
         get { return score; }
-        set { if ((score += value) <= 0) { score = 0; } else score = value; } // Do not allow score to go below 0
+        set { if ((value) <= 0) { score = 0; } else score = value; } // Do not allow score to go below 0
     }
     [field: SerializeField] public int Money { get; set; }
 
+    private float health = 100f;
     [field: SerializeField] public float Health 
     { 
         get { return health; }
-        set { if (health <= 0) { health = 0; } else health = value; } // Do not allow health to go below 0
+        set { if ((health += value) <= 0) { health = 0; } else health = value; } // Do not allow health to go below 0
     }
 
     public Inventory PlayerInventory = new Inventory();

@@ -182,14 +182,17 @@ public class MonsterController : MonoBehaviour, IStateController
     {
         DistancePlayerAndEnemy = (PlayerTr.position - ObjectTransform.position).sqrMagnitude;
 
-        CurrentState.UpdateState(this);
+        if (isAgentEnabled)
+        {
+            CurrentState.UpdateState(this);
+        }
     }
 
     void LateUpdate()
     {
-        this.LookTowardMovingDirection();
-        if (patrolling)
-            this.UpdateCurrentMovePoint();
+        if(isAgentEnabled) this.LookTowardMovingDirection();
+        if (patrolling) this.UpdateCurrentMovePoint();
+
     }
 
     #endregion
@@ -207,6 +210,7 @@ public class MonsterController : MonoBehaviour, IStateController
     private void InitilizeNavAgent()
     {
         Agent = GetComponent<NavMeshAgent>();
+        Agent.isStopped = false;
         Agent.autoBraking = false;
         Agent.updateRotation = false;
         Agent.speed = patrolSpeed;
@@ -359,11 +363,14 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
-        Debug.Log($"Monster has taken {Damage}");
+        Debug.Log($"{this.gameObject.tag} has taken {Damage}");
         Stats.Health -= Damage;
         if (Stats.Health <= 0)
-            Debug.Log("Monster has died.");
+        {
+            Debug.Log($"{this.gameObject.tag} has died.");
             this.OnDeath();
+        }
+
     }
 
     public void OnDeath()
@@ -376,7 +383,7 @@ public class MonsterController : MonoBehaviour, IStateController
         else if(this.gameObject.tag == "Human")
         {
             //player killed a human and 20 points deducted
-            this.playerInformation.Score += -20;
+            this.playerInformation.Score -= 20;
         }
 
         if(isAgentEnabled) StopAgent();

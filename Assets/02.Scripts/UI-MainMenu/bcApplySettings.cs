@@ -22,4 +22,14 @@ public class bcApplySettings : ButtonClicked
 
         Screen.SetResolution(width, height, windowsMode);   
     }
+
+    public override void ButtonHover(PointerEventData eventData)
+    {
+       
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+
+    }
 }

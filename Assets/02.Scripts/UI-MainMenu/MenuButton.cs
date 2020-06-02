@@ -61,6 +61,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
         if (enable)
         {
             if (animator != null) animator.SetBool("Selected", true);
+            Hover(eventData);
         }
      
     }
@@ -70,6 +71,7 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
         if (enable)
         {
             if (animator != null) animator.SetBool("Selected", false);
+            HoverExit(eventData);
         }
       
     }
@@ -81,6 +83,24 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
             buttonClicked.ButtonEvent(eventData);
         }
     
+    }
+
+    public void Hover(PointerEventData eventData)
+    {
+        if (enable)
+        {
+            buttonClicked.ButtonHover(eventData);
+        }
+
+    }
+
+    public void HoverExit(PointerEventData eventData)
+    {
+        if (enable)
+        {
+            buttonClicked.ButtonHoverExit(eventData);
+        }
+
     }
 
 

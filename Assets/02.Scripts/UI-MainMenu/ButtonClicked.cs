@@ -12,6 +12,8 @@ public abstract class ButtonClicked : MonoBehaviour
     }
 
     public abstract void ButtonEvent(PointerEventData eventData);
+    public abstract void ButtonHover(PointerEventData eventData);
+    public abstract void ButtonHoverExit(PointerEventData eventData);
     public void ButtonEventEnd() 
     {
         ButtonClickEvent = false;

@@ -384,7 +384,6 @@ public class MonsterController : MonoBehaviour, IStateController
             var moneyBillObject = GameManager.Instance.GetMoneyBillObject();
             if (moneyBillObject != null)
             {
-                Debug.Log($"player The POPOPOPOP");
                 moneyBillObject.GetComponent<Money>().MoneyAmount = UnityService.UnityRandomRange(10, 44);
                 moneyBillObject.transform.position = transform.position;
                 moneyBillObject.transform.rotation = transform.rotation;

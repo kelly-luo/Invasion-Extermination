@@ -58,7 +58,6 @@ public class Money : MonoBehaviour, ImDropableItem
     public void OnCollisionWithPlayer(GameObject Player)
     {
         Player.GetComponent<PlayerInformation>().Money += MoneyAmount;
-        Debug.Log($"player got : {MoneyAmount.ToString()}");
     }
 
 }

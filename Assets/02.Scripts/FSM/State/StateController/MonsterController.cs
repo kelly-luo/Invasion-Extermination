@@ -368,10 +368,30 @@ public class MonsterController : MonoBehaviour, IStateController
         Animator.SetTrigger(hashDie);
 
         GetComponent<CapsuleCollider>().enabled = false;
-        
+
+        LootMoneyPopUp();
+
         var script = GetComponent<MonsterController>();
         script.enabled = false;
     }
+
+    private void LootMoneyPopUp()
+    {
+      
+        var numberOfBill = UnityService.UnityRandomRange(1, 10);
+        for (int i = 0; i < numberOfBill; i++)
+        {
+            var moneyBillObject = GameManager.Instance.GetMoneyBillObject();
+            if (moneyBillObject != null)
+            {
+                moneyBillObject.GetComponent<Money>().MoneyAmount = UnityService.UnityRandomRange(10, 44);
+                moneyBillObject.transform.position = transform.position;
+                moneyBillObject.transform.rotation = transform.rotation;
+                moneyBillObject.SetActive(true);
+            }
+        }
+    }
+
     private void TurnOffWeaponAnimation()
     {
         isHoldingWeapon = false;

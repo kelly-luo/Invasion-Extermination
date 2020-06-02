@@ -77,7 +77,6 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     #endregion
 
     #region Delegate Event
-
     public Action OnShotFire { get; set; }
     public Action OnBulletRunOut { get; set; }
     public Action OnReload { get; set; }

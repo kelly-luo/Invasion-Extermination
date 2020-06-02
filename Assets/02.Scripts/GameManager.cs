@@ -8,11 +8,7 @@ public class GameManager : MonoBehaviour
     public List<Transform> SpawnPoints { get; set; } = new List<Transform>();
 
     private static GameManager instance = null;
-
-    private float humanCreateTime = 3f;
-
-    private float alienCreateTime = 2f;
-
+    [Header("Enemy Create Info")]
     public int numberOfAlien;
 
     public int numberOfHuman;
@@ -25,6 +21,12 @@ public class GameManager : MonoBehaviour
     public int maxAlien = 5;
 
     public bool ishand = false;
+
+    [Header("Object Pool")]
+    public GameObject moneyBillPrefab;
+    public int maxMoneyBillPool = 500; //Number limit of Money objects simultaneously allows in one scene.
+    public List<GameObject> moneyBillPool = new List<GameObject>();
+
     private MobFactory EnemyFactory;
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
@@ -45,7 +47,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private int requiredScore = 50;
    
     void Awake()
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
 
+        CreateMoneyBillPooling();
         
     }
     // Start is called before the first frame update
@@ -87,15 +89,15 @@ public class GameManager : MonoBehaviour
     void Update()
     {
     }
-
+    #region Enemy Spawn method
     private IEnumerator CreateEnemy()
     {
-        while(!ClearRound)
+        while (!ClearRound)
         {
             yield return new WaitForSeconds(spawnDeley);
             numberOfAlien = (int)GameObject.FindGameObjectsWithTag("Enemy").Length;
             numberOfHuman = (int)GameObject.FindGameObjectsWithTag("Human").Length;
-            if (numberOfHuman <= maxHuman )
+            if (numberOfHuman <= maxHuman)
             {
                 SpawnHuman();
                 if (isScoreSet)
@@ -104,7 +106,8 @@ public class GameManager : MonoBehaviour
                 if (experienceScore >= requiredScore)
                     ClearRound = true;
 
-            } else if(numberOfAlien <= maxAlien)
+            }
+            else if (numberOfAlien <= maxAlien)
             {
                 SpawnAlien();
                 if (isScoreSet)
@@ -121,18 +124,53 @@ public class GameManager : MonoBehaviour
 
 
     }
+
     void SpawnHuman()
     {
         EnemyFactory.CreateMob(GetRandomSpawnPoint());
     }
+
     void SpawnAlien()
     {
         EnemyFactory.CreateMobWithWeapon(GetRandomSpawnPoint());
     }
+
     Vector3 GetRandomSpawnPoint()
     {
         int randomIdx = UnityService.Range(0, SpawnPoints.Count);
         return SpawnPoints[randomIdx].position;
     }
+
+    #endregion
+
+    #region CreatingPooling
+    public GameObject GetMoneyBillObject()
+    {
+        for (int i = 0; i < moneyBillPool.Count; i++)
+        {
+            if (moneyBillPool[i].activeSelf == false)
+            {
+                return moneyBillPool[i];
+            }
+        }
+        return null;
+    }
+
+    public void CreateMoneyBillPooling()
+    {
+        GameObject objectPools = new GameObject("MoneyBillPools");
+
+        for (int i = 0; i < maxMoneyBillPool; i++)
+        {
+            var obj = Instantiate<GameObject>(moneyBillPrefab, objectPools.transform);
+            obj.name = "MoneyBill_" + i.ToString("00");
+
+            obj.SetActive(false);
+
+            moneyBillPool.Add(obj);
+        }
+    }
+    #endregion
+
 
 }

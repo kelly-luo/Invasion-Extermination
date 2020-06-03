@@ -109,6 +109,7 @@ public class InventoryManager : MonoBehaviour
 
     private Sprite GetImage(int id)
     {
+        if (weaponInstance == null) return null;
         int EntityId;
         for (int i = 0; i < maxWeapons; i++)
         {
@@ -146,10 +147,15 @@ public class InventoryManager : MonoBehaviour
     {
         if (inventoryHoverPanel.transform.localScale.x == 0) inventoryHoverPanel.transform.localScale = new Vector3(1, 1, 1);
         ImWeapon gunInfo = (ImWeapon)PlayerInventory.FindItem(key);
-        
+
         HoverPanelValues displayvalues = inventoryHoverPanel.GetComponent<HoverPanelValues>();
-        displayvalues.setTitle(GetImage(gunInfo.EntityID).name);
-        displayvalues.setImage(GetImage(gunInfo.EntityID));
+        Sprite GunImage = GetImage(gunInfo.EntityID);
+
+        if (GunImage != null)
+        {
+            displayvalues.setTitle(GunImage.name);
+            displayvalues.setImage(GunImage);
+        }
 
         if (PlayerInventory.Primary.InstanceID == key) displayvalues.setSelected("Primary");
         else if (PlayerInventory.Secondary.InstanceID == key) displayvalues.setSelected("Secondary");

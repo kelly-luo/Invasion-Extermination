@@ -10,6 +10,7 @@ public class bcSlotSelect : ButtonClicked
     public InventoryManager inventoryManager;
     public int InstanceId { get; set; } = -1;
 
+
     public GameObject slot_image;
     public TMP_Text stack_text;
     public override void ButtonEvent(PointerEventData eventData)
@@ -28,5 +29,15 @@ public class bcSlotSelect : ButtonClicked
     {
         slot_image.GetComponent < Image >().sprite = sprite;
         slot_image.SetActive(true);
+    }
+
+    public override void ButtonHover(PointerEventData eventData)
+    {
+        inventoryManager.DisplayHoverPanel(InstanceId);
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+        inventoryManager.HideHoverPanel();
     }
 }

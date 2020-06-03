@@ -11,4 +11,13 @@ public class bcLoad : ButtonClicked
         playerInformation.LoadPlayer();
     }
 
+    public override void ButtonHover(PointerEventData eventData)
+    {
+       
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+      
+    }
 }

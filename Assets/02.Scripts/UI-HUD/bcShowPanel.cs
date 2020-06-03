@@ -12,4 +12,14 @@ public class bcShowPanel : ButtonClicked
         currentPanel.SetActive(false);
         nextPanel.SetActive(true);
     }
+
+    public override void ButtonHover(PointerEventData eventData)
+    {
+      
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+        
+    }
 }

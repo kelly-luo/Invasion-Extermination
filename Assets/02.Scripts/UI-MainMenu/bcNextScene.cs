@@ -16,4 +16,11 @@ public class bcNextScene : ButtonClicked
        
     }
 
+    public override void ButtonHover(PointerEventData eventData)
+    {   }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+     
+    }
 }

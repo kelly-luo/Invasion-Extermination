@@ -15,6 +15,8 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject inventorySlotPanel;
     private GameObject[] slots;
 
+    [SerializeField] public GameObject inventoryHoverPanel;
+
     [SerializeField] private GameObject weaponInstances;
     private GameObject[] weaponInstance;
 
@@ -23,10 +25,10 @@ public class InventoryManager : MonoBehaviour
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
-    bool visible = true;
     public void Intialize(Inventory inventory)
     {
         PlayerInventory = inventory;
+        inventoryHoverPanel.transform.localScale = new Vector3(0, 0, 0);
 
         currentSlotUsed = 0;
         maxSlot = inventorySlotPanel.transform.childCount;
@@ -49,30 +51,8 @@ public class InventoryManager : MonoBehaviour
 
 
 
-    public void UpdateInventoryGUI()
-    {
-        UpdateWeaponSlots();
-        currentSlotUsed = PlayerInventory.GetSize();
-        int slotNo = -1;
-        foreach(KeyValuePair<int,ImItem> Weapon in PlayerInventory.inventory)
-        {
-            slotNo++;
-           // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
 
-            bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
-
-            slotInfo.InstanceId = Weapon.Key;
-            slotInfo.setSprite(GetImage(Weapon.Value.EntityID));
-            slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.StackAmount);
-        }
-      
-        for (int i = PlayerInventory.GetSize()  ; i < slots.Length; i++)
-        {
-            slots[i].GetComponent<MenuButton>().disableButton();
-            slots[i].SetActive(false);
-        }
-    }
-
+    #region Inventory_Management
     public void SetPrimary(int key)
     {
         if (PlayerInventory.ContainsKey(key))
@@ -105,6 +85,9 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region GUI_Management
     public void UpdateWeaponSlots()
     {
         if(PlayerInventory.Primary != null)
@@ -126,6 +109,7 @@ public class InventoryManager : MonoBehaviour
 
     private Sprite GetImage(int id)
     {
+        if (weaponInstance == null) return null;
         int EntityId;
         for (int i = 0; i < maxWeapons; i++)
         {
@@ -134,6 +118,60 @@ public class InventoryManager : MonoBehaviour
         }
         return null;
     }
+
+    public void UpdateInventoryGUI()
+    {
+        UpdateWeaponSlots();
+        currentSlotUsed = PlayerInventory.GetSize();
+        int slotNo = -1;
+        foreach (KeyValuePair<int, ImItem> Weapon in PlayerInventory.inventory)
+        {
+            slotNo++;
+            // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
+
+            bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
+
+            slotInfo.InstanceId = Weapon.Key;
+            slotInfo.setSprite(GetImage(Weapon.Value.EntityID));
+            slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.StackAmount);
+        }
+
+        for (int i = PlayerInventory.GetSize(); i < slots.Length; i++)
+        {
+            slots[i].GetComponent<MenuButton>().disableButton();
+            slots[i].SetActive(false);
+        }
+    }
+
+    public void DisplayHoverPanel(int key)
+    {
+        if (inventoryHoverPanel.transform.localScale.x == 0) inventoryHoverPanel.transform.localScale = new Vector3(1, 1, 1);
+        ImWeapon gunInfo = (ImWeapon)PlayerInventory.FindItem(key);
+
+        HoverPanelValues displayvalues = inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        Sprite GunImage = GetImage(gunInfo.EntityID);
+
+        if (GunImage != null)
+        {
+            displayvalues.setTitle(GunImage.name);
+            displayvalues.setImage(GunImage);
+        }
+
+        if (PlayerInventory.Primary.InstanceID == key) displayvalues.setSelected("Primary");
+        else if (PlayerInventory.Secondary.InstanceID == key) displayvalues.setSelected("Secondary");
+        else displayvalues.setSelected("Not Selected");
+
+        displayvalues.setText(0, gunInfo.Damage);//Display damage text
+        displayvalues.setText(1, gunInfo.MaxBullet);//Display clip size
+
+    }
+
+    public void HideHoverPanel()
+    {
+        if (inventoryHoverPanel.transform.localScale.x == 1) inventoryHoverPanel.transform.localScale = new Vector3(0, 0, 0);
+    }
+
+    #endregion
     void Update()
     {
         if (PlayerInventory != null)

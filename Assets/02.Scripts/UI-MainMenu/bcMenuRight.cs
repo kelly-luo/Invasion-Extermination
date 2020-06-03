@@ -12,5 +12,14 @@ public class bcMenuRight : ButtonClicked
          mapSelect.index += 1;
     }
 
+    public override void ButtonHover(PointerEventData eventData)
+    {
+       
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+       
+    }
 }
 

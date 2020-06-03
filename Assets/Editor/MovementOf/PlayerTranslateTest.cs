@@ -17,6 +17,7 @@ namespace Tests
         {
             target = new GameObject();
             target.AddComponent<Rigidbody>();
+            target.AddComponent<CapsuleCollider>();
             target.transform.position = new Vector3(0f, 0f, 0f);
             playerTranslate = new PlayerTranslate(target.transform);
 
@@ -36,5 +37,24 @@ namespace Tests
             //Check is DesiredPostion is same as expected
             Assert.AreEqual(ExpectedValue, playerTranslate.DesiredPosition);
         }
+
+        [Test] 
+        public void TranslateCharacter_JumpingTest()
+        {
+            //CheckingPlayerIsOnGround is false
+            bool IsJumpSuccess = playerTranslate.JumpCharacter(false);
+            
+
+            Assert.AreEqual(true, IsJumpSuccess);
+        }
+        [Test]
+        public void TranslateCharacter_CheckCharacterIsOnGroundTest()
+        {
+            bool IsCharacterOnGround = playerTranslate.CheckCharacterIsOnGround();
+
+            Assert.AreEqual(false, IsCharacterOnGround);
+        }
+        
+
     }
 }

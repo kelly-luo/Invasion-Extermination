@@ -12,6 +12,7 @@ public class MoveControlAction : Action
         var stateControlller = controller as PlayerStateController;
         var vertical = stateControlller.UnityService.GetAxis("Vertical");
         var horizontal = stateControlller.UnityService.GetAxis("Horizontal");
+
         Vector3 moveDir = (stateControlller.CameraRigTr.forward * vertical) 
             + (stateControlller.CameraRigTr.right * horizontal);
 

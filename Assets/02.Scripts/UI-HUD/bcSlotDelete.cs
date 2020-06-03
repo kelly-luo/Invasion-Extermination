@@ -11,4 +11,14 @@ public class bcSlotDelete : ButtonClicked
     {
         inventoryManager.RemoveItem(Slot.GetComponent<bcSlotSelect>().InstanceId);
     }
+
+    public override void ButtonHover(PointerEventData eventData)
+    {
+      
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+       
+    }
 }

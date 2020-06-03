@@ -70,6 +70,8 @@ public class UIManager : MonoBehaviour
 
         if (UnityService.GetKeyUp(KeyCode.Escape))
         {
+            if (invManager != null)
+                if(invManager.inventoryPanel.transform.localScale.x == 1) VisibleOnScreen(invManager.inventoryPanel);
             if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
         }
 
@@ -146,6 +148,8 @@ public class UIManager : MonoBehaviour
         }
 
     }
+
+
     static public void VisibleOnScreen(GameObject panel)
     {
         if (panel.transform.localScale.x == 1)

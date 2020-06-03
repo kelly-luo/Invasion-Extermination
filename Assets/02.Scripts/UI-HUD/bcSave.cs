@@ -10,4 +10,14 @@ public class bcSave : ButtonClicked
     {
         playerInformation.SavePlayer();
     }
+
+    public override void ButtonHover(PointerEventData eventData)
+    {
+        
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+   
+    }
 }

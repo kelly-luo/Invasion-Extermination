@@ -347,7 +347,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         if (UnityService.GetKeyUp(KeyCode.Space))
         {
-            PlayerTranslate.JumpCharacter(false);
+            PlayerTranslate.JumpCharacter(true);
         }
         if (UnityService.GetMouseButtonUp(0))
         {

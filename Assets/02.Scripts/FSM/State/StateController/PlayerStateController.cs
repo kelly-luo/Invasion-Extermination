@@ -45,6 +45,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
     private readonly int hashIsHoldingRifle = Animator.StringToHash("IsHoldingRifle");
+
+    public bool IsJumping
+    {
+        get { return PlayerTranslate.IsJumping; }
+    }
+
     private bool isRunning = false;
     public bool IsRunning
     {
@@ -177,7 +183,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         //update scene
         this.UpdateUserInput();
-
         this.CurrentState.UpdateState(this);
     }
 
@@ -340,6 +345,14 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     private void UpdateUserInput()
     {
+        if (UnityService.GetKeyUp(KeyCode.Space))
+        {
+            PlayerTranslate.JumpCharacter(true);
+        }
+        if (UnityService.GetMouseButtonUp(0))
+        {
+            this.Attack();
+        }
         if (UnityService.GetMouseButtonUp(0))
         {
             this.Attack();

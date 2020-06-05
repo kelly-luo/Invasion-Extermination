@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class ItemShop : MonoBehaviour
 {
     public List<ShopItem> weaponsList;
     public int numWeapons = 9;
+    public PlayerStateController controller;
 
     public void PopulateShop()
     {
@@ -15,9 +17,19 @@ public class ItemShop : MonoBehaviour
 
     private void PopulateWeaponsList()
     {
-        for (int i = 0; i < numWeapons - weaponsList.Count; i++)
+        for (int i = 0; i < numWeapons; i++)
+            weaponsList[i] = weaponsList[i] ?? new ShopItem();
+    }
+
+    public void BuyItem(int index)
+    {
+        ShopItem buying = weaponsList[index];
+        if(controller.playerStats.Money >= buying.money)
         {
-            weaponsList.Add(new ShopItem());
+            controller.playerStats.Money -= buying.money;
+            controller.playerStats.PlayerInventory.Add(buying.item);
+
+            weaponsList.RemoveAt(index);
         }
     }
 
@@ -27,8 +39,8 @@ public class ItemShop : MonoBehaviour
         public GameObject[] guns;
         public int costLowerRange = 900;
         public int costUpperRange = 1100;
-        int money;
-        ImItem item;
+        public int money;
+        public ImItem item;
 
         public ShopItem()
         {

@@ -44,6 +44,7 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
     #endregion
 
     #region Shooting Setting 
+    public float ShootKnockbackVector { get; set; } = 5f;
 
     public float Damage { get; set; } = 100;
 
@@ -54,6 +55,8 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
     private bool isShooting = false;
 
     private float lastShootTime = 0f;
+
+    public float FiringRange { get; set; } = 200f;
 
     #region LayerMask
     private int enemyLayer;
@@ -82,10 +85,15 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
     public Action OnBulletRunOut { get; set; }
     public Action OnReload { get; set; }
     #endregion
+
     #region Audio
     private AudioSource audio;
 
     public AudioClip fireSfx;
+
+    public AudioClip emptySfx;
+
+    public float SoundVolume { get; set; } = 0.2f;
     #endregion
 
     public int StackLimit { get; }
@@ -108,21 +116,21 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
         layerMask = (1 << enemyLayer) | (1 << obstacleLayer);
     }
 
-    public void Reload(ref int numOfBulletLeft)
+    public void Reload(ref int ammoLeft)
     {
-        if (numOfBulletLeft <= 0)
+        if (ammoLeft <= 0)
             return;
 
         OnReload?.Invoke();
 
-        if (numOfBulletLeft <= MaxBullet)
+        if (ammoLeft <= MaxBullet)
         {
-            NumOfBullet = numOfBulletLeft;
-            numOfBulletLeft = 0;
+            NumOfBullet = ammoLeft;
+            ammoLeft = 0;
         }
         else
         {
-            numOfBulletLeft -= MaxBullet;
+            ammoLeft -= MaxBullet;
             NumOfBullet = MaxBullet;
         }
     }
@@ -133,25 +141,33 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
         shootDirections = shootDirection;
         if (lastShootTime + Delay > UnityService.TimeAtFrame)
             return null;
+
+        if (NumOfBullet <= 0)
+        {
+            if (audio != null)
+                audio.PlayOneShot(emptySfx, SoundVolume);
+
+            lastShootTime = UnityService.TimeAtFrame;
+            return null;
+        }
+
         isShooting = true;
         lastShootTime = UnityService.TimeAtFrame;
 
-        if (NumOfBullet > 0)
-        {
-            OnShotFire?.Invoke();
-            if (audio != null)
-                audio.PlayOneShot(fireSfx, 0.5f);
-        }
+        OnShotFire?.Invoke();
+        if (audio != null)
+            audio.PlayOneShot(fireSfx, SoundVolume);
 
+        NumOfBullet--;
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 200, layerMask))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
         {
             var hitObject = hit.collider.gameObject;
             if (hitObject.CompareTag(("Enemy")) || hitObject.CompareTag(("Human")))
             {
                 var control = hitObject.GetComponent<MonsterController>();
                 control.TakeDamage(Damage);
-                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 200);
+                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * ShootKnockbackVector, ForceMode.Impulse);
                 isShooting = false;
             }
 
@@ -166,8 +182,9 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
         }
     }
 
+
     void OnDrawGizmos()
     {
-        Gizmos.DrawLine(playerPositions, playerPositions + (200 * shootDirections));
+        Gizmos.DrawLine(playerPositions, playerPositions + (FiringRange * shootDirections));
     }
 }

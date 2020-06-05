@@ -44,6 +44,7 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
     #endregion
 
     #region Shooting Setting 
+    public float ShootKnockbackVector { get; set; } = 10f;
 
     public float Damage { get; set; } = 5;
 
@@ -54,6 +55,8 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
     private bool isShooting = false;
 
     private float lastShootTime = 0f;
+
+    public float FiringRange { get; set; } = 50;
 
     #region LayerMask
     private int playerLayer;
@@ -88,6 +91,10 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
     private AudioSource audio;
 
     public AudioClip fireSfx;
+
+    public AudioClip emptySfx;
+
+    public float SoundVolume { get; set; } = 0.2f;
     #endregion
 
     public int StackLimit { get; }
@@ -133,33 +140,43 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
 
     public GameObject Fire(Vector3 playerPosition, Vector3 shootDirection)
     {
+
+
         playerPositions = playerPosition;
         shootDirections = shootDirection;
         if (lastShootTime + Delay > UnityService.TimeAtFrame)
             return null;
+
+        if (NumOfBullet <= 0)
+        {
+            if (audio != null)
+                audio.PlayOneShot(emptySfx, SoundVolume);
+
+            lastShootTime = UnityService.TimeAtFrame;
+            return null;
+        }
+
         isShooting = true;
         lastShootTime = UnityService.TimeAtFrame;
 
-        if (NumOfBullet > 0)
-        {
-            OnShotFire?.Invoke();
-            if(audio != null)
-                audio.PlayOneShot(fireSfx, 0.5f);
-        }
+        OnShotFire?.Invoke();
+        if (audio != null)
+            audio.PlayOneShot(fireSfx, SoundVolume);
+
+
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 300, layerMask))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
         {
-
-            isShooting = false;
-            var hitObject = hit.transform.gameObject;
-            Debug.Log(hitObject.tag.ToString());
-
+            var hitObject = hit.collider.gameObject;
             if (hitObject.CompareTag("Player"))
             {
                 var control = hitObject.GetComponent<PlayerStateController>();
                 control.TakeDamage(Damage);
-                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * 1700f + Vector3.up * 50);
+                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * ShootKnockbackVector, ForceMode.Impulse);
+                isShooting = false;
             }
+
+
             return hitObject;
 
             //do the related action with monster here
@@ -170,8 +187,9 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
         }
     }
 
+
     void OnDrawGizmos()
     {
-        Gizmos.DrawLine(playerPositions, playerPositions + (30 * shootDirections));
+        Gizmos.DrawLine(playerPositions, playerPositions + (FiringRange * shootDirections));
     }
 }

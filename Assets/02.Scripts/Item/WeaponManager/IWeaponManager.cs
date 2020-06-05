@@ -11,6 +11,8 @@ public interface IWeaponManager
     ImWeapon FirstWeaponClass { get; set; }
     GameObject CurrentWeaponObject { get; set; }
 
+    void StartReload(ref int ammoLeft);
+
     void EquipNewWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr, Transform thirdPersonViewWeaponHolderTr);
 
     void UnEquipCurrentWeapon();
@@ -20,7 +22,7 @@ public interface IWeaponManager
     void UpdateFirstPersonViewWeaponPosition();
 
     void UpdateWeaponReboundWhenShoot();
-
+    
     void SetFirstPersonWeaponActive(bool boolValue);
 
     void SetThirdPersonWeaponActive(bool boolValue);

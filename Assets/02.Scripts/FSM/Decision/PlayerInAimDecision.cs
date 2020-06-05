@@ -26,7 +26,6 @@ public class PlayerInAimDecision : Decision
             }
         }
 
-        Debug.Log("PlayerInAimDecision return: " + isView);
         return isView;
     }
 }

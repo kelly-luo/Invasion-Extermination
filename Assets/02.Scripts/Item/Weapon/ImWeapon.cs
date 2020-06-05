@@ -16,6 +16,8 @@ public interface ImWeapon : ImItem
 
     float Delay { get; }
 
+    float ShootKnockbackVector { get; set; }
+
     bool IsShooting { get; }
 
     float ReloadDuration { get; set; }

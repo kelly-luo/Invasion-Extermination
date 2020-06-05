@@ -27,8 +27,11 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         set
         {
             numOfBullet = value;
-            if (numOfBullet == 0)
+            if (numOfBullet <= 0)
+            {
+                numOfBullet = 0;
                 OnBulletRunOut?.Invoke();
+            }
         }
     }
     #endregion
@@ -42,8 +45,9 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     public float ShakeMagnitudeRot { get; } = 0.1f;
 
     #endregion
-    
+
     #region Shooting Setting 
+    public float ShootKnockbackVector { get; set; } = 1000f;
 
     public float Damage { get; set; } = 20;
 
@@ -98,7 +102,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     
     public int StackLimit { get; }
 
-    public float ReloadDuration { get; set; }
+    public float ReloadDuration { get; set; } = 1.2f;
 
     public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
 
@@ -139,16 +143,19 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     public GameObject Fire(Vector3 playerPosition,Vector3 shootDirection)
     {
-        if(NumOfBullet <= 0)
-        {
-            if (audio != null)
-                audio.PlayOneShot(emptySfx, SoundVolume);
-        }
-
         playerPositions = playerPosition;
         shootDirections = shootDirection;
         if (lastShootTime + Delay > UnityService.TimeAtFrame)
             return null;
+
+        if (NumOfBullet <= 0)
+        {
+            if (audio != null)
+                audio.PlayOneShot(emptySfx, SoundVolume);
+
+            lastShootTime = UnityService.TimeAtFrame;
+            return null;
+        }
 
         isShooting = true;
         lastShootTime = UnityService.TimeAtFrame;
@@ -156,8 +163,8 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         OnShotFire?.Invoke();
         if (audio != null)
             audio.PlayOneShot(fireSfx, SoundVolume);
-    
 
+        NumOfBullet--;
         RaycastHit hit;
         if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
         {
@@ -166,6 +173,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
             {
                 var control = hitObject.GetComponent<MonsterController>();
                 control.TakeDamage(Damage);
+                hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * ShootKnockbackVector, ForceMode.Impulse);
                 isShooting = false;
             }
 

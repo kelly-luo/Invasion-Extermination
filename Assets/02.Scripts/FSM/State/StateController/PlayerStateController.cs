@@ -359,7 +359,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
         if(UnityService.GetKeyUp(KeyCode.R))
         {
-
+            WeaponManager.StartReload(ref playerStats.Ammo);
         }
     }
     

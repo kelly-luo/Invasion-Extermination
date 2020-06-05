@@ -140,6 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbdb581c998fd9f4987820bede7457c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBarObject: {fileID: 6374623772963767696, guid: 3f63f9deaf42d2e4fa94c47e310e44bf,
+    type: 3}
   viewRange: 70
   failTraceRange: 120
   viewAngle: 120
@@ -149,6 +151,7 @@ MonoBehaviour:
     type: 2}
   isHoldingWeapon: 1
   weapon: {fileID: 3095201963981047300}
+  playerInformation: {fileID: 0}
 --- !u!54 &3132950753699696928
 Rigidbody:
   m_ObjectHideFlags: 0

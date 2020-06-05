@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 8bd7c4c95c71a774a8816abab7aa7cda
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - hpBarPrefab: {fileID: 6374623772963767696, guid: 3f63f9deaf42d2e4fa94c47e310e44bf,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

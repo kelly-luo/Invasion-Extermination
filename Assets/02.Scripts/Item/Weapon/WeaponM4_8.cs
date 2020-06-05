@@ -90,7 +90,7 @@ public class WeaponM4_8 : MonoBehaviour, ImWeapon
 
     public int StackLimit { get; }
 
-    public float ReloadTime { get; set; }
+    public float ReloadDuration { get; set; }
 
     public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
 

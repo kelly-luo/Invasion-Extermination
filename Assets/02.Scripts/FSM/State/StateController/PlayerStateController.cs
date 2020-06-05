@@ -357,6 +357,10 @@ public class PlayerStateController : MonoBehaviour, IStateController
             if (HasWeapon)
                 IsHoldingRifle = !IsHoldingRifle;
         }
+        if(UnityService.GetKeyUp(KeyCode.R))
+        {
+
+        }
     }
     
     public void UpdateTheTexturWhenCameraViewChange()
@@ -416,6 +420,11 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 }
             }
         }
+    }
+
+    public void Reload()
+    {
+
     }
 
     public void TransitionToState(State nextState)

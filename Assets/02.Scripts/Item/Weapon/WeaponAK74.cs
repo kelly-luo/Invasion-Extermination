@@ -55,6 +55,8 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     private float lastShootTime = 0f;
 
+    public float FiringRange { get; set; } = 70;
+
     #region LayerMask
     private int enemyLayer;
     private int obstacleLayer;
@@ -86,13 +88,17 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     private AudioSource audio;
 
     public AudioClip fireSfx;
+
+    public AudioClip emptySfx;
+
+    public float SoundVolume { get; set; } = 0.2f;
     #endregion
 
 
     
     public int StackLimit { get; }
 
-    public float ReloadTime { get; set; }
+    public float ReloadDuration { get; set; }
 
     public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
 
@@ -112,27 +118,33 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         layerMask = (1 << enemyLayer) | (1 << obstacleLayer);
     }
 
-    public void Reload(ref int numOfBulletLeft)
+    public void Reload(ref int ammoLeft)
     {
-        if (numOfBulletLeft <= 0)
+        if (ammoLeft <= 0)
             return;
 
         OnReload?.Invoke();
-
-        if (numOfBulletLeft <= MaxBullet)
+        //reload anime
+        if (ammoLeft <= MaxBullet)
         {
-            NumOfBullet = numOfBulletLeft;
-            numOfBulletLeft = 0;
+            NumOfBullet = ammoLeft;
+            ammoLeft = 0;
         }
         else
         {
-            numOfBulletLeft -= MaxBullet;
+            ammoLeft -= MaxBullet;
             NumOfBullet = MaxBullet;
         }
     }
 
     public GameObject Fire(Vector3 playerPosition,Vector3 shootDirection)
     {
+        if(NumOfBullet <= 0)
+        {
+            if (audio != null)
+                audio.PlayOneShot(emptySfx, SoundVolume);
+        }
+
         playerPositions = playerPosition;
         shootDirections = shootDirection;
         if (lastShootTime + Delay > UnityService.TimeAtFrame)
@@ -141,15 +153,13 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         isShooting = true;
         lastShootTime = UnityService.TimeAtFrame;
 
-        if (NumOfBullet > 0)
-        {
-            OnShotFire?.Invoke();
-            if (audio != null)
-                audio.PlayOneShot(fireSfx, 0.3f);
-        }
+        OnShotFire?.Invoke();
+        if (audio != null)
+            audio.PlayOneShot(fireSfx, SoundVolume);
+    
 
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, 70, layerMask))
+        if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
         {
             var hitObject = hit.collider.gameObject;
             if (hitObject.CompareTag(("Enemy")) || hitObject.CompareTag(("Human")))
@@ -173,6 +183,6 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
 
     void OnDrawGizmos( )
     {
-        Gizmos.DrawLine(playerPositions, playerPositions +(70 * shootDirections));
+        Gizmos.DrawLine(playerPositions, playerPositions +(FiringRange * shootDirections));
     }
 }

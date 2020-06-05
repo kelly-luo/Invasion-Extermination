@@ -97,7 +97,7 @@ public class WeaponM107 : MonoBehaviour, ImWeapon
 
     public int StackLimit { get; }
 
-    public float ReloadDuration { get; set; }
+    public float ReloadDuration { get; set; } = 2.3f;
 
     public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
 

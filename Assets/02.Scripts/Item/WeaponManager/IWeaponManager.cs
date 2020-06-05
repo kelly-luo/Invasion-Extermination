@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface IWeaponManager 
 {
-
+    bool IsReloading { get; set; }
     Vector3 WeaponOffSet { get; set; }
     Vector3 WeaponRebound { get; set; }
     ImWeapon FirstWeaponClass { get; set; }

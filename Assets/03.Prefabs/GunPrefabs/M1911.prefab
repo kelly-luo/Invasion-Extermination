@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireSfx: {fileID: 8300000, guid: faae5a94fde252e4baae41e8fca8ac5c, type: 3}
+  emptySfx: {fileID: 8300000, guid: c3825cdd4b1c73f4b9a97220ce336c93, type: 3}
 --- !u!82 &4519422311689274306
 AudioSource:
   m_ObjectHideFlags: 0

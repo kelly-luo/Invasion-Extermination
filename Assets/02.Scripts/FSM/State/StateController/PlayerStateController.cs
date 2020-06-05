@@ -40,7 +40,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     private readonly int hashXDirectionSpeed = Animator.StringToHash("XDirectionSpeed");
     private readonly int hashZDirectionSpeed = Animator.StringToHash("ZDirectionSpeed");
     private readonly int hashFire = Animator.StringToHash("Fire");
-
+    private readonly int hashReload = Animator.StringToHash("Reload");
     private readonly int hashSpeed = Animator.StringToHash("Speed");
 
     private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
@@ -370,6 +370,10 @@ public class PlayerStateController : MonoBehaviour, IStateController
             if (HasWeapon)
                 IsHoldingRifle = !IsHoldingRifle;
         }
+        if(UnityService.GetKeyUp(KeyCode.R))
+        {
+            this.Reload();
+        }
     }
     
     public void UpdateTheTexturWhenCameraViewChange()
@@ -429,6 +433,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
                 }
             }
         }
+    }
+
+    private void Reload()
+    {
+        if (IsHoldingRifle)
+            if (!WeaponManager.IsReloading)
+            {
+                WeaponManager.StartReload(ref playerStats.Ammo);
+                Animator.SetTrigger(hashReload);
+            }
     }
 
     public void TransitionToState(State nextState)

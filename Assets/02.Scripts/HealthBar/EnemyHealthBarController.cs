@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class EnemyHealthBarController : MonoBehaviour
 {
-    private Camera uiCamera;
+    public Camera uiCamera;
+    public Vector3 mainCameraPosition;
     private Canvas uiCanvas;
 
-    private RectTransform rectParent;
-    private RectTransform rectHp;
+    public RectTransform rectParent;
+    public RectTransform rectHp;
+
 
     [HideInInspector]
-    public GameObject healthBar;
+    public IUnityServiceManager UnityServiceManager = new UnityServiceManager();
 
     [HideInInspector]
     public Vector3 offset = Vector3.zero;
@@ -20,8 +22,10 @@ public class EnemyHealthBarController : MonoBehaviour
     public Transform targetTr;
 
     private const float viewdistance = 50.0f;
-    private float dist;
+    public float dist;
 
+    public Vector3 screenpos;
+    public Vector2 localPos;
     void Start()
     {
         uiCanvas = GetComponentInParent<Canvas>();
@@ -37,24 +41,29 @@ public class EnemyHealthBarController : MonoBehaviour
 
     public void UpdateHealthBarPosition()
     {
-        var screenpos = Camera.main.WorldToScreenPoint(targetTr.position + offset);
+        screenpos = UnityServiceManager.WorldSpaceToScreenSpace(targetTr.position + offset);
 
         if (screenpos.z < 0.0f) screenpos *= -1.0f;
 
-        var localPos = Vector2.zero;
+        localPos = Vector2.zero;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(rectParent, screenpos, uiCamera, out localPos);
-
         rectHp.localPosition = localPos;
-        healthVisible(targetTr.position);
+        healthVisible();
     }
 
-    private void healthVisible(Vector3 target)
+    public void healthVisible()
     {
-        dist = Vector3.Distance(target, Camera.main.transform.position);
+        mainCameraPosition = UnityServiceManager.GetMainCameraPosition;
+        dist = Vector3.Distance(targetTr.position, mainCameraPosition);
         if (dist > viewdistance)
             rectHp.transform.localScale = Vector3.zero;
         else
             rectHp.transform.localScale = Vector3.one;
+    }
+
+    public float getViewDistance()
+    {
+        return viewdistance;
     }
 
 }

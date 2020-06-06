@@ -5,33 +5,37 @@ using System.Net;
 using UnityEditor;
 using UnityEngine;
 
-public class ItemShop 
+public class ItemShop : MonoBehaviour
 {
     public ShopItem[] weaponsArray;
     public int numWeapons = 9;
-    public PlayerInformation information;
+    public PlayerInformation PlayerInfo { get; set; }
     public int ammoCost = 10; 
     public int ammoBatch = 10;
+    public GameObject[] gunPrefabs;
 
-    public ItemShop()
+
+    void Start()
     {
+        PlayerInfo = GameObject.FindGameObjectWithTag("Player")
+            .GetComponent<PlayerInformation>();
         weaponsArray = new ShopItem[numWeapons];
-        PopulateWeaponsList();
+        this.PopulateWeaponsList();
     }
 
     public void PopulateWeaponsList()
     {
         for (int i = 0; i < numWeapons; i++)
-            weaponsArray[i] = weaponsArray[i] ?? new ShopItem().Instantiate();
+            weaponsArray[i] = weaponsArray[i] ?? new ShopItem().InstantiateShopItem(gunPrefabs);
     }
 
     public void BuyItem(int index)
     {
         ShopItem buying = weaponsArray[index];
-        if(information.Money >= buying.money)
+        if(PlayerInfo.Money >= buying.money)
         {
-            information.Money -= buying. money;
-            information.PlayerInventory.Add(buying.item);
+            PlayerInfo.Money -= buying. money;
+            PlayerInfo.PlayerInventory.Add(buying.item);
 
             weaponsArray[index] = null;
             PopulateWeaponsList();
@@ -40,10 +44,10 @@ public class ItemShop
 
     public void BuyAmmo()
     {
-        if (information.Money >= ammoCost)
+        if (PlayerInfo.Money >= ammoCost)
         {
-            information.Money -= ammoCost;
-            information.Ammo += ammoBatch;
+            PlayerInfo.Money -= ammoCost;
+            PlayerInfo.Ammo += ammoBatch;
         }
     }
 }

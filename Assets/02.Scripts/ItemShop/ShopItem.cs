@@ -4,28 +4,29 @@ using UnityEngine.Assertions.Must;
 public class ShopItem
 {
     private IUnityServiceManager UnityService;
-    public GameObject[] guns;
     public int costLowerRange = 900;
     public int costUpperRange = 1100;
     public int money;
     public ImItem item;
 
-    public ShopItem Instantiate()
+    public ShopItem InstantiateShopItem(GameObject[] gunPrefabs)
     {
-        UnityService = new UnityServiceManager();
-        Debug.Log(UnityService.ToString());
-        this.item = CreateWeapon();
+        UnityService = UnityServiceManager.Instance;
+        this.item = CreateWeapon(gunPrefabs);
         this.money = UnityService.UnityRandomRange(costLowerRange, costUpperRange);
         return this;
     }
 
-    public ImWeapon CreateWeapon()
+    public ImWeapon CreateWeapon(GameObject[] guns)
     {
-        var gun = guns[1].GetComponent<ImWeapon>();
-        gun.Damage += UnityService.UnityRandomRange(0, (int)(gun.Damage * 0.1f));
-        gun.MaxBullet += UnityService.UnityRandomRange(0, (int)(gun.MaxBullet * 0.1f));
-        gun.InstanceID = gun.EntityID * 1000 + (int)gun.Damage;
+        var gun = GameObject.Instantiate(guns[UnityService.UnityRandomRange(0, guns.Length)], new Vector3(0f, 0f, 0f), Quaternion.identity);
+        var gunClass = gun.GetComponent<ImWeapon>();
+        gun.transform.localScale = new Vector3(0f, 0f, 0f);
 
-        return gun;
+        gunClass.Damage += UnityService.UnityRandomRange(0, (int)(gunClass.Damage * 0.1f));
+        gunClass.MaxBullet += UnityService.UnityRandomRange(0, (int)(gunClass.MaxBullet * 0.1f));
+        gunClass.InstanceID = gunClass.EntityID * 1000 + (int)gunClass.Damage;
+
+        return gunClass;
     }
 }

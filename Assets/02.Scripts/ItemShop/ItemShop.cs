@@ -2,53 +2,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using UnityEditor;
 using UnityEngine;
 
-public class ItemShop : MonoBehaviour
+public class ItemShop 
 {
-    public List<ShopItem> weaponsList;
+    public ShopItem[] weaponsArray;
     public int numWeapons = 9;
-    public PlayerStateController controller;
+    public PlayerInformation information;
+    public int ammoCost = 10; 
+    public int ammoBatch = 10;
 
-    public void PopulateShop()
+    public ItemShop()
     {
+        weaponsArray = new ShopItem[numWeapons];
         PopulateWeaponsList();
     }
 
-    private void PopulateWeaponsList()
+    public void PopulateWeaponsList()
     {
         for (int i = 0; i < numWeapons; i++)
-            weaponsList[i] = weaponsList[i] ?? new ShopItem();
+            weaponsArray[i] = weaponsArray[i] ?? new ShopItem().Instantiate();
     }
 
     public void BuyItem(int index)
     {
-        ShopItem buying = weaponsList[index];
-        if(controller.playerStats.Money >= buying.money)
+        ShopItem buying = weaponsArray[index];
+        if(information.Money >= buying.money)
         {
-            controller.playerStats.Money -= buying.money;
-            controller.playerStats.PlayerInventory.Add(buying.item);
+            information.Money -= buying. money;
+            information.PlayerInventory.Add(buying.item);
 
-            weaponsList.RemoveAt(index);
+            weaponsArray[index] = null;
+            PopulateWeaponsList();
         }
     }
 
-    public class ShopItem
+    public void BuyAmmo()
     {
-        private IUnityServiceManager UnityServiceManager;
-        public GameObject[] guns;
-        public int costLowerRange = 900;
-        public int costUpperRange = 1100;
-        public int money;
-        public ImItem item;
-
-        public ShopItem()
+        if (information.Money >= ammoCost)
         {
-            var gun = guns[UnityServiceManager.UnityRandomRange(0, 4)].GetComponent<ImWeapon>();
-            gun.Damage += UnityServiceManager.UnityRandomRange(0, (int)(gun.Damage * 0.1f));
-            gun.MaxBullet += UnityServiceManager.UnityRandomRange(0, (int)(gun.MaxBullet * 0.1f));
-            this.item = gun;
-            this.money = UnityServiceManager.UnityRandomRange(costLowerRange, costUpperRange);
+            information.Money -= ammoCost;
+            information.Ammo += ammoBatch;
         }
     }
 }

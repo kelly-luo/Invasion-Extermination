@@ -19,7 +19,7 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
     #endregion
 
     #region Bullet
-    public int MaxBullet { get; } = 7;
+    public int MaxBullet { get; set; } = 7;
     private int numOfBullet = 7;
     public int NumOfBullet
     {

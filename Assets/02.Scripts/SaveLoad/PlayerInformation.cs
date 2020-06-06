@@ -7,9 +7,10 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public int Level { get; set; }
     [field: SerializeField] public int Score { get; set; }
     [field: SerializeField] public int Money { get; set; }
+    [field: SerializeField] public int Ammo { get; set; }
 
     [field: SerializeField] public float health = 100f;
-
+    //usuk
     [field: SerializeField] public float Health 
     { 
         get { return health; }

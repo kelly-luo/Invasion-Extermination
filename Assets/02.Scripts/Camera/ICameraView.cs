@@ -5,6 +5,7 @@ using UnityEngine;
 public interface ICameraView
 {
     bool IsSmooth { get; set; }
+    bool IsInvertMouse { get; set; }
     float SmoothTime { get; set; }
     float XSensitivity { get; set; }
     float YSensitivity { get; set; }

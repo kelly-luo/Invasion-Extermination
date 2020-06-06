@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 
 
 public class CameraControl : MonoBehaviour , ICameraControl
-
 {
     [Serializable]
     public class CameraMode
@@ -32,6 +31,20 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
 
         #region Camera Sensitivity setting
+        private bool isInvertMouse = false;
+        public bool IsInvertMouse
+        {
+            get { return isInvertMouse; }
+            set
+            {
+                if (value != isInvertMouse)
+                {
+                    isInvertMouse = value;
+                    foreach (var view in cameraViewList)
+                        view.IsInvertMouse = value;
+                }
+            }
+        }
         private bool smooth = false;
         public bool Smooth
         {
@@ -160,7 +173,6 @@ public class CameraControl : MonoBehaviour , ICameraControl
         }
 
     }
-
 
     public CameraViewType CurrentViewMode { get; set; } = CameraViewType.First;
 

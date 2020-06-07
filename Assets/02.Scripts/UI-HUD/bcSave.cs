@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,9 +9,11 @@ public class bcSave : ButtonClicked
 {
     [SerializeField] private PlayerInformation playerInformation;
     [SerializeField] private TMP_Text saveLoadText;
+
     public override void ButtonEvent(PointerEventData eventData)
     {
         playerInformation.SavePlayer();
+        this.DisplaySaveLoadText();
     }
 
     public override void ButtonHover(PointerEventData eventData)
@@ -23,9 +26,18 @@ public class bcSave : ButtonClicked
 
     }
 
-    public void DisplaySaveLoadText()
+    private void DisplaySaveLoadText()
     {
-        //float startTime = UnityService.DeltaTime;
-        //saveLoadText.gameObject.SetActive(false);
+        saveLoadText.SetText("Save complete");
+        saveLoadText.gameObject.SetActive(true);
+        //saveLoadText..color(new Color());
+
+        StartCoroutine(this.timerWait());
+    }
+
+    private IEnumerator timerWait()
+    {
+        yield return new WaitForSeconds(3f);
+        saveLoadText.gameObject.SetActive(false);
     }
 }

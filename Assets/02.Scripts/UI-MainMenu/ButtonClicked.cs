@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NSubstitute.Exceptions;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,5 +19,5 @@ public abstract class ButtonClicked : MonoBehaviour
     {
         ButtonClickEvent = false;
     }
-        
+
 }

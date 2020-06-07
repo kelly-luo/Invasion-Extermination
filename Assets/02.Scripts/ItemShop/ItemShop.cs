@@ -17,8 +17,7 @@ public class ItemShop : MonoBehaviour
 
     void Start()
     {
-        PlayerInfo = GameObject.FindGameObjectWithTag("Player")
-            .GetComponent<PlayerInformation>();
+        PlayerInfo = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInformation>();
         weaponsArray = new ShopItem[numWeapons];
         this.PopulateWeaponsList();
     }
@@ -29,17 +28,19 @@ public class ItemShop : MonoBehaviour
             weaponsArray[i] = weaponsArray[i] ?? new ShopItem().InstantiateShopItem(gunPrefabs);
     }
 
-    public void BuyItem(int index)
+    public Boolean BuyItem(int index)
     {
         ShopItem buying = weaponsArray[index];
-        if(PlayerInfo.Money >= buying.money)
+        if (PlayerInfo.Money >= buying.cost)
         {
-            PlayerInfo.Money -= buying. money;
+            PlayerInfo.Money -= buying.cost;
             PlayerInfo.PlayerInventory.Add(buying.item);
 
             weaponsArray[index] = null;
             PopulateWeaponsList();
+            return true;
         }
+        return false;
     }
 
     public void BuyAmmo()

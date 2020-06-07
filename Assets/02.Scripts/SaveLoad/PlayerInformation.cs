@@ -10,7 +10,7 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public int Ammo { get; set; }
 
     [field: SerializeField] public float health = 100f;
-    //usuk
+
     [field: SerializeField] public float Health 
     { 
         get { return health; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSubstitute;
+using System;
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
@@ -112,4 +113,22 @@ public class Inventory
     {
         return inventory.Count;
     }
+
+    public ImItem GetItem(ImItem item)
+    {
+        if (this.inventory.ContainsValue(item)) return item;
+        return null;
+    }
+
+    public ImItem GetItem(int key)
+    {
+        if (this.inventory.ContainsKey(key))
+        {
+            ImItem value;
+            this.inventory.TryGetValue(key, out value);
+            return value;
+        }
+        return null;
+    }
+
 }

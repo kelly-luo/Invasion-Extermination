@@ -12,8 +12,8 @@ public class bcSave : ButtonClicked
 
     public override void ButtonEvent(PointerEventData eventData)
     {
-        playerInformation.SavePlayer();
-        this.DisplaySaveLoadText();
+        bool successful = playerInformation.SavePlayer();
+        this.DisplaySaveLoadText(successful);
     }
 
     public override void ButtonHover(PointerEventData eventData)
@@ -26,11 +26,20 @@ public class bcSave : ButtonClicked
 
     }
 
-    private void DisplaySaveLoadText()
+    private void DisplaySaveLoadText(bool saveSuccess)
     {
-        saveLoadText.SetText("Save complete");
+        if (saveSuccess)
+        {
+            saveLoadText.SetText("Save complete");
+            saveLoadText.color = Color.green;
+        }
+        else
+        {
+            saveLoadText.SetText("Save unsuccessful");
+            saveLoadText.color = Color.red;
+        }
+
         saveLoadText.gameObject.SetActive(true);
-        //saveLoadText..color(new Color());
 
         StartCoroutine(this.timerWait());
     }

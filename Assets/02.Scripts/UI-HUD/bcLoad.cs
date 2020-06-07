@@ -10,8 +10,8 @@ public class bcLoad : ButtonClicked
     [SerializeField] private TMP_Text saveLoadText;
     public override void ButtonEvent(PointerEventData eventData)
     {
-        playerInformation.LoadPlayer();
-        this.DisplaySaveLoadText();
+        bool successful = playerInformation.LoadPlayer();
+        this.DisplaySaveLoadText(successful);
     }
 
     public override void ButtonHover(PointerEventData eventData)
@@ -24,11 +24,20 @@ public class bcLoad : ButtonClicked
 
     }
 
-    private void DisplaySaveLoadText()
+    private void DisplaySaveLoadText(bool loadSuccess)
     {
-        saveLoadText.SetText("Load complete");
+        if (loadSuccess)
+        {
+            saveLoadText.SetText("Load complete");
+            saveLoadText.color = Color.green;
+        }
+        else
+        {
+            saveLoadText.SetText("Load unsuccessful");
+            saveLoadText.color = Color.red;
+        }
+
         saveLoadText.gameObject.SetActive(true);
-        //saveLoadText..color(new Color());
 
         StartCoroutine(this.timerWait());
     }

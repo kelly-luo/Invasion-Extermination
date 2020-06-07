@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class PlayerInformation : MonoBehaviour
 {
-    [field: SerializeField] public int Level { get; set; }
 
     private int score = 0;
     [field: SerializeField] public int Score
@@ -71,27 +70,31 @@ public class PlayerInformation : MonoBehaviour
     }
 
 
-    public void SavePlayer()
+    public bool SavePlayer()
     {
-
-        SaveSystem.SavePlayer(this);
+        return SaveSystem.SavePlayer(this);
     }
 
-    public void LoadPlayer()
+    public bool LoadPlayer()
     {
-        PlayerSaveData data = SaveSystem.LoadPlayer();
+        PlayerSaveData loadedData = SaveSystem.LoadPlayer();
+
+        if (loadedData == null) return false;
 
         Vector3 position;
-        position.x = data.position[0];
-        position.y = data.position[1];
-        position.z = data.position[2];
+        position.x = loadedData.position[0];
+        position.y = loadedData.position[1];
+        position.z = loadedData.position[2];
 
-        transform.position = position;
-        this.Health = data.Health;
-        this.Score = data.Score;
-        this.Level = data.Level;
-        this.Score = data.Score;
+        this.transform.position = position;
+        this.Health = loadedData.Health;
+        this.Score = loadedData.Score;
+        this.Money = loadedData.Money;
 
+        Debug.Log($"Player was LOADED. Health:{loadedData.Health} Money:{loadedData.Money} " +
+        $"Score:{loadedData.Score} Position: x={loadedData.position[0]} y={loadedData.position[1]} y={loadedData.position[2]}");
+
+        return true;
 
     }
 }

@@ -6769,7 +6769,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 1.25
+  m_padding: 0
   m_canvasRenderer: {fileID: 1937151107390278403}
   m_TextComponent: {fileID: 1937151107425596181}
   m_materialReferenceIndex: 1
@@ -15881,7 +15881,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 1.25
+  m_padding: 0
   m_canvasRenderer: {fileID: 1937151108634217441}
   m_TextComponent: {fileID: 1937151107968558623}
   m_materialReferenceIndex: 1
@@ -16403,7 +16403,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 1.25
+  m_padding: 0
   m_canvasRenderer: {fileID: 2186885502288565076}
   m_TextComponent: {fileID: 5095941487278329093}
   m_materialReferenceIndex: 1
@@ -16798,6 +16798,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1490951709750774887, guid: a8e6701e9b4c4b54fba725783c8c250d,
+        type: 3}
+      propertyPath: m_padding
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1669723601316937447, guid: a8e6701e9b4c4b54fba725783c8c250d,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -16826,6 +16831,11 @@ PrefabInstance:
     - target: {fileID: 1669723601316937447, guid: a8e6701e9b4c4b54fba725783c8c250d,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2918873687960102930, guid: a8e6701e9b4c4b54fba725783c8c250d,
+        type: 3}
+      propertyPath: m_padding
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2918873688022365452, guid: a8e6701e9b4c4b54fba725783c8c250d,
@@ -17141,6 +17151,11 @@ PrefabInstance:
     - target: {fileID: 2918873688506611281, guid: a8e6701e9b4c4b54fba725783c8c250d,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2918873688524721362, guid: a8e6701e9b4c4b54fba725783c8c250d,
+        type: 3}
+      propertyPath: m_padding
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2918873688543328350, guid: a8e6701e9b4c4b54fba725783c8c250d,
@@ -17466,6 +17481,11 @@ PrefabInstance:
     - target: {fileID: 2918873689679439904, guid: a8e6701e9b4c4b54fba725783c8c250d,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2918873689751846017, guid: a8e6701e9b4c4b54fba725783c8c250d,
+        type: 3}
+      propertyPath: m_padding
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2918873689830711713, guid: a8e6701e9b4c4b54fba725783c8c250d,

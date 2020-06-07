@@ -24,4 +24,7 @@ public interface IUnityServiceManager
 
     Collider[] OverlapSphere(Vector3 position, float viewRange, int layerMask);
 
+    Vector3 WorldSpaceToScreenSpace(Vector3 point);
+
+    Vector3 GetMainCameraPosition { get; }
 }

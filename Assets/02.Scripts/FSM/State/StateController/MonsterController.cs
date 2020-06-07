@@ -6,6 +6,8 @@ using UnityEngine.AI;
 
 public class MonsterController : MonoBehaviour, IStateController
 {
+    public GameObject healthBarObject;
+    private EnemyHealthBar healthbar;
 
     //Range of detecting the player.
     public float viewRange = 70.0f;
@@ -147,6 +149,8 @@ public class MonsterController : MonoBehaviour, IStateController
     #region MonoBehaviour Base Function
     void Awake()
     {
+        
+       
         var transforms = GetComponentsInChildren<Transform>();
         foreach (Transform tr in transforms)
         {
@@ -160,10 +164,16 @@ public class MonsterController : MonoBehaviour, IStateController
 
         this.playerInformation = GameObject.Find("Player").GetComponent<PlayerInformation>();
 
+   
+
     }
 
     void Start()
     {
+        healthbar = this.gameObject.AddComponent<EnemyHealthBar>();
+        healthbar.hpBarPrefab = healthBarObject;
+        healthbar.SetHPBar();
+
         UnityService = UnityServiceManager.Instance;
 
         InitilizeSkinType();
@@ -365,6 +375,7 @@ public class MonsterController : MonoBehaviour, IStateController
     {
         Debug.Log($"{this.gameObject.tag} has taken {Damage}");
         Stats.Health -= Damage;
+        healthbar.onDamage(Stats.Health);
         if (Stats.Health <= 0)
         {
             Debug.Log($"{this.gameObject.tag} has died.");

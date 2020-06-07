@@ -5,11 +5,13 @@ using UnityEngine;
 
 public interface IWeaponManager 
 {
-
+    bool IsReloading { get; set; }
     Vector3 WeaponOffSet { get; set; }
     Vector3 WeaponRebound { get; set; }
     ImWeapon FirstWeaponClass { get; set; }
     GameObject CurrentWeaponObject { get; set; }
+
+    void StartReload(ref int ammoLeft);
 
     void EquipNewWeapon(GameObject FirstPeronViewWeapon, Transform fisrtPersonViewWeaponHolderTr, Transform thirdPersonViewWeaponHolderTr);
 
@@ -20,7 +22,7 @@ public interface IWeaponManager
     void UpdateFirstPersonViewWeaponPosition();
 
     void UpdateWeaponReboundWhenShoot();
-
+    
     void SetFirstPersonWeaponActive(bool boolValue);
 
     void SetThirdPersonWeaponActive(bool boolValue);

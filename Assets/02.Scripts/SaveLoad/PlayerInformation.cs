@@ -30,6 +30,8 @@ public class PlayerInformation : MonoBehaviour
 
     public int equipped;
 
+    public int Ammo =100;
+
     void Start()
     {
         transform = GetComponent<Transform>();

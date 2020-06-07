@@ -7,8 +7,8 @@ public interface ImWeapon : ImItem
 {
 
     float Damage { get; set; }
-    
 
+    float FiringRange { get; set; }
 
     int MaxBullet { get; }
 
@@ -16,9 +16,11 @@ public interface ImWeapon : ImItem
 
     float Delay { get; }
 
+    float ShootKnockbackVector { get; set; }
+
     bool IsShooting { get; }
 
-    float ReloadTime { get; set; }
+    float ReloadDuration { get; set; }
 
     float RequiredScore { get; }
 
@@ -34,10 +36,11 @@ public interface ImWeapon : ImItem
     
     Action OnReload { get; set; }
 
+    float SoundVolume { get; set; }
 
     GameObject Fire(Vector3 playerPosition, Vector3 shootDirection);
 
     void SetLayer();
 
-    void Reload(ref int numOfBulletLeft);
+    void Reload(ref int ammoLeft);
 }

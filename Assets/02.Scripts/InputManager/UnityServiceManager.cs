@@ -9,7 +9,7 @@ public class UnityServiceManager : IUnityServiceManager
     {
         get
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = new UnityServiceManager();
             }
@@ -30,7 +30,11 @@ public class UnityServiceManager : IUnityServiceManager
 
     public Vector3 InsideUnitSphere
     {
-        get { return Random.insideUnitSphere;  }
+        get { return Random.insideUnitSphere; }
+    }
+
+    public Vector3 GetMainCameraPosition {
+       get { return Camera.main.transform.position; }
     }
 
     public float GetAxis(string inputKey)
@@ -67,4 +71,10 @@ public class UnityServiceManager : IUnityServiceManager
     {
         return Physics.OverlapSphere(position, viewRange, layerMask);
     }
+
+    public Vector3 WorldSpaceToScreenSpace(Vector3 point)
+    {
+        return Camera.main.WorldToScreenPoint(point);
+    }
+
 }

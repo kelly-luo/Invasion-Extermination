@@ -1,17 +1,47 @@
-﻿using UnityEngine;
+﻿//
+// SaveSystem BINARY SAVE AND LOAD OF PLAYER INFORMATION
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This static class saves and loads the player informaiton by binary serialisation and deserialisation.
+// This save file is locally stored at
+// 
+// AUT University - 2020 - Kelly Luo
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 18.05.2020 Creation date
+// 7.06.2020 Added error checking during save and load
+
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
+using UnityEngine;
+//
+// .NET support packages
+// ~~~~~~~~~~~~~~~~~~~~~
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 
+
 public static class SaveSystem
 {
-    public static bool SavePlayer(PlayerInformation player)
+    //
+    // SavePlayer()
+    // ~~~~~~~~~~~~
+    // The PlayerSaveData converts the incoming player information to be serialisable which is then
+    // performed binary serialisation with the save file path.
+    //
+    // playerInfo   The player information wanting to be saved to the local file
+    //
+    // returns      True if the player information was successfully saved to the local location without disruption
+    //
+    public static bool SavePlayer(PlayerInformation playerInfo)
     {
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/playerSaveFile";
 
         FileStream stream = new FileStream(path, FileMode.Create);
-        PlayerSaveData data = new PlayerSaveData(player);
+        PlayerSaveData data = new PlayerSaveData(playerInfo);
 
         Debug.Log($"Player was SAVED. Health:{data.Health} Money:{data.Money} " +
             $"Score:{data.Score} Position: x={data.position[0]} y={data.position[1]} y={data.position[2]}");
@@ -33,6 +63,14 @@ public static class SaveSystem
         return true;
     }
 
+    //
+    // LoadPlayer()
+    // ~~~~~~~~~~~~
+    // From the save file path, the file is read (if exists) and deserialised from binary and converted to
+    // PlayerSaveData to be further parsed to load and update the player information.
+    //
+    // returns      loaded player save data from the file read
+    //
     public static PlayerSaveData LoadPlayer()
     {
         string path = Application.persistentDataPath + "/playerSaveFile";

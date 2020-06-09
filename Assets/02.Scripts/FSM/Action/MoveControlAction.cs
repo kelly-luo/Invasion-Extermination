@@ -16,7 +16,7 @@ public class MoveControlAction : Action
         Vector3 moveDir = (stateControlller.CameraRigTr.forward * vertical) 
             + (stateControlller.CameraRigTr.right * horizontal);
 
-        stateControlller.PlayerTranslate.TranslateCharacter(moveDir);
+        stateControlller.PlayerTranslate.TranslateCharacterOnGround(true,moveDir);
         stateControlller.MoveAnimation(horizontal, vertical);
 
     }

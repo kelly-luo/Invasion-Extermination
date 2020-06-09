@@ -46,7 +46,7 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
     #region Shooting Setting 
     public float ShootKnockbackVector { get; set; } = 10f;
 
-    public float Damage { get; set; } = 5;
+    public float Damage { get; set; } = 5f;
 
     public float Delay { get; set; } = 0.5f;
 
@@ -56,7 +56,7 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
 
     private float lastShootTime = 0f;
 
-    public float FiringRange { get; set; } = 50;
+    public float FiringRange { get; set; } = 50f;
 
     #region LayerMask
     private int playerLayer;
@@ -116,7 +116,7 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
         enemyLayer = LayerMask.NameToLayer("Enemy");
         playerLayer = LayerMask.NameToLayer("Player");
         obstacleLayer = LayerMask.NameToLayer("Obstacle");
-        layerMask = 1 << playerLayer | 1 << obstacleLayer | 1 << enemyLayer;
+        layerMask = (1 << playerLayer) | (1 << obstacleLayer) ;
     }
 
     public void Reload(ref int numOfBulletLeft)
@@ -138,11 +138,11 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
         }
     }
 
-    public GameObject Fire(Vector3 playerPosition, Vector3 shootDirection)
+    public GameObject Fire(Vector3 characterPosition, Vector3 shootDirection)
     {
 
 
-        playerPositions = playerPosition;
+        playerPositions = characterPosition;
         shootDirections = shootDirection;
         if (lastShootTime + Delay > UnityService.TimeAtFrame)
             return null;
@@ -165,13 +165,14 @@ public class WeaponM1911 : MonoBehaviour, ImWeapon
 
 
         RaycastHit hit;
-        if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
+        if (Physics.Raycast(characterPosition, shootDirection, out hit, FiringRange, layerMask))
         {
             var hitObject = hit.collider.gameObject;
             if (hitObject.CompareTag("Player"))
             {
                 var control = hitObject.GetComponent<PlayerStateController>();
-                control.TakeDamage(Damage);
+                if(control != null)
+                    control.TakeDamage(Damage);
                 hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * ShootKnockbackVector, ForceMode.Impulse);
                 isShooting = false;
             }

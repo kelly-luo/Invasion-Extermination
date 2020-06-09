@@ -16,6 +16,8 @@ public interface ICharacterTranslate
 
     void TranslateCharacter(Vector3 moveDir);
 
+    void TranslateCharacterOnGround(bool IsCheckingGround, Vector3 moveDir);
+
     bool JumpCharacter(bool IsCheckingGround);
 
     bool CheckCharacterIsOnGround();

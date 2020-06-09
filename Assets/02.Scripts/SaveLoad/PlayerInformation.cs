@@ -1,4 +1,19 @@
-﻿using UnityEditor;
+﻿//
+// PlayerInformation INFORMATION FOR PLAYER
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This class manages all the information about the player such as stats.
+// This includes player score, money, health, inventory, position, guns.
+// 
+// AUT University - 2020 - Kelly Luo, Yuki Liyanage, Dan Yoo, Howard Mao
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 18.05.2020 Creation date (Kelly)
+// 23.05.2020 Added player inventory to equip/unequip guns (Howard)
+
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~~
 using UnityEngine;
 
 public class PlayerInformation : MonoBehaviour
@@ -8,7 +23,7 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public int Score
     {
         get { return score; }
-        set { if ((value) <= 0) { score = 0; } else score = value; } // Do not allow score to go below 0
+        set { if ((value) <= 0) { score = 0; } else score = value; }
     }
     [field: SerializeField] public int Money { get; set; }
 
@@ -16,24 +31,25 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public float Health 
     { 
         get { return health; }
-        set { if ((health += value) <= 0) { health = 0; } else health = value; } // Do not allow health to go below 0
+        set { if ((health += value) <= 0) { health = 0; } else health = value; }
     }
 
-    public Inventory PlayerInventory = new Inventory();
-
     public PlayerStateController player;
-
     public Transform transform;
-
+    public Inventory PlayerInventory = new Inventory();
     public GameObject[] guns;
-
     public int equipped;
+    public int Ammo = 100;
 
-    public int Ammo =100;
-
+    //
+    // Start()
+    // ~~~~~~~~~~~~
+    // Upon start of game, player transform in instantiated from player object and player equips primary gun.
+    //
     void Start()
     {
         transform = GetComponent<Transform>();
+        
         if (player.HasWeapon)
         {
             player.UnEquipWeapon();
@@ -50,6 +66,12 @@ public class PlayerInformation : MonoBehaviour
         equipped = PlayerInventory.Primary.EntityID;
     }
 
+    //
+    // Update()
+    // ~~~~~~~~~~~~
+    // Upon every frame, checks if the player has chosen to equip another gun from the inventory and
+    // if so then it changes the equiped gun.
+    //
     void Update()
     {
 
@@ -69,12 +91,25 @@ public class PlayerInformation : MonoBehaviour
         }
     }
 
-
+    //
+    // SavePlayer()
+    // ~~~~~~~~~~~~
+    // This method parses the current player information instance into the SaveSystem to be binary serialised to a save file.
+    //
+    // returns      True if the player information was successfully saved in the SaveSystem without disruption
+    //
     public bool SavePlayer()
     {
         return SaveSystem.SavePlayer(this);
     }
 
+    //
+    // LoadPlayer()
+    // ~~~~~~~~~~~~
+    // Loads the save data from a local save file and updating the position, health, score and money to the player.
+    //
+    // returns      True if the player information was successfully loaded in the SaveSystem and was not null
+    //
     public bool LoadPlayer()
     {
         PlayerSaveData loadedData = SaveSystem.LoadPlayer();

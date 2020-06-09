@@ -8,8 +8,9 @@
 // 
 // Revision History
 // ~~~~~~~~~~~~~~~~
-// 22.05.2020 Creation date
-// 7.06.2020 Added displaying load text for 3 seconds
+// 22.05.2020 Creation date (Yuki)
+// 02.06.2020 Added more functionality to MenuButton (Yuki)
+// 7.06.2020 Added displaying load text for 3 seconds (Kelly)
 
 //
 // .NET support packages

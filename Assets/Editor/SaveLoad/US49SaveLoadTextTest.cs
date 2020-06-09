@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -17,37 +19,53 @@ namespace Tests
     //
     public class US49SaveLoadTextTest
     {
-        GameObject saveTextObject;
-        GameObject loadTextObject;
+        GameObject player;
+        PlayerInformation stats;
 
+        GameObject saveTextObject;
         bcSave saveButton;
+
+        GameObject loadTextObject;
         bcLoad loadButton;
+
+        GameObject saveLoadTextObject;
+        TMP_Text saveLoadText;
 
         [SetUp]
         public void SetUp()
         {
+            player = new GameObject();
+            stats = player.AddComponent<PlayerInformation>();
+            stats.transform = player.GetComponent<Transform>();
+
+            saveLoadTextObject = new GameObject();
+            saveLoadText = saveLoadTextObject.AddComponent<TextMeshPro>();
+            saveLoadTextObject.SetActive(false);
+            saveLoadText.SetText("");
+
             saveTextObject = new GameObject();
-            saveTextObject.AddComponent<TextMeshPro>();
+            saveButton = saveTextObject.AddComponent<bcSave>();
+            saveButton.playerInformation = stats;
+            saveButton.saveLoadText = saveLoadTextObject.GetComponent<TextMeshPro>();
 
             loadTextObject = new GameObject();
-            loadTextObject.AddComponent<TextMeshPro>();
-
-            saveButton = new bcSave();
-            loadButton = new bcLoad();
+            loadButton = loadTextObject.AddComponent<bcLoad>();
+            loadButton.playerInformation = stats;
+            loadButton.saveLoadText = saveLoadTextObject.GetComponent<TextMeshPro>();
         }
 
         // Below are tests for the SAVE text
         [Test]
         public void US49SaveLoadText_TestIfTextIsNotActiveBeforeSave()
         {
-            Assert.IsFalse(saveTextObject.activeSelf);
+            Assert.IsFalse(saveLoadTextObject.activeSelf);
         }
 
         [Test]
         public void US49SaveLoadText_TestIfTextIsActiveAfterSave()
         {
             saveButton.ButtonEvent(null);
-            Assert.IsTrue(saveTextObject.activeSelf);
+            Assert.IsTrue(saveLoadTextObject.activeSelf);
         }
 
         [Test]
@@ -55,7 +73,7 @@ namespace Tests
         {
             saveButton.ButtonEvent(null);
 
-            string saveText = saveTextObject.GetComponent<TextMeshPro>().text;
+            string saveText = saveButton.saveLoadText.text;
             bool isSaveStringCorrect = saveText.Equals("Save complete");
 
             Assert.IsTrue(isSaveStringCorrect);
@@ -65,22 +83,22 @@ namespace Tests
         [Test]
         public void US49SaveLoadText_TestIfTextIsNotActiveBeforeLoad()
         {
-            Assert.IsFalse(loadTextObject.activeSelf);
+            Assert.IsFalse(saveLoadTextObject.activeSelf);
         }
 
         [Test]
         public void US49SaveLoadText_TestIfTextIsActiveAfterLoad()
         {
             loadButton.ButtonEvent(null);
-            Assert.IsTrue(loadTextObject.activeSelf);
+            Assert.IsTrue(saveLoadTextObject.activeSelf);
         }
 
         [Test]
         public void US49SaveLoadText_TestIfTextIsChangedAfterLoad()
         {
-            saveButton.ButtonEvent(null);
+            loadButton.ButtonEvent(null);
 
-            string loadText = loadTextObject.GetComponent<TextMeshPro>().text;
+            string loadText = loadButton.saveLoadText.text;
             bool isLoadStringCorrect = loadText.Equals("Load complete");
 
             Assert.IsTrue(isLoadStringCorrect);

@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 
 public class bcSave : ButtonClicked
 {
-    [SerializeField] private PlayerInformation playerInformation;
-    [SerializeField] private TMP_Text saveLoadText;
+    [SerializeField] public PlayerInformation playerInformation;
+    [SerializeField] public TMP_Text saveLoadText;
 
     public override void ButtonEvent(PointerEventData eventData)
     {

@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 
 public class bcLoad : ButtonClicked
 {
-    [SerializeField] private PlayerInformation playerInformation;
-    [SerializeField] private TMP_Text saveLoadText;
+    [SerializeField] public PlayerInformation playerInformation;
+    [SerializeField] public TMP_Text saveLoadText;
     public override void ButtonEvent(PointerEventData eventData)
     {
         bool successful = playerInformation.LoadPlayer();

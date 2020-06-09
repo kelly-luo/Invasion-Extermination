@@ -1,4 +1,23 @@
-﻿using System.Collections;
+﻿//
+// bcLoad HUD LOAD BUTTON
+// ~~~~~~~~~~~~~~~~~~~~~~
+// This is the functionality for the load button on the HUD when clicked.
+// Initiating to start loading player information and display the corresponding text from load success or not.
+// 
+// AUT University - 2020 - Yuki Liyanage & Kelly Luo
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 22.05.2020 Creation date
+// 7.06.2020 Added displaying load text for 3 seconds
+
+//
+// .NET support packages
+// ~~~~~~~~~~~~~~~~~~~~~
+using System.Collections;
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,6 +26,14 @@ public class bcLoad : ButtonClicked
 {
     [SerializeField] public PlayerInformation playerInformation;
     [SerializeField] public TMP_Text saveLoadText;
+
+    //
+    // ButtonEvent()
+    // ~~~~~~~~~~~~~
+    // Initiates player information to be loaded and then start timed display of the correct load text afterwards
+    //
+    // eventData   Button click incoming event
+    //
     public override void ButtonEvent(PointerEventData eventData)
     {
         bool successful = playerInformation.LoadPlayer();
@@ -23,6 +50,14 @@ public class bcLoad : ButtonClicked
 
     }
 
+    //
+    // DisplaySaveLoadText()
+    // ~~~~~~~~~~~~~~~~~~~~~
+    // Enables and displays the appropriate text and colour depending if the load was successful or not.
+    // Also starts a 3 second Unity Coroutine.
+    //
+    // saveSuccess   Whether the loading of the player information was success in the SaveSystem
+    //
     private void DisplaySaveLoadText(bool loadSuccess)
     {
         if (loadSuccess)
@@ -41,6 +76,13 @@ public class bcLoad : ButtonClicked
         StartCoroutine(this.timerWait());
     }
 
+    //
+    // timerWait()
+    // ~~~~~~~~~~~
+    // Waits for 3 seconds and then disables the save completed/incompleted text
+    //
+    // returns      IEnumerator for Coroutine
+    //
     private IEnumerator timerWait()
     {
         yield return new WaitForSeconds(3f);

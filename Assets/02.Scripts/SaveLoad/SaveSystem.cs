@@ -2,7 +2,7 @@
 // SaveSystem BINARY SAVE AND LOAD OF PLAYER INFORMATION
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // This static class saves and loads the player informaiton by binary serialisation and deserialisation.
-// This save file is locally stored at
+// This save file is locally stored at C:\Users\[USER]\AppData\LocalLow\DefaultCompany\Invasion_Extermination
 // 
 // AUT University - 2020 - Kelly Luo
 // 
@@ -12,16 +12,15 @@
 // 7.06.2020 Added error checking during save and load
 
 //
-// Unity support packages
-// ~~~~~~~~~~~~~~~~~~~~~
-using UnityEngine;
-//
 // .NET support packages
 // ~~~~~~~~~~~~~~~~~~~~~
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
-
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
+using UnityEngine;
 
 public static class SaveSystem
 {

@@ -1,22 +1,27 @@
-﻿using NUnit.Framework;
-using System.Collections;
+﻿//
+// US49SaveLoadTextTest
+// ~~~~~~~~~~~~~~~~~~~~
+// This test class is used to test user story 49: As a player I want to have a UI pop up so that I know I have completed my save or load successfully
+// 
+// AUT University - 2020 - Kelly Luo
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 5.06.2020 Creation date
+//
+
+//
+// NUnit support packages
+// ~~~~~~~~~~~~~~~~~~~~~
+using NUnit.Framework;
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
 using TMPro;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace Tests
 {
-    //
-    // US49SaveLoadTextTest
-    // ~~~~~~~~~~~~~~~~~~~~
-    // This test class is used to test user story 49: As a player I want to have a UI pop up so that I know I have completed my save or load successfully
-    // 
-    // AUT University - 2020 - Kelly Luo
-    // 
-    // Revision History
-    // ~~~~~~~~~~~~~~~~
-    // 5.06.2020 Creation date
-    //
     public class US49SaveLoadTextTest
     {
         GameObject player;

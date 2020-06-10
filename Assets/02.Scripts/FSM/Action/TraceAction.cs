@@ -8,12 +8,14 @@ public class TraceAction : Action
 {
     public override void Act(IStateController controller)
     {
-        var monsterController = controller as MonsterController;
-
-        if (monsterController.DistancePlayerAndEnemy > monsterController.viewRange && monsterController.DistancePlayerAndEnemy <= monsterController.failTraceRange)
+        if (controller is MonsterController monsterController)
         {
-            Debug.Log("Trace Action");
-            monsterController.TraceTarget = monsterController.PlayerTr.position;
+            if (monsterController.DistancePlayerAndEnemy > monsterController.viewRange && monsterController.DistancePlayerAndEnemy <= monsterController.failTraceRange)
+            {
+                monsterController.TraceTarget = monsterController.PlayerTr.position;
+            }
         }
-    }
+    } 
+
 }
+

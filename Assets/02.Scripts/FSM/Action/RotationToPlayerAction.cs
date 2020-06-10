@@ -8,12 +8,12 @@ public class RotationToPlayerAction : Action
 {
     public override void Act(IStateController controller)
     {
-        var monsterController = controller as MonsterController;
-
-        if( monsterController.DistancePlayerAndEnemy <= monsterController.viewRange)
+        if (controller is MonsterController monsterController)
         {
-            monsterController.RotateToPlayer();
-
+            if (monsterController.DistancePlayerAndEnemy <= monsterController.viewRange)
+            {
+                monsterController.RotateToPlayer();
+            }
         }
     }
 }

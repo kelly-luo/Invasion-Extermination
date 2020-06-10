@@ -8,12 +8,7 @@ public class AttackAction : Action
 {
     public override void Act(IStateController controller)
     {
-        Debug.Log("Attack Attaction");
-
-        var monsterController = controller as MonsterController;
-
-        monsterController.Attack();
+        if (controller is MonsterController monsterController)
+            monsterController.Attack();
     }
-
-
 }

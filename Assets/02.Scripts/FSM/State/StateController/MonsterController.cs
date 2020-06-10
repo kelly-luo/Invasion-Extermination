@@ -64,13 +64,11 @@ public class MonsterController : MonoBehaviour, IStateController
     public int LayerMask { get; set; }
     #endregion
 
-
     #region PatrolWayPoints
     public List<Transform> WayPoints { get; set; } = new List<Transform>();
     public int NextWayPointIndex { get; set; }
 
     #endregion
-
 
     #region Speed Value     
     private readonly float patrolSpeed = 1.5f;
@@ -122,6 +120,9 @@ public class MonsterController : MonoBehaviour, IStateController
         }
     }
     #endregion
+
+    public float StateUpdateDelayTime { get; set; } = 0.075f;
+    private float currentTime = 0f;
 
 
     public NavMeshAgent Agent { get; set; }
@@ -194,7 +195,12 @@ public class MonsterController : MonoBehaviour, IStateController
 
         if (isAgentEnabled)
         {
-            CurrentState.UpdateState(this);
+            //timer
+            if (currentTime + StateUpdateDelayTime < UnityService.TimeAtFrame)
+            {
+                CurrentState.UpdateState(this);
+                currentTime = UnityService.TimeAtFrame;
+            }
         }
     }
 

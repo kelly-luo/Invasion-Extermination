@@ -142,7 +142,7 @@ namespace Tests
             itemShop.BuyAmmo();
 
             //ASSERT
-            Assert.AreEqual(10, itemShop.PlayerInfo.Ammo);
+            Assert.AreEqual(110, itemShop.PlayerInfo.ammo);
         }
         [Test]
         public void buying_ammo_removes_money()

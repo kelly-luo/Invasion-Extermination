@@ -48,7 +48,7 @@ public class ItemShop : MonoBehaviour
         if (PlayerInfo.Money >= ammoCost)
         {
             PlayerInfo.Money -= ammoCost;
-            PlayerInfo.Ammo += ammoBatch;
+            PlayerInfo.ammo += ammoBatch;
         }
     }
 }

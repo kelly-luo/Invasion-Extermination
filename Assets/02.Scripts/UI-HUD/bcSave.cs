@@ -25,9 +25,16 @@ using UnityEngine.EventSystems;
 
 public class bcSave : ButtonClicked
 {
-    [SerializeField] public PlayerInformation playerInformation;
+    [SerializeField] public UIManager manager;
+    [HideInInspector]
+    public PlayerInformation playerInformation;
     [SerializeField] public TMP_Text saveLoadText;
 
+
+    private void Start()
+    {
+        playerInformation = manager.playerInformation;
+    }
     //
     // ButtonEvent()
     // ~~~~~~~~~~~~~
@@ -35,6 +42,7 @@ public class bcSave : ButtonClicked
     //
     // eventData   Button click incoming event
     //
+
     public override void ButtonEvent(PointerEventData eventData)
     {
         bool successful = playerInformation.SavePlayer();

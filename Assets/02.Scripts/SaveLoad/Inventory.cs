@@ -64,6 +64,11 @@ public class Inventory
             selected = Secondary;
     }
 
+    public ImWeapon Equppied()
+    {
+        return (ImWeapon)selected;
+    }
+
     public bool Remove(ImItem item)
     {
         if (Primary == item) 

@@ -40,7 +40,14 @@ public class PlayerInformation : MonoBehaviour
     public Inventory PlayerInventory = new Inventory();
     public GameObject[] guns;
     public int equipped;
-    public int Ammo = 100;
+    public int ammo  = 100;
+
+    [field: SerializeField] public int Ammo
+    {
+        get { return ammo; }
+        set { ammo = value; }
+    }
+
 
     //
     // Start()

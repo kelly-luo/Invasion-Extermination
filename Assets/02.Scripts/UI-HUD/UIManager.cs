@@ -12,7 +12,8 @@ public class UIManager : MonoBehaviour
 
     public TMP_Text scoreView;
     public TMP_Text moneyView;
-    public TMP_Text ammoView;
+    public TMP_Text gunammoView;
+    public TMP_Text amountammoView;
 
     public InventoryManager invManager;
 
@@ -23,8 +24,11 @@ public class UIManager : MonoBehaviour
     //Temp values, change to 0 after testing
     public int displaymoney;
     public int displayscore;
-    public int displayammo;
+    public int displaygunammo;
+    public int displayamountammo;
     public int displayhealth;
+
+    public int temp;
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
@@ -38,7 +42,7 @@ public class UIManager : MonoBehaviour
         if(playerInformation != null)
         {
             SetHealth(playerInformation.Health);
-            SetAmmo(0);
+            SetAmountAmmo(playerInformation.Ammo);
             SetMoney(playerInformation.Money);
             SetScore(playerInformation.Score);
         }
@@ -50,13 +54,13 @@ public class UIManager : MonoBehaviour
         if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
     }
 
-    private void Update()
+    void Update()
     {
         if(displayhealth != Convert.ToInt32(playerInformation.Health)) SetHealth(playerInformation.Health);
         if (displaymoney != playerInformation.Money) SetMoney(playerInformation.Money);
-        // if (displayammo != playerInformation.Ammo) SetScore(playerInformation.Ammo);
+        if (displaygunammo != playerInformation.PlayerInventory.Equppied().NumOfBullet) SetGunAmmo(playerInformation.PlayerInventory.Equppied().NumOfBullet);
+        if (displayamountammo != playerInformation.Ammo) SetAmountAmmo(playerInformation.Ammo);
         if (displayscore != playerInformation.Score) SetScore(playerInformation.Score);
-
         CheckInput();
     }
 
@@ -107,14 +111,23 @@ public class UIManager : MonoBehaviour
         if (moneyView != null) moneyView.text = FormatValue(displaymoney);
        
     }
-    public void SetAmmo(int ammo)
+    public void SetAmountAmmo(int ammo)
     {
-        displayammo = ammo;
-        if (ammo <= 0) displayammo = 0;
-        else displayammo = ammo;
+        displayamountammo = ammo;
+        if (ammo <= 0) displayamountammo = 0;
+        else displayamountammo = ammo;
 
-        if (ammoView != null) ammoView.text = FormatValue(displayammo);
+        if (amountammoView != null) amountammoView.text = FormatValue(displayamountammo);
        
+    }
+    public void SetGunAmmo(int ammo)
+    {
+        displaygunammo = ammo;
+        if (ammo <= 0) displaygunammo = 0;
+        else displaygunammo = ammo;
+
+        if (gunammoView != null) gunammoView.text = FormatValue(displaygunammo);
+
     }
 
     public void SetHealth(float fhealth)

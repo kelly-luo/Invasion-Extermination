@@ -16,8 +16,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     [field: SerializeField]
     public State RemainState { get; set; }
 
-    public ObjectStats Stats { get; set; } // Kelly: have to rethink about this
-
     #endregion state
 
     #region Character Information
@@ -42,11 +40,17 @@ public class PlayerStateController : MonoBehaviour, IStateController
     private readonly int hashXDirectionSpeed = Animator.StringToHash("XDirectionSpeed");
     private readonly int hashZDirectionSpeed = Animator.StringToHash("ZDirectionSpeed");
     private readonly int hashFire = Animator.StringToHash("Fire");
-
+    private readonly int hashReload = Animator.StringToHash("Reload");
     private readonly int hashSpeed = Animator.StringToHash("Speed");
 
     private readonly int hashIsRunning = Animator.StringToHash("IsRunning");
     private readonly int hashIsHoldingRifle = Animator.StringToHash("IsHoldingRifle");
+
+    public bool IsJumping
+    {
+        get { return PlayerTranslate.IsJumping; }
+    }
+
     private bool isRunning = false;
     public bool IsRunning
     {
@@ -179,7 +183,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         //update scene
         this.UpdateUserInput();
-
         this.CurrentState.UpdateState(this);
     }
 
@@ -228,7 +231,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
         //you might be wondering why did i put the x on z axis 
         //it is because the I found that local Transform of the Neck bone in model was reversed. 
         neckTr.localRotation = Quaternion.Euler(0f, 0f, CameraTr.localRotation.eulerAngles.x);
-
     }
 
     private void RotateHeadAndAvatar(float yRot)
@@ -343,6 +345,14 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
     private void UpdateUserInput()
     {
+        if (UnityService.GetKeyUp(KeyCode.Space))
+        {
+            PlayerTranslate.JumpCharacter(true);
+        }
+        if (UnityService.GetMouseButtonUp(0))
+        {
+            this.Attack();
+        }
         if (UnityService.GetMouseButtonUp(0))
         {
             this.Attack();
@@ -360,8 +370,12 @@ public class PlayerStateController : MonoBehaviour, IStateController
             if (HasWeapon)
                 IsHoldingRifle = !IsHoldingRifle;
         }
+        if(UnityService.GetKeyUp(KeyCode.R))
+        {
+            this.Reload();
+        }
     }
-    //weapon
+    
     public void UpdateTheTexturWhenCameraViewChange()
     {
         this.UpdateCharacterTexture();
@@ -421,6 +435,16 @@ public class PlayerStateController : MonoBehaviour, IStateController
         }
     }
 
+    private void Reload()
+    {
+        if (IsHoldingRifle)
+            if (!WeaponManager.IsReloading)
+            {
+                WeaponManager.StartReload(ref playerStats.Ammo);
+                Animator.SetTrigger(hashReload);
+            }
+    }
+
     public void TransitionToState(State nextState)
     {
         if (nextState != RemainState)
@@ -469,7 +493,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     public void OnDeath()
     {
         spawn.SetSpawn();
-        playerStats.health = 100f;
+        playerStats.Health = 100f;
     }
 }
 

@@ -34,5 +34,13 @@ public class bcInstructions : ButtonClicked
         return images.Length;
     }
 
+    public override void ButtonHover(PointerEventData eventData)
+    {
+       
+    }
 
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+      
+    }
 }

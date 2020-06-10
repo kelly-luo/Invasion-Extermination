@@ -24,7 +24,6 @@ namespace US8Tests_SaveLoad
             Vector3 position1 = new Vector3(1f, -7f, 2.55f);
             playerInformation.transform.position = position1;
             playerInformation.Health = 97.2f;
-            playerInformation.Level = 10;
             playerInformation.Score = 3501;
             playerInformation.Money = 999999;
         }
@@ -69,18 +68,6 @@ namespace US8Tests_SaveLoad
 
             yield return null;
 
-        }
-
-        // Test if the loaded character has the correct health points
-        [UnityTest]
-        public IEnumerator TestLoadPlayer_LoadedLevelFromFileIsCorrect()
-        {
-            playerInformation.LoadPlayer();
-
-            //check for health points
-            Assert.AreEqual(10, playerInformation.Level);
-
-            yield return null;
         }
 
         // Test if the loaded character has the correct health points

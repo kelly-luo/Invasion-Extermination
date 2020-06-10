@@ -12,12 +12,10 @@ public class PlayerInTraceRangeDecision : Decision
 
         if (monsterController.DistancePlayerAndEnemy > monsterController.failTraceRange)
         {
-            Debug.Log("PlayerInTraceRangeDecision return: " + false);
             return false;
         }
         else
         {
-            Debug.Log("PlayerInTraceRangeDecision return: " + true);
             return true;
         }
     }

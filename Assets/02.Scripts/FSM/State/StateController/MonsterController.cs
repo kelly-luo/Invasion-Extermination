@@ -6,6 +6,8 @@ using UnityEngine.AI;
 
 public class MonsterController : MonoBehaviour, IStateController
 {
+    public GameObject healthBarObject;
+    private EnemyHealthBar healthbar;
 
     //Range of detecting the player.
     public float viewRange = 70.0f;
@@ -124,6 +126,20 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public NavMeshAgent Agent { get; set; }
 
+    private bool isAgentEnabled;
+    public bool IsAgentEnabled
+    {
+        get { return isAgentEnabled; }
+        set
+        {
+            if (value)
+            {
+                InitilizeNavAgent();
+                isAgentEnabled = value;
+            }
+        }
+    }
+
     private float damping = 1.0f;
 
     private List<GameObject> skins = new List<GameObject>();
@@ -133,6 +149,8 @@ public class MonsterController : MonoBehaviour, IStateController
     #region MonoBehaviour Base Function
     void Awake()
     {
+        
+       
         var transforms = GetComponentsInChildren<Transform>();
         foreach (Transform tr in transforms)
         {
@@ -146,15 +164,20 @@ public class MonsterController : MonoBehaviour, IStateController
 
         this.playerInformation = GameObject.Find("Player").GetComponent<PlayerInformation>();
 
+   
+
     }
 
     void Start()
     {
+        healthbar = this.gameObject.AddComponent<EnemyHealthBar>();
+        healthbar.hpBarPrefab = healthBarObject;
+        healthbar.SetHPBar();
+
         UnityService = UnityServiceManager.Instance;
 
         InitilizeSkinType();
         InitilizeWaypointGroup();
-        InitilizeNavAgent();
         InitilizeLayerMask();
 
         if (isHoldingWeapon)
@@ -169,14 +192,17 @@ public class MonsterController : MonoBehaviour, IStateController
     {
         DistancePlayerAndEnemy = (PlayerTr.position - ObjectTransform.position).sqrMagnitude;
 
-        CurrentState.UpdateState(this);
+        if (isAgentEnabled)
+        {
+            CurrentState.UpdateState(this);
+        }
     }
 
     void LateUpdate()
     {
-        this.LookTowardMovingDirection();
-        if (patrolling)
-            this.UpdateCurrentMovePoint();
+        if(isAgentEnabled) this.LookTowardMovingDirection();
+        if (patrolling) this.UpdateCurrentMovePoint();
+
     }
 
     #endregion
@@ -194,6 +220,7 @@ public class MonsterController : MonoBehaviour, IStateController
     private void InitilizeNavAgent()
     {
         Agent = GetComponent<NavMeshAgent>();
+        Agent.isStopped = false;
         Agent.autoBraking = false;
         Agent.updateRotation = false;
         Agent.speed = patrolSpeed;
@@ -327,15 +354,6 @@ public class MonsterController : MonoBehaviour, IStateController
         weapon.transform.localPosition = new Vector3(22.8f, 9.3f, -7.5f);
     }
 
-    public void TakeDamage(float Damage)
-    {
-        Debug.Log($"Monster has taken {Damage}");
-        Stats.Health -= Damage;
-        if (Stats.Health <= 0)
-            Debug.Log("Monster has died.");
-            this.OnDeath();
-    }
-
     public void Attack()
     {
         StopAgent();
@@ -353,12 +371,33 @@ public class MonsterController : MonoBehaviour, IStateController
         yield return null;
     }
 
+    public void TakeDamage(float Damage)
+    {
+        Debug.Log($"{this.gameObject.tag} has taken {Damage}");
+        Stats.Health -= Damage;
+        healthbar.onDamage(Stats.Health);
+        if (Stats.Health <= 0)
+        {
+            Debug.Log($"{this.gameObject.tag} has died.");
+            this.OnDeath();
+        }
+
+    }
+
     public void OnDeath()
     {
-        //player gains points
-        this.playerInformation.Score += 10;
+        if(this.gameObject.tag == "Enemy")
+        {
+            //player killed a monster and gains 10 points
+            this.playerInformation.Score += 10;
+        }
+        else if(this.gameObject.tag == "Human")
+        {
+            //player killed a human and 20 points deducted
+            this.playerInformation.Score -= 20;
+        }
 
-        StopAgent();
+        if(isAgentEnabled) StopAgent();
 
         TurnOffWeaponAnimation();
 
@@ -368,10 +407,30 @@ public class MonsterController : MonoBehaviour, IStateController
         Animator.SetTrigger(hashDie);
 
         GetComponent<CapsuleCollider>().enabled = false;
-        
+
+        LootMoneyPopUp();
+
         var script = GetComponent<MonsterController>();
         script.enabled = false;
     }
+
+    private void LootMoneyPopUp()
+    {
+      
+        var numberOfBill = UnityService.UnityRandomRange(1, 10);
+        for (int i = 0; i < numberOfBill; i++)
+        {
+            var moneyBillObject = GameManager.Instance.GetMoneyBillObject();
+            if (moneyBillObject != null)
+            {
+                moneyBillObject.GetComponent<Money>().MoneyAmount = UnityService.UnityRandomRange(10, 44);
+                moneyBillObject.transform.position = transform.position;
+                moneyBillObject.transform.rotation = transform.rotation;
+                moneyBillObject.SetActive(true);
+            }
+        }
+    }
+
     private void TurnOffWeaponAnimation()
     {
         isHoldingWeapon = false;

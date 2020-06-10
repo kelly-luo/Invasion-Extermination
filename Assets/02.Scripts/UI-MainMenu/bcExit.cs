@@ -11,6 +11,16 @@ public class bcExit : ButtonClicked
         Application.Quit();
     }
 
+    public override void ButtonHover(PointerEventData eventData)
+    {
+       
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+
+    }
+
     public bool getIsEnding()
     {
         return isEnding;

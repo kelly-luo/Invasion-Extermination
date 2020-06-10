@@ -12,6 +12,11 @@ public interface ICharacterTranslate
 
     bool IsSitting { get; set; }
 
+    bool IsJumping { get; set; }
+
     void TranslateCharacter(Vector3 moveDir);
 
+    bool JumpCharacter(bool IsCheckingGround);
+
+    bool CheckCharacterIsOnGround();
 }

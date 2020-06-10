@@ -10,4 +10,14 @@ public class bcBackToMenu : ButtonClicked
     {
         SceneManager.LoadScene("MainMenuV2", LoadSceneMode.Single);
     }
+
+    public override void ButtonHover(PointerEventData eventData)
+    {
+        
+    }
+
+    public override void ButtonHoverExit(PointerEventData eventData)
+    {
+  
+    }
 }

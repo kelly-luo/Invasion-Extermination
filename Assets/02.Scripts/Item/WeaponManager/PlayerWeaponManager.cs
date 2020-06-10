@@ -26,6 +26,8 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
     public float BobFrequency { get; set; } = 10f;
     public float BobAmount { get; set; } = 0.05f;
 
+    public bool IsReloading { get; set; } = false;
+
     private GameObject currentWeaponObject;
     public GameObject CurrentWeaponObject
     {
@@ -54,11 +56,28 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
 
     public IEnumerator Attack(Vector3 playerPosition, Vector3 shootDirection)
     {
-        FirstWeaponClass.Fire(playerPosition, shootDirection);
+        if (!IsReloading)
+        {
+            FirstWeaponClass.Fire(playerPosition, shootDirection);
+        }
         yield return null;
     }
 
+    public void StartReload(ref int ammoLeft)
+    {
+        if (!IsReloading)
+        {
+            IsReloading = true;
+            FirstWeaponClass.Reload(ref ammoLeft);
+            StartCoroutine(TakeReloadTime());
+        }
+    }
 
+    private IEnumerator TakeReloadTime()
+    {            
+        yield return new WaitForSeconds(FirstWeaponClass.ReloadDuration);
+        IsReloading = false;
+    }
 
     #region Initialize  
 

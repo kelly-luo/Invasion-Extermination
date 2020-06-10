@@ -7,6 +7,7 @@ public class ThirdPersonView : ICameraView
     public bool IsClampOnRotatingXAxis { get; set; } = true;
     public float MaxAngleOnRotatingXAxis { get; set; } = 80f;
     public float MinAngleOnRotatingXAxis { get; set; } = -90f;
+    public bool IsInvertMouse { get; set; } 
     public bool IsSmooth { get; set; } = true;
     public float SmoothTime { get; set; } = 1f;
     public float XSensitivity { get; set; }
@@ -65,7 +66,10 @@ public class ThirdPersonView : ICameraView
     {
         YRot = UnityService.GetAxis("Mouse X") * XSensitivity;
         XRot = UnityService.GetAxis("Mouse Y") * YSensitivity;
-
+        if(IsInvertMouse)
+        {
+            XRot = -XRot;
+        }
         cameraRigRot *= Quaternion.Euler(0, YRot, 0f);
         cameraRot *= Quaternion.Euler(-XRot, 0f, 0f);
 

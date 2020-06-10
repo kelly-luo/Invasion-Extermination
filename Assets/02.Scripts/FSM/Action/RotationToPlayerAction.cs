@@ -15,7 +15,5 @@ public class RotationToPlayerAction : Action
             monsterController.RotateToPlayer();
 
         }
-
-        Debug.Log("Ratate Action");
     }
 }

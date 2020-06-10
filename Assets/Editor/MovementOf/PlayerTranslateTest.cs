@@ -16,6 +16,9 @@ namespace Tests
         public void SetupTest()
         {
             target = new GameObject();
+            target.AddComponent<Rigidbody>();
+            target.AddComponent<CapsuleCollider>();
+            target.transform.position = new Vector3(0f, 0f, 0f);
             playerTranslate = new PlayerTranslate(target.transform);
 
             var unitService = Substitute.For<IUnityServiceManager>();
@@ -27,13 +30,31 @@ namespace Tests
         [Test]
         public void TranslateCharacter_MovingTest()
         {
-            this.SetupTest();
-            
+        
             playerTranslate.TranslateCharacter(new Vector3(1f, 0f, 0f));
 
             var ExpectedValue = new Vector3(1.5f, 0f,0f);
-
-            Assert.AreEqual(ExpectedValue, target.transform.position);
+            //Check is DesiredPostion is same as expected
+            Assert.AreEqual(ExpectedValue, playerTranslate.DesiredPosition);
         }
+
+        [Test] 
+        public void TranslateCharacter_JumpingTest()
+        {
+            //CheckingPlayerIsOnGround is false
+            bool IsJumpSuccess = playerTranslate.JumpCharacter(false);
+            
+
+            Assert.AreEqual(true, IsJumpSuccess);
+        }
+        [Test]
+        public void TranslateCharacter_CheckCharacterIsOnGroundTest()
+        {
+            bool IsCharacterOnGround = playerTranslate.CheckCharacterIsOnGround();
+
+            Assert.AreEqual(false, IsCharacterOnGround);
+        }
+        
+
     }
 }

@@ -26,7 +26,7 @@ public class PlayerInformation : MonoBehaviour
         set { if ((value) <= 0) { score = 0; } else score = value; }
     }
     [field: SerializeField] public int Money { get; set; }
-    [field: SerializeField] public int Ammo { get; set; }
+
 
     private float health = 100f;
     [field: SerializeField] public float Health 

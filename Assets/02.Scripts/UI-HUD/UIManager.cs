@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
 
     public InventoryManager invManager;
 
+    public ShopManager shopManager;
+
     public PlayerInformation playerInformation;
 
     public GameObject GameMenuPanel;
@@ -28,7 +30,6 @@ public class UIManager : MonoBehaviour
     public int displayamountammo;
     public int displayhealth;
 
-    public int temp;
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
@@ -39,6 +40,7 @@ public class UIManager : MonoBehaviour
 
     public void Intialize()
     {
+
         if(playerInformation != null)
         {
             SetHealth(playerInformation.Health);

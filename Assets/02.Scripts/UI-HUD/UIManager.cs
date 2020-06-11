@@ -80,13 +80,13 @@ public class UIManager : MonoBehaviour
         {
             if (!IsVisible(shopManager.gameObject))
             {
-                makeVisible(invManager.inventoryPanel,shopManager.gameObject);
-                makeInvisble(healthObject);
+                MakeVisible(invManager.inventoryPanel,shopManager.gameObject);
+                MakeInvisble(healthObject);
             }
             else
             {
-                makeInvisble(invManager.inventoryPanel, shopManager.gameObject);
-                makeVisible(healthObject);
+                MakeInvisble(invManager.inventoryPanel, shopManager.gameObject);
+                MakeVisible(healthObject);
             }
         }
 
@@ -94,13 +94,13 @@ public class UIManager : MonoBehaviour
         {
             if (!IsVisible(GameMenuPanel))
             {
-                makeVisible(GameMenuPanel);
-                makeInvisble(invManager.inventoryPanel, shopManager.gameObject, healthObject);
+                MakeVisible(GameMenuPanel);
+                MakeInvisble(invManager.inventoryPanel, shopManager.gameObject, healthObject);
             }
             else
             {
-                makeInvisble(GameMenuPanel);
-                makeVisible(healthObject);
+                MakeInvisble(GameMenuPanel);
+                MakeVisible(healthObject);
             }
 
         }
@@ -116,19 +116,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    static public void makeInvisble(params GameObject[] panels)
-    {
-        foreach(GameObject panel in panels){
-            if (IsVisible(panel)) VisibleOnScreen(panel);
-        }
-    }
-    static public void makeVisible(params GameObject[] panels)
-    {
-        foreach (GameObject panel in panels)
-        {
-            if (!IsVisible(panel)) VisibleOnScreen(panel);
-        }
-    }
+
 
     #region Displaying_Information
     public void SetScore(int score)
@@ -200,7 +188,20 @@ public class UIManager : MonoBehaviour
 
     }
 
-
+    static public void MakeInvisble(params GameObject[] panels)
+    {
+        foreach (GameObject panel in panels)
+        {
+            if (IsVisible(panel)) VisibleOnScreen(panel);
+        }
+    }
+    static public void MakeVisible(params GameObject[] panels)
+    {
+        foreach (GameObject panel in panels)
+        {
+            if (!IsVisible(panel)) VisibleOnScreen(panel);
+        }
+    }
     static public void VisibleOnScreen(GameObject panel)
     {
         if (panel.transform.localScale.x == 1)

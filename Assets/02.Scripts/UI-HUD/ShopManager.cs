@@ -20,8 +20,15 @@ public class ShopManager : MonoBehaviour
     private int displayAmmo = 0;
     public TMP_Text ammo;
 
+    private bool start = false;
+
    
     void Start()
+    {
+        Intiliaze();
+    }
+
+    public void Intiliaze()
     {
         MakeGunPanel(0);
         UpdateInventory();
@@ -35,12 +42,18 @@ public class ShopManager : MonoBehaviour
             displayAmmo = itemShop.PlayerInfo.Ammo;
             ammo.text = UIManager.FormatValue(displayAmmo);
         }
+
+        if (itemShop.weaponsArray != null && !start)
+        {
+            start = true;
+            MakeGunPanel(0);
+            UpdateInventory();
+        }
     }
 
     public void UpdateInventory()
     {
-       
-        if(itemShop != null)
+        if(itemShop != null && itemShop.weaponsArray != null)
         {
             for (int i = 0; i < itemShop.weaponsArray.Length; i++)
             {
@@ -48,6 +61,8 @@ public class ShopManager : MonoBehaviour
                 slots[i].SetSlot(GetImage(weapon.EntityID), i);
             }
         }
+
+
     }
 
     public void BuyGun()
@@ -64,15 +79,19 @@ public class ShopManager : MonoBehaviour
 
     public void MakeGunPanel(int index)
     {
-        selectedindex = index;
-        selecteditem = itemShop.weaponsArray[index];
-        ImWeapon weapon = (ImWeapon)selecteditem.item;
-        gunSprite = GetImage(weapon.EntityID);
-        panel.SetImage(gunSprite);
-        panel.SetGunName(gunSprite.name);
-        panel.SetGunDamage((int)weapon.Damage);
-        panel.SetGunClipSize((int)weapon.MaxBullet);
-        panel.SetGunPrice(selecteditem.cost);
+        if(itemShop.weaponsArray != null)
+        {
+            selectedindex = index;
+            selecteditem = itemShop.weaponsArray[index];
+            ImWeapon weapon = (ImWeapon)selecteditem.item;
+            gunSprite = GetImage(weapon.EntityID);
+            panel.SetImage(gunSprite);
+            panel.SetGunName(gunSprite.name);
+            panel.SetGunDamage((int)weapon.Damage);
+            panel.SetGunClipSize((int)weapon.MaxBullet);
+            panel.SetGunPrice(selecteditem.cost);
+        }
+
     }
 
     public Sprite GetImage(int id)

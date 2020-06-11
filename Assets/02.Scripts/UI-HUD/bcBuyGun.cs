@@ -8,6 +8,7 @@ public class bcBuyGun : ButtonClicked
     public ShopManager manager;
     public override void ButtonEvent(PointerEventData eventData)
     {
+        Debug.Log("pressed");
         manager.BuyGun();
     }
 

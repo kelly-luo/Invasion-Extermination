@@ -16,10 +16,12 @@ public class Inventory
     public Dictionary<int, ImItem> inventory = new Dictionary<int, ImItem>();
 
     
-    public void Add(ImItem item)
+    public bool Add(ImItem item)
     {
+        bool addedItem = false;
         if (inventory.Count < 24) 
         {
+            addedItem = true;
             if (!inventory.ContainsKey(item.InstanceID))
             {
                 inventory.Add(item.InstanceID, item);
@@ -38,6 +40,7 @@ public class Inventory
                 StackUpItem(item);
             }
         }
+        return addedItem;
     }
 
     private void StackUpItem(ImItem item)

@@ -31,14 +31,15 @@ public class ItemShop : MonoBehaviour
     public Boolean BuyItem(int index)
     {
         ShopItem buying = weaponsArray[index];
-        if (PlayerInfo.Money >= buying.cost)
+        if (PlayerInfo.Money >= buying.cost )
         {
-            PlayerInfo.Money -= buying.cost;
-            PlayerInfo.PlayerInventory.Add(buying.item);
-
-            weaponsArray[index] = null;
-            PopulateWeaponsList();
-            return true;
+            if (PlayerInfo.PlayerInventory.Add(buying.item))
+            {
+                PlayerInfo.Money -= buying.cost;
+                weaponsArray[index] = null;
+                PopulateWeaponsList();
+                return true;
+            }
         }
         return false;
     }

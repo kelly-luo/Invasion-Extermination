@@ -7,14 +7,18 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
+    public GameObject healthObject;
     public Slider healthView;
     public Image healthFill;
 
     public TMP_Text scoreView;
     public TMP_Text moneyView;
-    public TMP_Text ammoView;
+    public TMP_Text gunammoView;
+    public TMP_Text amountammoView;
 
     public InventoryManager invManager;
+
+    public ShopManager shopManager;
 
     public PlayerInformation playerInformation;
 
@@ -23,8 +27,10 @@ public class UIManager : MonoBehaviour
     //Temp values, change to 0 after testing
     public int displaymoney;
     public int displayscore;
-    public int displayammo;
+    public int displaygunammo;
+    public int displayamountammo;
     public int displayhealth;
+
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
@@ -35,10 +41,11 @@ public class UIManager : MonoBehaviour
 
     public void Intialize()
     {
+
         if(playerInformation != null)
         {
             SetHealth(playerInformation.Health);
-            SetAmmo(0);
+            SetAmountAmmo(playerInformation.Ammo);
             SetMoney(playerInformation.Money);
             SetScore(playerInformation.Score);
         }
@@ -46,17 +53,18 @@ public class UIManager : MonoBehaviour
         invManager.Intialize(playerInformation.PlayerInventory);
         invManager.UpdateWeaponSlots();
 
+        if (shopManager != null) VisibleOnScreen(shopManager.gameObject);
         if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
         if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
     }
 
-    private void Update()
+    void Update()
     {
-        if(displayhealth != Convert.ToInt32(playerInformation.Health)) SetHealth(playerInformation.Health);
+        if (displayhealth != Convert.ToInt32(playerInformation.Health)) SetHealth(playerInformation.Health);
         if (displaymoney != playerInformation.Money) SetMoney(playerInformation.Money);
-        // if (displayammo != playerInformation.Ammo) SetScore(playerInformation.Ammo);
+        if (displaygunammo != playerInformation.PlayerInventory.Equppied().NumOfBullet) SetGunAmmo(playerInformation.PlayerInventory.Equppied().NumOfBullet);
+        if (displayamountammo != playerInformation.Ammo) SetAmountAmmo(playerInformation.Ammo);
         if (displayscore != playerInformation.Score) SetScore(playerInformation.Score);
-
         CheckInput();
     }
 
@@ -65,14 +73,36 @@ public class UIManager : MonoBehaviour
 
         if (UnityService.GetKeyUp(KeyCode.I))
         {
-            if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
+            if (invManager.inventoryPanel != null && !IsVisible(shopManager.gameObject)) VisibleOnScreen(invManager.inventoryPanel);
+        }
+
+        if (UnityService.GetKeyUp(KeyCode.B))
+        {
+            if (!IsVisible(shopManager.gameObject))
+            {
+                MakeVisible(invManager.inventoryPanel,shopManager.gameObject);
+                MakeInvisble(healthObject);
+            }
+            else
+            {
+                MakeInvisble(invManager.inventoryPanel, shopManager.gameObject);
+                MakeVisible(healthObject);
+            }
         }
 
         if (UnityService.GetKeyUp(KeyCode.Escape))
         {
-            if (invManager != null)
-                if(invManager.inventoryPanel.transform.localScale.x == 1) VisibleOnScreen(invManager.inventoryPanel);
-            if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
+            if (!IsVisible(GameMenuPanel))
+            {
+                MakeVisible(GameMenuPanel);
+                MakeInvisble(invManager.inventoryPanel, shopManager.gameObject, healthObject);
+            }
+            else
+            {
+                MakeInvisble(GameMenuPanel);
+                MakeVisible(healthObject);
+            }
+
         }
 
         if (UnityService.GetKeyUp(KeyCode.Alpha1))
@@ -107,14 +137,23 @@ public class UIManager : MonoBehaviour
         if (moneyView != null) moneyView.text = FormatValue(displaymoney);
        
     }
-    public void SetAmmo(int ammo)
+    public void SetAmountAmmo(int ammo)
     {
-        displayammo = ammo;
-        if (ammo <= 0) displayammo = 0;
-        else displayammo = ammo;
+        displayamountammo = ammo;
+        if (ammo <= 0) displayamountammo = 0;
+        else displayamountammo = ammo;
 
-        if (ammoView != null) ammoView.text = FormatValue(displayammo);
+        if (amountammoView != null) amountammoView.text = FormatValue(displayamountammo);
        
+    }
+    public void SetGunAmmo(int ammo)
+    {
+        displaygunammo = ammo;
+        if (ammo <= 0) displaygunammo = 0;
+        else displaygunammo = ammo;
+
+        if (gunammoView != null) gunammoView.text = FormatValue(displaygunammo);
+
     }
 
     public void SetHealth(float fhealth)
@@ -149,7 +188,20 @@ public class UIManager : MonoBehaviour
 
     }
 
-
+    static public void MakeInvisble(params GameObject[] panels)
+    {
+        foreach (GameObject panel in panels)
+        {
+            if (IsVisible(panel)) VisibleOnScreen(panel);
+        }
+    }
+    static public void MakeVisible(params GameObject[] panels)
+    {
+        foreach (GameObject panel in panels)
+        {
+            if (!IsVisible(panel)) VisibleOnScreen(panel);
+        }
+    }
     static public void VisibleOnScreen(GameObject panel)
     {
         if (panel.transform.localScale.x == 1)
@@ -160,6 +212,13 @@ public class UIManager : MonoBehaviour
         {
             panel.transform.localScale = new Vector3(1, 1, 1);
         }
+    }
+
+    static public bool IsVisible(GameObject panel)
+    {
+        if (panel.transform.localScale.x == 1)return true;
+        else return false;
+        
     }
     #endregion
 }

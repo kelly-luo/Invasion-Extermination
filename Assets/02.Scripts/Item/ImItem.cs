@@ -8,4 +8,5 @@ public interface ImItem
     int InstanceID { get; set; }
     int StackAmount { get; set; }
     int StackLimit { get; }
+
 }

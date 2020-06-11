@@ -10,7 +10,7 @@ public interface ImWeapon : ImItem
 
     float FiringRange { get; set; }
 
-    int MaxBullet { get; }
+    int MaxBullet { get; set; }
 
     int NumOfBullet { get; set; }
 

@@ -114,6 +114,11 @@ public class MenuButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHand
         enable = false;
         if(animator != null) animator.SetBool("Selected", false);
     }
+    public void enableButton()
+    {
+        enable = true;
+        if (animator != null) animator.SetBool("Selected", false);
+    }
 
 
 

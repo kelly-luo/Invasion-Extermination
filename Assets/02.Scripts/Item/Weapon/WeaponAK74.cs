@@ -19,7 +19,7 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     #endregion
 
     #region Bullet
-    public int MaxBullet { get; } = 30;
+    public int MaxBullet { get; set; } = 30;
     private int numOfBullet = 30;
     public int NumOfBullet
     {
@@ -105,7 +105,6 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     public float ReloadDuration { get; set; } = 1.2f;
 
     public IUnityServiceManager UnityService { get; set; } = new UnityServiceManager();
-
 
 
     void Start()

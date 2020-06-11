@@ -73,11 +73,11 @@ public class UI_HUD_Test : MonoBehaviour
     public void Check_If_Ammo_does_not_go_less_than_0()
     {
         //ARRANGE
-        uiManager.SetAmmo(100);
+        uiManager.SetAmountAmmo(100);
         //ACT
-        uiManager.SetAmmo(-999);
+        uiManager.SetAmountAmmo(-999);
         //ASSERT
-        int actual = uiManager.displayammo;
+        int actual = uiManager.displayamountammo;
         Assert.AreEqual(0, actual);
     }
 

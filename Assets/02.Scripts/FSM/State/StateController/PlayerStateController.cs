@@ -440,7 +440,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         if (IsHoldingRifle)
             if (!WeaponManager.IsReloading)
             {
-                WeaponManager.StartReload(ref playerStats.Ammo);
+                WeaponManager.StartReload(ref playerStats.ammo);
                 Animator.SetTrigger(hashReload);
             }
     }

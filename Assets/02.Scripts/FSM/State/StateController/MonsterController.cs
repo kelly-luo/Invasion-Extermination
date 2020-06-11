@@ -127,6 +127,8 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public NavMeshAgent Agent { get; set; }
 
+    public bool isEnabled;
+
     private bool isAgentEnabled;
     public bool IsAgentEnabled
     {
@@ -150,8 +152,7 @@ public class MonsterController : MonoBehaviour, IStateController
     #region MonoBehaviour Base Function
     void Awake()
     {
-        
-       
+
         var transforms = GetComponentsInChildren<Transform>();
         foreach (Transform tr in transforms)
         {
@@ -165,7 +166,8 @@ public class MonsterController : MonoBehaviour, IStateController
 
         this.playerInformation = GameObject.Find("Player").GetComponent<PlayerInformation>();
 
-   
+        if (isEnabled)
+            IsAgentEnabled = true;
 
     }
 
@@ -195,6 +197,7 @@ public class MonsterController : MonoBehaviour, IStateController
 
         if (isAgentEnabled)
         {
+            
             //timer
             if (currentTime + StateUpdateDelayTime < UnityService.TimeAtFrame)
             {

@@ -7,6 +7,7 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
+    public GameObject healthObject;
     public Slider healthView;
     public Image healthFill;
 
@@ -52,13 +53,14 @@ public class UIManager : MonoBehaviour
         invManager.Intialize(playerInformation.PlayerInventory);
         invManager.UpdateWeaponSlots();
 
+        if (shopManager != null) VisibleOnScreen(shopManager.gameObject);
         if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
         if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
     }
 
     void Update()
     {
-        if(displayhealth != Convert.ToInt32(playerInformation.Health)) SetHealth(playerInformation.Health);
+        if (displayhealth != Convert.ToInt32(playerInformation.Health)) SetHealth(playerInformation.Health);
         if (displaymoney != playerInformation.Money) SetMoney(playerInformation.Money);
         if (displaygunammo != playerInformation.PlayerInventory.Equppied().NumOfBullet) SetGunAmmo(playerInformation.PlayerInventory.Equppied().NumOfBullet);
         if (displayamountammo != playerInformation.Ammo) SetAmountAmmo(playerInformation.Ammo);
@@ -71,14 +73,36 @@ public class UIManager : MonoBehaviour
 
         if (UnityService.GetKeyUp(KeyCode.I))
         {
-            if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
+            if (invManager.inventoryPanel != null && !IsVisible(shopManager.gameObject)) VisibleOnScreen(invManager.inventoryPanel);
+        }
+
+        if (UnityService.GetKeyUp(KeyCode.B))
+        {
+            if (!IsVisible(shopManager.gameObject))
+            {
+                makeVisible(invManager.inventoryPanel,shopManager.gameObject);
+                makeInvisble(healthObject);
+            }
+            else
+            {
+                makeInvisble(invManager.inventoryPanel, shopManager.gameObject);
+                makeVisible(healthObject);
+            }
         }
 
         if (UnityService.GetKeyUp(KeyCode.Escape))
         {
-            if (invManager != null)
-                if(invManager.inventoryPanel.transform.localScale.x == 1) VisibleOnScreen(invManager.inventoryPanel);
-            if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
+            if (!IsVisible(GameMenuPanel))
+            {
+                makeVisible(GameMenuPanel);
+                makeInvisble(invManager.inventoryPanel, shopManager.gameObject, healthObject);
+            }
+            else
+            {
+                makeInvisble(GameMenuPanel);
+                makeVisible(healthObject);
+            }
+
         }
 
         if (UnityService.GetKeyUp(KeyCode.Alpha1))
@@ -92,7 +116,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
+    static public void makeInvisble(params GameObject[] panels)
+    {
+        foreach(GameObject panel in panels){
+            if (IsVisible(panel)) VisibleOnScreen(panel);
+        }
+    }
+    static public void makeVisible(params GameObject[] panels)
+    {
+        foreach (GameObject panel in panels)
+        {
+            if (!IsVisible(panel)) VisibleOnScreen(panel);
+        }
+    }
 
     #region Displaying_Information
     public void SetScore(int score)
@@ -175,6 +211,13 @@ public class UIManager : MonoBehaviour
         {
             panel.transform.localScale = new Vector3(1, 1, 1);
         }
+    }
+
+    static public bool IsVisible(GameObject panel)
+    {
+        if (panel.transform.localScale.x == 1)return true;
+        else return false;
+        
     }
     #endregion
 }

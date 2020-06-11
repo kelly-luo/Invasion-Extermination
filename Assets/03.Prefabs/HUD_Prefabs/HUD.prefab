@@ -327,7 +327,7 @@ GameObject:
   - component: {fileID: 7749000612043084509}
   - component: {fileID: 1876959199180508948}
   - component: {fileID: 5871545262035063174}
-  - component: {fileID: 7074576052560622801}
+  - component: {fileID: 4533618318582295127}
   m_Layer: 5
   m_Name: BuyAmmo
   m_TagString: Untagged
@@ -471,7 +471,7 @@ MonoBehaviour:
   currentState: 3
   pressed: 0
   buttonClicked: {fileID: 0}
---- !u!114 &7074576052560622801
+--- !u!114 &4533618318582295127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -480,10 +480,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1024716308335988049}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdc6fce3ab46b9d489b0bb02b42bbf11, type: 3}
+  m_Script: {fileID: 11500000, guid: 02e29f182abde934e952c987921ef3a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isEnding: 0
+  manager: {fileID: 4507141563514587518}
 --- !u!1 &1068689988620887890
 GameObject:
   m_ObjectHideFlags: 0
@@ -4184,6 +4184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295c9e2d70990cd4eb762a1e32ee6f53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthObject: {fileID: 3227371735610872435}
   healthView: {fileID: 1937151107386698454}
   healthFill: {fileID: 1937151107944753813}
   scoreView: {fileID: 1937151107238905884}
@@ -17468,7 +17469,7 @@ GameObject:
   - component: {fileID: 6073194242798849665}
   - component: {fileID: 1187280070624994391}
   - component: {fileID: 2076602852469443415}
-  - component: {fileID: 125123257359886540}
+  - component: {fileID: 6988073498214679885}
   m_Layer: 5
   m_Name: BuyGun
   m_TagString: Untagged
@@ -17612,7 +17613,7 @@ MonoBehaviour:
   currentState: 3
   pressed: 0
   buttonClicked: {fileID: 0}
---- !u!114 &125123257359886540
+--- !u!114 &6988073498214679885
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17621,10 +17622,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2550988195859771590}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdc6fce3ab46b9d489b0bb02b42bbf11, type: 3}
+  m_Script: {fileID: 11500000, guid: eedee07e1b8a74c418e3b5558ca14a00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isEnding: 0
+  manager: {fileID: 4507141563514587518}
 --- !u!1 &2973491375177598154
 GameObject:
   m_ObjectHideFlags: 0
@@ -21694,6 +21695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemShop: {fileID: 0}
+  selectedindex: 0
   sprites:
   - {fileID: 21300000, guid: ec7da4c8623424c458c7fc906805b2c2, type: 3}
   - {fileID: 21300000, guid: cc605c898abe65c4dad159de959bdb05, type: 3}

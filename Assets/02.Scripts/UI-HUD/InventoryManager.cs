@@ -127,6 +127,8 @@ public class InventoryManager : MonoBehaviour
         foreach (KeyValuePair<int, ImItem> Weapon in PlayerInventory.inventory)
         {
             slotNo++;
+            slots[slotNo].SetActive(true);
+            slots[slotNo].GetComponent<MenuButton>().enableButton();
             // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
 
             bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
@@ -134,6 +136,7 @@ public class InventoryManager : MonoBehaviour
             slotInfo.InstanceId = Weapon.Key;
             slotInfo.setSprite(GetImage(Weapon.Value.EntityID));
             slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.StackAmount);
+         
         }
 
         for (int i = PlayerInventory.GetSize(); i < slots.Length; i++)
@@ -174,6 +177,7 @@ public class InventoryManager : MonoBehaviour
     #endregion
     void Update()
     {
+
         if (PlayerInventory != null)
         {
             if (currentSlotUsed != PlayerInventory.GetSize()) UpdateInventoryGUI();

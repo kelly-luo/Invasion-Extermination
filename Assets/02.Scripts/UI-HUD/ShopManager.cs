@@ -8,6 +8,8 @@ using TMPro;
 public class ShopManager : MonoBehaviour
 {
     public ItemShop itemShop;
+    public ShopItem selecteditem;
+    public int selectedindex;
 
     public Sprite[] sprites;
     public bcShopSlot[] slots;
@@ -17,9 +19,11 @@ public class ShopManager : MonoBehaviour
 
     private int displayAmmo = 0;
     public TMP_Text ammo;
+
+   
     void Start()
     {
-        MakeGunPanel(itemShop.weaponsArray[0]);
+        MakeGunPanel(0);
         UpdateInventory();
     }
 
@@ -41,20 +45,34 @@ public class ShopManager : MonoBehaviour
             for (int i = 0; i < itemShop.weaponsArray.Length; i++)
             {
                 ImWeapon weapon = (ImWeapon)itemShop.weaponsArray[i].item;
-                slots[i].SetSlot(GetImage(weapon.EntityID), itemShop.weaponsArray[i]);
+                slots[i].SetSlot(GetImage(weapon.EntityID), i);
             }
         }
     }
 
-    public void MakeGunPanel(ShopItem item)
+    public void BuyGun()
     {
-        ImWeapon weapon = (ImWeapon)item.item;
+        itemShop.BuyItem(selectedindex);
+        UpdateInventory();
+        MakeGunPanel(0);
+    }
+
+    public void BuyAmmo()
+    {
+        itemShop.BuyAmmo();
+    }
+
+    public void MakeGunPanel(int index)
+    {
+        selectedindex = index;
+        selecteditem = itemShop.weaponsArray[index];
+        ImWeapon weapon = (ImWeapon)selecteditem.item;
         gunSprite = GetImage(weapon.EntityID);
         panel.SetImage(gunSprite);
         panel.SetGunName(gunSprite.name);
         panel.SetGunDamage((int)weapon.Damage);
         panel.SetGunClipSize((int)weapon.MaxBullet);
-        panel.SetGunPrice(item.cost);
+        panel.SetGunPrice(selecteditem.cost);
     }
 
     public Sprite GetImage(int id)

@@ -43,6 +43,8 @@ public class ItemShop : MonoBehaviour
         return false;
     }
 
+
+
     public void BuyAmmo()
     {
         if (PlayerInfo.Money >= ammoCost)

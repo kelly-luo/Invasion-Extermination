@@ -7,17 +7,18 @@ using UnityEngine.UI;
 public class bcShopSlot : ButtonClicked
 {
     public ShopManager manager;
-    public ShopItem shopItem;
+    //public ShopItem shopItem;
+    public int index = -1;
     [SerializeField] private Image image;
 
     public override void ButtonEvent(PointerEventData eventData)
     {
-        if(shopItem != null)manager.MakeGunPanel(shopItem);
+        if(index != -1)manager.MakeGunPanel(index);
     }
 
-    public void SetSlot(Sprite sprite,ShopItem shopItem)
+    public void SetSlot(Sprite sprite,int index)
     {
-        this.shopItem = shopItem;
+        this.index = index;
         if (!image.gameObject.activeSelf) image.gameObject.SetActive(true);
         image.sprite = sprite;
     }

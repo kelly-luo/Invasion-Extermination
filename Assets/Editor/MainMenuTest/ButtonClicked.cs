@@ -15,7 +15,7 @@ public class ButtonClicked : MonoBehaviour
         GameObject frame = new GameObject();
         frame.SetActive(false);
         optionClick.setFrame(frame);
-        button.setButtonClicked(optionClick);
+        button.SetButtonClicked(optionClick);
         //ACT
         button.OnPointerClick(null);
         //ASSERT
@@ -33,7 +33,7 @@ public class ButtonClicked : MonoBehaviour
         GameObject frame = new GameObject();
         frame.SetActive(false);
         optionClick.setFrame(frame);
-        button.setButtonClicked(optionClick);
+        button.SetButtonClicked(optionClick);
         button.OnPointerClick(null);
         //ACT
         button.OnPointerClick(null);
@@ -51,10 +51,10 @@ public class ButtonClicked : MonoBehaviour
         GameObject frame = new GameObject();
         frame.SetActive(false);
         optionClick.setFrame(frame);
-        button.setButtonClicked(optionClick);
+        button.SetButtonClicked(optionClick);
 
         //ACT
-        button.disableButton();
+        button.DisableButton();
         button.OnPointerClick(null);
         //ASSERT
         bool actual = frame.activeSelf;

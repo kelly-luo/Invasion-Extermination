@@ -128,7 +128,7 @@ public class InventoryManager : MonoBehaviour
         {
             slotNo++;
             slots[slotNo].SetActive(true);
-            slots[slotNo].GetComponent<MenuButton>().enableButton();
+            slots[slotNo].GetComponent<MenuButton>().EnableButton();
             // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
 
             bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
@@ -141,7 +141,7 @@ public class InventoryManager : MonoBehaviour
 
         for (int i = PlayerInventory.GetSize(); i < slots.Length; i++)
         {
-            slots[i].GetComponent<MenuButton>().disableButton();
+            slots[i].GetComponent<MenuButton>().DisableButton();
             slots[i].SetActive(false);
         }
     }

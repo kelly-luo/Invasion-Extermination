@@ -13,7 +13,7 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] public GameObject inventoryPanel;
     [SerializeField] private GameObject inventorySlotPanel;
-    private GameObject[] slots;
+    [SerializeField] private InventorySlots invslots;
 
     [SerializeField] public GameObject inventoryHoverPanel;
 
@@ -28,16 +28,10 @@ public class InventoryManager : MonoBehaviour
     public void Intialize(Inventory inventory)
     {
         PlayerInventory = inventory;
-        inventoryHoverPanel.transform.localScale = new Vector3(0, 0, 0);
+        inventoryHoverPanel.transform.localScale = Vector3.zero;
 
         currentSlotUsed = 0;
         maxSlot = inventorySlotPanel.transform.childCount;
-        slots = new GameObject[maxSlot];
-
-        for (int i = 0; i < maxSlot; i++)
-        {
-            slots[i] = inventorySlotPanel.transform.GetChild(i).gameObject;
-        }
 
         maxWeapons = weaponInstances.transform.childCount;
         weaponInstance = new GameObject[maxWeapons];
@@ -48,9 +42,6 @@ public class InventoryManager : MonoBehaviour
         UpdateWeaponSlots();
 
     }
-
-
-
 
     #region Inventory_Management
     public void SetPrimary(int key)
@@ -127,11 +118,10 @@ public class InventoryManager : MonoBehaviour
         foreach (KeyValuePair<int, ImItem> Weapon in PlayerInventory.inventory)
         {
             slotNo++;
-            slots[slotNo].SetActive(true);
-            slots[slotNo].GetComponent<MenuButton>().enableButton();
-            // Debug.Log(slotNo + " : " + Weapon.Key + " , " + Weapon.Value.Id);
+            invslots.slots[slotNo].SetActive(true);
+            invslots.slots[slotNo].GetComponent<MenuButton>().EnableButton();
 
-            bcSlotSelect slotInfo = slots[slotNo].GetComponent<bcSlotSelect>();
+            bcSlotSelect slotInfo = invslots.slots[slotNo].GetComponent<bcSlotSelect>();
 
             slotInfo.InstanceId = Weapon.Key;
             slotInfo.setSprite(GetImage(Weapon.Value.EntityID));
@@ -139,16 +129,16 @@ public class InventoryManager : MonoBehaviour
          
         }
 
-        for (int i = PlayerInventory.GetSize(); i < slots.Length; i++)
+        for (int i = PlayerInventory.GetSize(); i < invslots.slots.Length; i++)
         {
-            slots[i].GetComponent<MenuButton>().disableButton();
-            slots[i].SetActive(false);
+            invslots.slots[i].GetComponent<MenuButton>().DisableButton();
+            invslots.slots[i].SetActive(false);
         }
     }
 
     public void DisplayHoverPanel(int key)
     {
-        if (inventoryHoverPanel.transform.localScale.x == 0) inventoryHoverPanel.transform.localScale = new Vector3(1, 1, 1);
+        if (inventoryHoverPanel.transform.localScale.x == 0) inventoryHoverPanel.transform.localScale = Vector3.one;
         ImWeapon gunInfo = (ImWeapon)PlayerInventory.FindItem(key);
 
         HoverPanelValues displayvalues = inventoryHoverPanel.GetComponent<HoverPanelValues>();
@@ -171,7 +161,7 @@ public class InventoryManager : MonoBehaviour
 
     public void HideHoverPanel()
     {
-        if (inventoryHoverPanel.transform.localScale.x == 1) inventoryHoverPanel.transform.localScale = new Vector3(0, 0, 0);
+        if (inventoryHoverPanel.transform.localScale.x == 1) inventoryHoverPanel.transform.localScale = Vector3.zero;
     }
 
     #endregion

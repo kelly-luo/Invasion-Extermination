@@ -1,7 +1,22 @@
-﻿using System.Collections;
+﻿/*TabGroup UI Custom Button controller 
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This class is a custom button class, it handles clicks but when a it is clicked
+ * it stays clicked. It also handles animations 
+ *
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * Used Tutorial: https://www.youtube.com/watch?v=211t6r12XPQ - Game Dev Guide
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  21.04.2020 Creation date (Yuki)
+ *  12.06.2020 Refactored, and removed uncessary code (Yuki)
+ *  
+ *  
+ *  Unity support packages
+ */
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TabGroup : MonoBehaviour
 {
@@ -17,18 +32,25 @@ public class TabGroup : MonoBehaviour
 
     public TabButton initial;
 
-   // public List<GameObject> objectsToSwap;
-
     [SerializeField] bool keyDown;
 
     public string controls;
 
 
-
+    /*
+     * Awake()
+     *  ~~~~~~~~~~~~~~~~
+     *  Reset tabs to initailize it
+     */
     public void Awake()
     {
         ResetTabs();
     }
+    /*
+     * Subscribe()
+     *  ~~~~~~~~~~~~~~~~
+     * This method attachs a tab button object to this tab button group.
+     */
     public void Subscribe(TabButton button)
     {
         if(tabButtons == null)
@@ -38,22 +60,32 @@ public class TabGroup : MonoBehaviour
 
         tabButtons.Add(button);
         if (button == initial) OnTabSelected(button);
- 
-
     }
-
+    /*
+     * OnTabEnter()
+     *  ~~~~~~~~~~~~~~~~
+     * When a tab button is being hovered over, it resets tabs and changes the color of the button that is being hovered over
+     */
     public void OnTabEnter(TabButton button)
     {
         ResetTabs();
         if(selectedTab == null || button != selectedTab)
         button.background.color = tabHover;
     }
-
+    /*
+     * OnTabExit()
+     *  ~~~~~~~~~~~~~~~~
+     * When a tab button leaves being hovered over, it resets tabs.
+     */
     public void OnTabExit(TabButton button)
     {
         ResetTabs();
     }
-
+    /*
+     * OnTabSelected()
+     *  ~~~~~~~~~~~~~~~~
+     * When a tab button us clicked, it deselects the current one, and selects the tab that has been clicked on
+     */
     public void OnTabSelected(TabButton button)
     {
         if(selectedTab != null)
@@ -68,20 +100,17 @@ public class TabGroup : MonoBehaviour
         ResetTabs();
         button.background.color = tabActive;
         int index = button.transform.GetSiblingIndex();
-        //for(int i = 0; i < objectsToSwap.Count; i++)
-        //{
-        //    if(i == index) objectsToSwap[i].SetActive(true);
-        //    else objectsToSwap[i].SetActive(false);
-           
-        //}
-
 
         if(panelGroup != null)
         {
             panelGroup.SetPageIndex(button.transform.GetSiblingIndex());
         }
     }
-
+    /*
+     * ResetTabs()
+     *  ~~~~~~~~~~~~~~~~
+     * Resets tabs, changes all tab colours back to original color (except for the tab that has been selected)
+     */
     public void ResetTabs()
     {
         foreach(TabButton button in tabButtons)
@@ -90,40 +119,11 @@ public class TabGroup : MonoBehaviour
                 button.background.color = tabIdle;
         }
     }
-
-
-    public void Update()
-    {
-        if (Input.GetAxis(controls) != 0)
-        {
-            if (!keyDown)
-            {
-
-                if (Input.GetAxis(controls) < 0)
-                {
-                    if (selectedTab.transform.GetSiblingIndex() > 0)
-                    {
-                        SetActive(selectedTab.transform.GetSiblingIndex() - 1);
-                    }
-                }
-
-                if (Input.GetAxis(controls) > 0)
-                {
-                    if (selectedTab.transform.GetSiblingIndex() < (transform.childCount-1))
-                    {
-                        SetActive(selectedTab.transform.GetSiblingIndex() + 1);
-                    }
-                }
-
-                keyDown = true;
-            }
-        }
-        else
-        {
-            keyDown = false;
-        }
-    }
-
+    /*
+     * SetActive()
+     *  ~~~~~~~~~~~~~~~~
+     * Set the tab active depending on the index
+     */
     public void SetActive(int index)
     {
 
@@ -137,10 +137,12 @@ public class TabGroup : MonoBehaviour
             }
         }
 
-
-        //OnTabSelected(tabButtons[index]);
     }
-
+    /*
+     * SetActive()
+     *  ~~~~~~~~~~~~~~~~
+     * Set the tab active
+     */
     public void SetActive(TabButton activeTab)
     {
         if(activeTab != null)
@@ -148,35 +150,6 @@ public class TabGroup : MonoBehaviour
             OnTabSelected(activeTab);
         }
     }
-
-    //public int getTabIndex()
-    //{
-    //    if (selectedTab == null) return -1;
-
-    //    int count = 0;
-    //    foreach(TabButton tabButton in tabButtons){
-    //        if(selectedTab == tabButton)
-    //        {
-    //            return count;
-    //        }
-    //        count++;
-    //    }
-    //    return -1;
-    //}
-
-    //public string temqpwe()
-    //{
-
-
-    //    string sadad = "";
-    //    foreach (TabButton tabButton in tabButtons)
-    //    {
-    //        sadad += tabButton.name;
-
-
-    //    }
-    //    return sadad;
-    //}
 
 
 }

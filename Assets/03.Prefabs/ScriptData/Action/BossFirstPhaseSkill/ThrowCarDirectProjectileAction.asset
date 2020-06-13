@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae1424f510a03a459ff8c8f10603771, type: 3}
+  m_Name: ThrowCarDirectProjectileAction
+  m_EditorClassIdentifier: 
+  projectilePrefabs:
+  - {fileID: 164098, guid: bf88a80cce4a40f4aa08f941cc054831, type: 3}
+  - {fileID: 157676, guid: 61d2663dd97ceca4fbdfc4438e370eb9, type: 3}
+  - {fileID: 141870, guid: f4e26e9ea636fc048be17f62b86a51fc, type: 3}
+  - {fileID: 189930, guid: 16b96e2e32a8fca4587a8ebb922fd876, type: 3}
+  - {fileID: 198730, guid: 4213ff422670da14e91ec973607843bd, type: 3}
+  - {fileID: 127632, guid: d8a7e9a9f75e1f545ab491f87817e070, type: 3}
+  - {fileID: 175378, guid: a545615791097d34ea2ab905fa0d9972, type: 3}
+  - {fileID: 130278, guid: 5713b854f7568004d828e9a95942a512, type: 3}
+  numOfPostionPoint: 50
+  delayBetweenShoot: 0.75
+  timeSpeedFactor: 0.03
+  numberOfProjectileToThrow: 1
+  stateUpdateDelayTime: 2.5
+  directProjectileSpawnRadius: 25

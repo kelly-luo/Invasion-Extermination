@@ -56,9 +56,12 @@ public class NormalProjectile : MonoBehaviour, ImProjectile
             stateController.TakeDamage(CollisionDamage);
         }
     }
-
     public void SetGravity(bool SetGravityOn)
     {
         rigidbody.useGravity = SetGravityOn;
+    }
+    public void AfterThrow()
+    {
+        rigidbody.useGravity = true; 
     }
 }

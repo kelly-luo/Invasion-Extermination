@@ -81,6 +81,10 @@ public class MonsterController : MonoBehaviour, IStateController
     }
     #endregion
 
+    #region projectile
+    public ProjectileManager ProjectileManager { get; set; }
+    #endregion
+
     #region State Value properties
     public float DistancePlayerAndEnemy { get; set; }
 
@@ -152,7 +156,7 @@ public class MonsterController : MonoBehaviour, IStateController
     #region MonoBehaviour Base Function
     void Awake()
     {
-
+        ProjectileManager = GetComponentInChildren<ProjectileManager>();
         var transforms = GetComponentsInChildren<Transform>();
         foreach (Transform tr in transforms)
         {
@@ -216,6 +220,7 @@ public class MonsterController : MonoBehaviour, IStateController
 
     #endregion
 
+    #region Initiallize Method
     private void InitilizeLayerMask()
     {
         PlayerTr = GameObject.FindGameObjectWithTag("Player").transform;
@@ -262,6 +267,7 @@ public class MonsterController : MonoBehaviour, IStateController
         }
 
     }
+    #endregion
 
     private void SetFireAnimtion()
     {
@@ -337,7 +343,7 @@ public class MonsterController : MonoBehaviour, IStateController
 
     }
     #endregion
-
+ 
     public void StopAgent()
     { //Stop All
         Agent.isStopped = true;

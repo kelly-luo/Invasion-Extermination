@@ -20,5 +20,5 @@ public interface ImProjectile
     //This method should called when obstacle collide with this object
     void OnCollisionWithObstacle();
 
-    void SetGravity(bool SetGravityOn);
+    void AfterThrow();
 }

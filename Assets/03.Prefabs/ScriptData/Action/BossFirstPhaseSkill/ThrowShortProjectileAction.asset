@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50fd246fb1f168f4aafd18f1b25b77f2, type: 3}
+  m_Name: ThrowShortProjectileAction
+  m_EditorClassIdentifier: 
+  projectilePrefabs:
+  - {fileID: 199508, guid: 6160ad9c6399e8b4386cd542934c6394, type: 3}
+  - {fileID: 179172, guid: b7956a89800806641bb3210b0616cb1d, type: 3}
+  - {fileID: 190556, guid: 98050a851bb948647aa803f8ee795005, type: 3}
+  - {fileID: 197498, guid: c60c47dcc7215e44c91ffc3f8c3301d1, type: 3}
+  - {fileID: 188904, guid: 40b08c4597fc0b547890ffcfb3d879f5, type: 3}
+  - {fileID: 129530, guid: bb5c7099ea733154c934959a1f91d0c3, type: 3}
+  - {fileID: 155622, guid: 296893142ca40114aa66d074bebdd258, type: 3}
+  - {fileID: 128712, guid: e6c4d7e7d7d85e0459f44ed458e8a751, type: 3}
+  - {fileID: 139926, guid: e70796a53cadb9445a8febf6f1575931, type: 3}
+  - {fileID: 176468, guid: b9461ac90d402e443bd38d57a748e2c7, type: 3}
+  - {fileID: 174670, guid: 53d39208671d6fe47958ad1caa6466ca, type: 3}
+  numOfPostionPoint: 100
+  projectilSpawnOffSet: {x: 0, y: 2, z: 0}
+  projectileSpawnAngle: 150
+  projectileSpawnDistance: 5
+  initialControlPointDistance: 15
+  targetControlPointDistance: 2
+  delayBetweenShoot: 0.75
+  timeSpeedFactor: 0.006
+  numberOfProjectileToThrow: 3
+  stateUpdateDelayTime: 3

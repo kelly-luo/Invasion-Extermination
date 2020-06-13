@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b2376feb99e8f74e885e14058b75f9b, type: 3}
+  m_Name: ThrowStraightDownProjectileAction
+  m_EditorClassIdentifier: 
+  projectilePrefabs:
+  - {fileID: 198584, guid: 0708672b9974ea249b18be8fe2438317, type: 3}
+  - {fileID: 182348, guid: 9a9d7aa1bc2e9584d9324cc3286e87b7, type: 3}
+  - {fileID: 100086, guid: 8781d21e89abe3b4d9424ada65563949, type: 3}
+  - {fileID: 120682, guid: eaff550718c74f64fa95253752f1d962, type: 3}
+  numOfPostionPoint: 500
+  delayBetweenShoot: 10
+  timeSpeedFactor: 0.04
+  numberOfProjectileToThrow: 1
+  stateUpdateDelayTime: 6
+  straightDownProjectailSpawn: 40

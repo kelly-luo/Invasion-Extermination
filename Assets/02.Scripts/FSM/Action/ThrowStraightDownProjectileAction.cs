@@ -7,7 +7,6 @@ using IEGame.FiniteStateMachine;
 public class ThrowStraightDownProjectileAction : Action
 {
 
-    public GameObject[] projectilePrefabs;
 
     public float numOfPostionPoint = 500;
     public float delayBetweenShoot = 10f;
@@ -28,8 +27,7 @@ public class ThrowStraightDownProjectileAction : Action
                 monsterController.ProjectileManager.StraightDownProjectailSpawn = straightDownProjectailSpawn;
 
                 monsterController.ProjectileManager.StartThrowNumberOfStraightDownProjectile(monsterController.PlayerTr.position
-                    ,numberOfProjectileToThrow
-                    , projectilePrefabs);
+                    ,numberOfProjectileToThrow);
             }
         }
     }

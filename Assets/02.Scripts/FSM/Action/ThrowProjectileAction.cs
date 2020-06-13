@@ -8,7 +8,6 @@ using IEGame.FiniteStateMachine;
 public class ThrowProjectileAction : Action
 {
 
-    public GameObject[] projectilePrefabs;
 
     public float numOfPostionPoint = 50;
     public Vector3 projectilSpawnOffSet = new Vector3(0, 2f, 0);
@@ -29,13 +28,13 @@ public class ThrowProjectileAction : Action
         {
             if(monsterController.ProjectileManager != null)
             {
+                monsterController.StateUpdateDelayTime = stateUpdateDelayTime;
                 monsterController.ProjectileManager.SetProjectileValue(numOfPostionPoint, projectilSpawnOffSet
                     , projectileSpawnAngle, projectileSpawnDistance, initialControlPointDistance, targetControlPointDistance
                     ,delayBetweenShoot, timeSpeedFactor);
-                monsterController.ProjectileManager.StartThrowNumberOfProjectile(monsterController.PlayerTr.position,
-                    numberOfProjectileToThrow
-                    , projectilePrefabs);
-                monsterController.StateUpdateDelayTime = stateUpdateDelayTime;
+
+                monsterController.ProjectileManager.StartThrowNumberOfProjectile(monsterController.PlayerTr.position
+                    , numberOfProjectileToThrow);
             }
         }
     }

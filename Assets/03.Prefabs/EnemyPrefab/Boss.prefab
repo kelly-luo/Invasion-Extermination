@@ -2488,8 +2488,8 @@ MonoBehaviour:
   healthBarObject: {fileID: 6374623772963767696, guid: 3f63f9deaf42d2e4fa94c47e310e44bf,
     type: 3}
   viewRange: 30
-  failTraceRange: 100
-  viewAngle: 120
+  failTraceRange: 400
+  viewAngle: 195
   <CurrentState>k__BackingField: {fileID: 11400000, guid: 6fb7f8bb45c36924c85d9347e4ba0a1e,
     type: 2}
   <RemainState>k__BackingField: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783,

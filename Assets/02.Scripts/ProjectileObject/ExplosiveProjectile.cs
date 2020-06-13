@@ -8,14 +8,14 @@ using IEGame.FiniteStateMachine;
 public class ExplosiveProjectile : MonoBehaviour, ImProjectile
 {
     public float CollisionDamage { get; set; } = 5f;
-    public float ExplosionDamage { get; set; } = 20f;
+    public float ExplosionDamage { get; set; } = 30f;
     public float DestroyDelay { get; set; } = 0.01f;
 
     public bool IsDisposing { get; set; } = false;
     public bool IsCollideWithOther { get; set; } = false;
 
     private float explosionPower = 20f;
-    private float explosionRadius = 1.7f;
+    private float explosionRadius = 3.7f;
     private float upForce = 2.5f;
     void OnCollisionEnter(Collision coll)
     {
@@ -52,8 +52,8 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
     private IEnumerator SelfDestroy(float delay)
     {
         this.IsDisposing = true;
-        yield return null;
-        Destroy(this.gameObject, delay);
+        yield return new WaitForSeconds(delay);
+        gameObject.SetActive(false);
     }
 
     //This method allow player take damage when they collide with this gameobject

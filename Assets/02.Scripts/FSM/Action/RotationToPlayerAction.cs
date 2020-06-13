@@ -12,6 +12,7 @@ public class RotationToPlayerAction : Action
         {
             if (monsterController.DistancePlayerAndEnemy <= monsterController.viewRange)
             {
+                monsterController.StateUpdateDelayTime = 0.075f;
                 monsterController.RotateToPlayer();
             }
         }

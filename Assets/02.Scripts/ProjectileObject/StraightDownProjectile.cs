@@ -43,8 +43,8 @@ public class StraightDownProjectile : MonoBehaviour,ImProjectile
 
     private IEnumerator SelfDestroy(float delay)
     {
-        yield return null;
-        Destroy(this.gameObject, delay);
+        yield return new WaitForSeconds(delay);
+        gameObject.SetActive(false);
     }
 
     //This method allow player take damage when they collide with this gameobject

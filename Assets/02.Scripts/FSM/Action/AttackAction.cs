@@ -9,6 +9,9 @@ public class AttackAction : Action
     public override void Act(IStateController controller)
     {
         if (controller is MonsterController monsterController)
+        {
+            monsterController.StateUpdateDelayTime = 0.075f;
             monsterController.Attack();
+        }
     }
 }

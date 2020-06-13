@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+
     public List<Transform> SpawnPoints { get; set; } = new List<Transform>();
 
     private static GameManager instance = null;
@@ -27,12 +29,34 @@ public class GameManager : MonoBehaviour
 
     public bool ishand = false;
 
-    [Header("Object Pool")]
+    [Header("Root Object Pool")]
     public GameObject moneyBillPrefab;
     public int maxMoneyBillPool = 500; //Number limit of Money objects simultaneously allows in one scene.
     public List<GameObject> moneyBillPool = new List<GameObject>();
 
     private MobFactory EnemyFactory;
+
+    [Header("Prefab of Direct Projectile Pool")]
+    public GameObject[] directProjectilePrefabs;
+    public int numberOfEachDirectProjectile=3;
+    private int directProjectileIdx =0;
+    public List<GameObject> directProjectilePool = new List<GameObject>();
+    [Header("Prefab of Straight Down Projectile Pool")]
+    public GameObject[] straightDownProjectilePrefabs;
+    public int numberOfEachStraightDownProjectile = 3;
+    private int straightDownProjectileIdx = 0;
+    public List<GameObject> straightDownProjectilePool = new List<GameObject>();
+    [Header("Prefab of Normal Projectile Pool")]
+    public GameObject[] normalProjectilePrefabs;
+    public int numberOfEachNormalProjectile = 3;
+    private int normalProjectileIdx = 0;
+    public List<GameObject> normalProjectilePool = new List<GameObject>();
+    [Header("Prefab of explosive Projectile Pool")]
+    public GameObject[] explosiveProjectilePrefabs;
+    public int numberOfEachExplosiveProjectile = 5;
+    private int explosiveProjectileIdx = 0;
+    public List<GameObject> explosiveProjectilePool = new List<GameObject>();
+
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
@@ -70,10 +94,12 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
 
         CreateMoneyBillPooling();
-        
+        CreateDirectProjectilePrefabsPooling();
+        CreateStraightDownProjectilePrefabsPooling();
+        CreateNormalProjectilePrefabsPooling();
+        CreateExplosiveProjectilePrefabsPooling();
     }
-    // Start is called before the first frame update
-    // Start is called before the first frame update
+
     void Start()
     {
         EnemyFactory = GetComponent<EnemyMobFactory>();
@@ -151,6 +177,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region CreatingPooling
+
     public GameObject GetMoneyBillObject()
     {
         for (int i = 0; i < moneyBillPool.Count; i++)
@@ -177,6 +204,134 @@ public class GameManager : MonoBehaviour
             moneyBillPool.Add(obj);
         }
     }
+
+    //since every I want show there is alot of projectiles so I iterate the pool list using own index(idx)
+    public GameObject GetDirectProjectileObject()
+    {
+        for (int i = 0; i < directProjectilePool.Count; i++)
+        {
+            directProjectileIdx %= directProjectilePool.Count;
+            if (directProjectilePool[directProjectileIdx].activeSelf == false)
+            {
+                return directProjectilePool[directProjectileIdx++];
+            }
+            directProjectileIdx++;
+        }
+        return null;
+    }
+
+    public void CreateDirectProjectilePrefabsPooling()
+    {
+        GameObject objectPools = new GameObject("DirectProjectilePools");
+        int j = 0;
+        for (int i = 0; i < numberOfEachDirectProjectile; i++)
+            foreach (GameObject prefab in directProjectilePrefabs)
+            {
+                var obj = Instantiate<GameObject>(prefab, objectPools.transform);
+                obj.name = "DirectProjectile_" + j.ToString("00");
+
+                obj.SetActive(false);
+
+                directProjectilePool.Add(obj);
+                j++;
+            }
+    }
+
+    //since every I want show there is alot of projectiles so I iterate the pool list using own index(idx)
+    public GameObject GetStraightDownProjectileObject()
+    {
+        for (int i = 0; i < straightDownProjectilePool.Count; i++)
+        {
+            straightDownProjectileIdx %= straightDownProjectilePool.Count;
+            if (straightDownProjectilePool[straightDownProjectileIdx].activeSelf == false)
+            {
+                return straightDownProjectilePool[straightDownProjectileIdx++];
+            }
+            straightDownProjectileIdx++;
+        }
+        return null;
+    }
+
+    public void CreateStraightDownProjectilePrefabsPooling()
+    {
+        GameObject objectPools = new GameObject("StraightDownProjectilePools");
+        int j = 0;
+        for (int i = 0; i < numberOfEachStraightDownProjectile; i++)
+            foreach (GameObject prefab in straightDownProjectilePrefabs)
+            {
+                var obj = Instantiate<GameObject>(prefab, objectPools.transform);
+                obj.name = "StraightDownProjectile_" + j.ToString("00") ;
+
+                obj.SetActive(false);
+
+                straightDownProjectilePool.Add(obj);
+                j++;
+            }
+    }
+
+    //since every I want show there is alot of projectiles so I iterate the pool list using own index(idx)
+    public GameObject GetNormalProjectileObject()
+    {
+        for (int i = 0; i < normalProjectilePool.Count; i++)
+        {
+            normalProjectileIdx %= normalProjectilePool.Count;
+            if (normalProjectilePool[normalProjectileIdx].activeSelf == false)
+            {
+                return normalProjectilePool[normalProjectileIdx++];
+            }
+            normalProjectileIdx++;
+        }
+        return null;
+    }
+
+    public void CreateNormalProjectilePrefabsPooling()
+    {
+        GameObject objectPools = new GameObject("NormalProjectilePools");
+        int j = 0;
+        for (int i = 0; i < numberOfEachNormalProjectile; i++)
+            foreach (GameObject prefab in normalProjectilePrefabs)
+            {
+                var obj = Instantiate<GameObject>(prefab, objectPools.transform);
+                obj.name = "NormalProjectile_" + j.ToString("00");
+
+                obj.SetActive(false);
+
+                normalProjectilePool.Add(obj);
+                j++;
+            }
+    }
+    //since every I want show there is alot of projectiles so I iterate the pool list using own index(idx)
+    public GameObject GetExplosiveProjectileObject()
+    {
+        for (int i = 0; i < explosiveProjectilePool.Count; i++)
+        {
+            explosiveProjectileIdx %= explosiveProjectilePool.Count;
+            if (explosiveProjectilePool[explosiveProjectileIdx].activeSelf == false)
+            {
+                return explosiveProjectilePool[explosiveProjectileIdx++];
+            }
+            explosiveProjectileIdx++;
+        }
+        return null;
+    }
+    public void CreateExplosiveProjectilePrefabsPooling()
+    {
+        GameObject objectPools = new GameObject("ExplosiveProjectilePools");
+        int j = 0;
+        for (int i = 0; i < numberOfEachExplosiveProjectile; i++)
+            foreach (GameObject prefab in explosiveProjectilePrefabs)
+            {
+                var obj = Instantiate<GameObject>(prefab, objectPools.transform);
+                obj.name = "ExplosiveProjectile_" + j.ToString("00");
+
+                obj.SetActive(false);
+
+                explosiveProjectilePool.Add(obj);
+                j++;
+            }
+    }
+
+
     #endregion
 
 }

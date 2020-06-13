@@ -12,6 +12,7 @@ public class TraceAction : Action
         {
             if (monsterController.DistancePlayerAndEnemy > monsterController.viewRange && monsterController.DistancePlayerAndEnemy <= monsterController.failTraceRange)
             {
+                monsterController.StateUpdateDelayTime = 0.075f;
                 monsterController.TraceTarget = monsterController.PlayerTr.position;
             }
         }

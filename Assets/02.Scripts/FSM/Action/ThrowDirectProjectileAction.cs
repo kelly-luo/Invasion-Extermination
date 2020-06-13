@@ -7,9 +7,6 @@ using IEGame.FiniteStateMachine;
 [CreateAssetMenu(menuName = "PluggableScript/EnemyAction/ThrowDirectProjectileAction")]
 public class ThrowDirectProjectileAction : Action
 {
-
-    public GameObject[] projectilePrefabs;
-
     public float numOfPostionPoint = 50;
     public float delayBetweenShoot = 0.75f;
     public float timeSpeedFactor = 0.03f; // delay of translate projectile toward each point of path  
@@ -27,10 +24,8 @@ public class ThrowDirectProjectileAction : Action
                 monsterController.ProjectileManager.TimeSpeedFactor = timeSpeedFactor;
                 monsterController.ProjectileManager.DelayBetweenShoot = delayBetweenShoot;
                 monsterController.ProjectileManager.DirectProjectileSpawnRadius = directProjectileSpawnRadius;
-
                 monsterController.ProjectileManager.StartThrowNumberOfDirectProjectile(monsterController.PlayerTr.position
-                    ,numberOfProjectileToThrow
-                    , projectilePrefabs);
+                    ,numberOfProjectileToThrow);
             }
         }
     }

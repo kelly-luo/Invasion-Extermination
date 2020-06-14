@@ -32,6 +32,10 @@ public class GameManager : MonoBehaviour
     public int maxMoneyBillPool = 500; //Number limit of Money objects simultaneously allows in one scene.
     public List<GameObject> moneyBillPool = new List<GameObject>();
 
+    public GameObject ammoPrefab;
+    public int maxAmmoPool = 500;
+    public List<GameObject> ammoPool = new List<GameObject>();
+
     private MobFactory EnemyFactory;
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
@@ -69,7 +73,7 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
 
-        CreateMoneyBillPooling();
+        CreateDroppedItemsPool();
         
     }
     // Start is called before the first frame update
@@ -163,19 +167,43 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public void CreateMoneyBillPooling()
+    public GameObject GetAmmoObject()
     {
-        GameObject objectPools = new GameObject("MoneyBillPools");
+        for (int i = 0; i < ammoPool.Count; i++)
+        {
+            if (ammoPool[i].activeSelf == false)
+            {
+                return ammoPool[i];
+            }
+        }
+        return null;
+    }
+
+    public void CreateDroppedItemsPool()
+    {
+        GameObject moneyPools = new GameObject("MoneyBillPools");
+        GameObject ammoPools = new GameObject("AmmoPools");
 
         for (int i = 0; i < maxMoneyBillPool; i++)
         {
-            var obj = Instantiate<GameObject>(moneyBillPrefab, objectPools.transform);
+            var obj = Instantiate<GameObject>(moneyBillPrefab, moneyPools.transform);
             obj.name = "MoneyBill_" + i.ToString("00");
 
             obj.SetActive(false);
 
             moneyBillPool.Add(obj);
         }
+
+        for (int i = 0; i < maxAmmoPool; i++)
+        {
+            var obj = Instantiate<GameObject>(ammoPrefab, ammoPools.transform);
+            obj.name = "Ammo_" + i.ToString("00");
+
+            obj.SetActive(false);
+
+            ammoPool.Add(obj);
+        }
+
     }
     #endregion
 

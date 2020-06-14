@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class NormalProjectile : MonoBehaviour, ImProjectile
 {
-    public float CollisionDamage { get; set; } = 50f;
+    public float CollisionDamage { get; set; } = 30f;
     public float DestroyDelay { get; set; } = 1f;
 
     public bool IsDisposing { get; set; } = false;

@@ -443,6 +443,7 @@ public class MonsterController : MonoBehaviour, IStateController
     {
         if(isBoss)
         {
+            Debug.Log($"Boss Health Left: {Stats.Health.ToString()}");
             this.TriggerTakeHit();
         }
         Debug.Log($"{this.gameObject.tag} has taken {Damage}");

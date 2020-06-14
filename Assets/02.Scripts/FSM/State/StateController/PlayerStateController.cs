@@ -158,7 +158,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
         this.playerStats = GetComponent<PlayerInformation>();
         playerStats.Health = 100f;
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
-
     }
 
     void Start()

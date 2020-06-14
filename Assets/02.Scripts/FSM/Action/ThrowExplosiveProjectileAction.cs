@@ -30,7 +30,7 @@ public class ThrowExplosiveProjectileAction : Action
                 monsterController.ProjectileManager.SetProjectileValue(numOfPostionPoint, projectilSpawnOffSet
                     , projectileSpawnAngle, projectileSpawnDistance, initialControlPointDistance, targetControlPointDistance
                     , delayBetweenShoot, timeSpeedFactor);
-
+                monsterController.TriggerThrowAttackFullOne();
                 monsterController.ProjectileManager.StartThrowNumberOfExplosiveProjectile(monsterController.PlayerTr.position
                     , numberOfProjectileToThrow);
             }

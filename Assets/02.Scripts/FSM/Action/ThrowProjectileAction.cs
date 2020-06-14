@@ -32,7 +32,7 @@ public class ThrowProjectileAction : Action
                 monsterController.ProjectileManager.SetProjectileValue(numOfPostionPoint, projectilSpawnOffSet
                     , projectileSpawnAngle, projectileSpawnDistance, initialControlPointDistance, targetControlPointDistance
                     ,delayBetweenShoot, timeSpeedFactor);
-
+                monsterController.TriggerThrowAttack();
                 monsterController.ProjectileManager.StartThrowNumberOfProjectile(monsterController.PlayerTr.position
                     , numberOfProjectileToThrow);
             }

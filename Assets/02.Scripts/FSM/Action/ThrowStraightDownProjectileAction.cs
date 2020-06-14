@@ -25,7 +25,7 @@ public class ThrowStraightDownProjectileAction : Action
                 monsterController.ProjectileManager.TimeSpeedFactor = timeSpeedFactor;
                 monsterController.ProjectileManager.DelayBetweenShoot = delayBetweenShoot;
                 monsterController.ProjectileManager.StraightDownProjectailSpawn = straightDownProjectailSpawn;
-
+                monsterController.TriggerThrowAttackFullTwo();
                 monsterController.ProjectileManager.StartThrowNumberOfStraightDownProjectile(monsterController.PlayerTr.position
                     ,numberOfProjectileToThrow);
             }

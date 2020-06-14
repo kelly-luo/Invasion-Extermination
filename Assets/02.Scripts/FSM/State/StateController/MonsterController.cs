@@ -35,6 +35,14 @@ public class MonsterController : MonoBehaviour, IStateController
     private readonly int hashIsHoldingWeapon = Animator.StringToHash("IsHoldingWeapon");
     private readonly int hashReload = Animator.StringToHash("Reload");
     private readonly int hashFire = Animator.StringToHash("Fire");
+    private readonly int hashTakeHit = Animator.StringToHash("TakeHit");
+    private readonly int hashThrowAttackFullOne = Animator.StringToHash("ThrowAttackFullOne");
+    private readonly int hashThrowAttackFullTwo = Animator.StringToHash("ThrowAttackFullTwo");
+    private readonly int hashThrowDirectAttack = Animator.StringToHash("ThrowDirectAttack");
+    private readonly int hashThrowAttack = Animator.StringToHash("ThrowAttack");
+
+    public bool isBoss = false;
+
 
     #endregion
 
@@ -164,7 +172,15 @@ public class MonsterController : MonoBehaviour, IStateController
                 weaponHolderTr = tr;
         }
         this.Stats = new MonsterStats();
-        this.Stats.Health = 100f;
+        if (isBoss)
+        {
+            this.Stats.Health = 5000f;
+        }
+        else
+        {
+            this.Stats.Health = 100f;
+        }
+
         this.ObjectTransform = gameObject.transform;
         this.Animator = GetComponent<Animator>();
 
@@ -192,6 +208,7 @@ public class MonsterController : MonoBehaviour, IStateController
             Animator.SetBool(hashIsHoldingWeapon, true);
             EquipWeapon(weapon);
         }
+
     }
 
 
@@ -269,6 +286,7 @@ public class MonsterController : MonoBehaviour, IStateController
     }
     #endregion
 
+    #region Animation
     private void SetFireAnimtion()
     {
         Animator.SetTrigger(hashFire);
@@ -278,6 +296,41 @@ public class MonsterController : MonoBehaviour, IStateController
     {
 
     }
+    public void TriggerTakeHit()
+    {
+        Animator.SetTrigger(hashTakeHit);
+    }
+    public void TriggerThrowAttackFullOne()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowAttackFullOne);
+    }
+    public void TriggerThrowAttackFullTwo()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowAttackFullTwo);
+    }
+    public void TriggerThrowDirectAttack()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowDirectAttack);
+    }
+    public void TriggerThrowAttack()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowAttack);
+    }
+
+    #endregion
+
 
 
     #region State Related Method
@@ -388,6 +441,10 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
+        if(isBoss)
+        {
+            this.TriggerTakeHit();
+        }
         Debug.Log($"{this.gameObject.tag} has taken {Damage}");
         Stats.Health -= Damage;
         healthbar.onDamage(Stats.Health);

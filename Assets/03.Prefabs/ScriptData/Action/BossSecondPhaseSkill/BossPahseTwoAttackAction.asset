@@ -15,6 +15,7 @@ MonoBehaviour:
   phaseOneAttackActions:
   - {fileID: 11400000, guid: 51003a7d8610be144b4312fc4c5e0b2c, type: 2}
   - {fileID: 11400000, guid: a388ab3b6dce93a49a0489c475d7bf5f, type: 2}
-  - {fileID: 11400000, guid: 5229f2064b73ae54cb26fbf6bff1f720, type: 2}
+  - {fileID: 11400000, guid: 7ad0b7f54c4b9fd40acf1c848932fdec, type: 2}
   - {fileID: 11400000, guid: b5d4697132898dc4492403670aff180e, type: 2}
   - {fileID: 11400000, guid: e0e2acef73c16c14ebcc8489f7c5cc1a, type: 2}
+  - {fileID: 11400000, guid: a388ab3b6dce93a49a0489c475d7bf5f, type: 2}

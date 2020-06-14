@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: BossSkillPatternOneState
   m_EditorClassIdentifier: 
   actions:
-  - {fileID: 11400000, guid: 9fffa0745bd69c9438512529d4308b63, type: 2}
+  - {fileID: 11400000, guid: 260f287d0ad176c4da7a0b9867690137, type: 2}
+  - {fileID: 11400000, guid: de8938bfc98fe1946b7b18b304cdf043, type: 2}
   transitions:
-  - decision: {fileID: 11400000, guid: 73da6caa8609da042b06ca227025f6a9, type: 2}
-    trueState: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783, type: 2}
+  - decision: {fileID: 11400000, guid: 01a6c55778540b04badf3379b3322eab, type: 2}
+    trueState: {fileID: 11400000, guid: daaffa72f7ee36244aa7c4aba14ec5c6, type: 2}
     falseState: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783, type: 2}

@@ -24,6 +24,7 @@ public class ThrowDirectProjectileAction : Action
                 monsterController.ProjectileManager.TimeSpeedFactor = timeSpeedFactor;
                 monsterController.ProjectileManager.DelayBetweenShoot = delayBetweenShoot;
                 monsterController.ProjectileManager.DirectProjectileSpawnRadius = directProjectileSpawnRadius;
+                monsterController.TriggerThrowDirectAttack();
                 monsterController.ProjectileManager.StartThrowNumberOfDirectProjectile(monsterController.PlayerTr.position
                     ,numberOfProjectileToThrow);
             }

@@ -7,11 +7,17 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private GameManager gameManager;
+
     public GameObject healthObject;
     public Slider healthView;
     public Image healthFill;
 
+    public Slider scoreProgress;
+    public TMP_Text roundView;
+    public RoundPopUp roundPopUp;
     public TMP_Text scoreView;
+
     public TMP_Text moneyView;
     public TMP_Text gunammoView;
     public TMP_Text amountammoView;
@@ -125,9 +131,19 @@ public class UIManager : MonoBehaviour
         if (score <= 0) displayscore = 0;
         else displayscore = score;
 
+        if (displayscore >= gameManager.RequiredScore)
+        {
+            roundPopUp.playAnimation();
+            gameManager.ClearRound = true;
+            roundView.text = FormatValue(gameManager.RoundNo);
+        }
+
         if (scoreView != null) scoreView.text = FormatValue(displayscore);
+        if (scoreProgress != null) scoreProgress.value = (float)displayscore / (float)gameManager.RequiredScore;
        
     }
+
+
     public void SetMoney(int money)
     {
         displaymoney = money;
@@ -219,6 +235,11 @@ public class UIManager : MonoBehaviour
         if (panel.transform.localScale.x == 1)return true;
         else return false;
         
+    }
+
+    public void displayRoundPopUp()
+    {
+
     }
     #endregion
 }

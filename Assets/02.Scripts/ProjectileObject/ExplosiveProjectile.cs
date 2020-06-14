@@ -19,7 +19,7 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
     private float upForce = 2.5f;
     void OnCollisionEnter(Collision coll)
     {
-
+        Debug.Log($"{coll.collider.gameObject.layer.ToString()}");
         if (coll.collider.CompareTag("Player"))
         {
             OnCollisionWithPlayer(coll.gameObject);
@@ -28,24 +28,28 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
         {
             OnCollisionWithHuman(coll.gameObject);
         }
-        if (coll.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        if (coll.collider.gameObject.layer == 16)
         {
             OnCollisionWithObstacle();
         }
-    }
 
+    }
+    void OnEnable()
+    {
+        IsDisposing = false;
+    }
     //This method call destory method when they collide with Obstacle
     public void OnCollisionWithObstacle()
     {
         this.ProjectileExplosion();
-        this.SelfDestroy(DestroyDelay);
+        StartCoroutine(SelfDestroy(DestroyDelay));
         return;
     }
     //When car collide with Human unit they also get pushed 
     public void OnCollisionWithHuman(GameObject human)
     {
         this.ProjectileExplosion();
-        this.SelfDestroy(DestroyDelay);
+        StartCoroutine(SelfDestroy(DestroyDelay));
         return;
     }
     //Self Destory with delay
@@ -89,7 +93,6 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
 
     public void AfterThrow()
     {
-        this.IsDisposing = true;
         this.ProjectileExplosion();
         StartCoroutine(SelfDestroy(DestroyDelay));
     }

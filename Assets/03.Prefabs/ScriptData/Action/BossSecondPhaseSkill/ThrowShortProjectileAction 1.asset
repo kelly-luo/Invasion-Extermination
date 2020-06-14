@@ -12,35 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fd246fb1f168f4aafd18f1b25b77f2, type: 3}
   m_Name: ThrowShortProjectileAction 1
   m_EditorClassIdentifier: 
-  projectilePrefabs:
-  - {fileID: 199508, guid: 6160ad9c6399e8b4386cd542934c6394, type: 3}
-  - {fileID: 179172, guid: b7956a89800806641bb3210b0616cb1d, type: 3}
-  - {fileID: 132640, guid: 48e4316432f09c94f9bb465ee097e7ef, type: 3}
-  - {fileID: 106796, guid: f3f8cb8dd57ebe6499f4bbaee06a80dc, type: 3}
-  - {fileID: 118212, guid: 7051ee155509fc74d911e1935e959a78, type: 3}
-  - {fileID: 197498, guid: c60c47dcc7215e44c91ffc3f8c3301d1, type: 3}
-  - {fileID: 195414, guid: 21af051404c92544389e5fc686d01ae7, type: 3}
-  - {fileID: 188904, guid: 40b08c4597fc0b547890ffcfb3d879f5, type: 3}
-  - {fileID: 129530, guid: bb5c7099ea733154c934959a1f91d0c3, type: 3}
-  - {fileID: 155622, guid: 296893142ca40114aa66d074bebdd258, type: 3}
-  - {fileID: 128712, guid: e6c4d7e7d7d85e0459f44ed458e8a751, type: 3}
-  - {fileID: 194032, guid: 441eb5680524ee84882ca0def1d611c9, type: 3}
-  - {fileID: 121442, guid: fbb9de41c775fba4aba150e5442a98e5, type: 3}
-  - {fileID: 171374, guid: 4b79d038d4c4e0e4eae3dafc37698820, type: 3}
-  - {fileID: 160556, guid: 8bbfba5c273e61040b7542c4e7f1bac4, type: 3}
-  - {fileID: 122982, guid: 96a6063647658cb45aa7315a86038535, type: 3}
-  - {fileID: 139926, guid: e70796a53cadb9445a8febf6f1575931, type: 3}
-  - {fileID: 176468, guid: b9461ac90d402e443bd38d57a748e2c7, type: 3}
-  - {fileID: 121614, guid: 33b2354a66d3a8141972de2a8ec966e4, type: 3}
-  - {fileID: 132414, guid: ccf90cc5d496f0243b9ef24dcfdcf051, type: 3}
-  - {fileID: 174670, guid: 53d39208671d6fe47958ad1caa6466ca, type: 3}
-  - {fileID: 153048, guid: 2ab3b9949f854894193dba980bbe4c76, type: 3}
-  - {fileID: 103300, guid: af470644fbf7b284490ffad73d4c272f, type: 3}
-  - {fileID: 122224, guid: c2f03ebb92149f849b6da49f9b2eb982, type: 3}
-  - {fileID: 182694, guid: b27d176aee74efb4da4d3b51e41673d8, type: 3}
-  - {fileID: 194538, guid: 83cc08565cd2c7644ac4a805523f539b, type: 3}
   numOfPostionPoint: 100
-  projectilSpawnOffSet: {x: 0, y: 2, z: 0}
+  projectilSpawnOffSet: {x: 0, y: 3, z: 0}
   projectileSpawnAngle: 150
   projectileSpawnDistance: 5
   initialControlPointDistance: 15

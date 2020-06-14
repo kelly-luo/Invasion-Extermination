@@ -4,7 +4,7 @@ using UnityEngine;
 //This component class allows to Manage and Throw projectile for each shot 
 public class ProjectileManager : MonoBehaviour
 {
-    public float NumOfPostionPoint { get; set; } = 50;
+    public int NumOfPostionPoint { get; set; } = 50;
     public Vector3 ProjectilSpawnOffSet { get; set; } = new Vector3(0, 2f, 0);
     public float ProjectileSpawnAngle { get; set; } = 90; // 180 = left 0 = right
     public float ProjectileSpawnDistance { get; set; } = 5f;
@@ -19,13 +19,16 @@ public class ProjectileManager : MonoBehaviour
     //speed of projectile move to each point of path
     public float TimeSpeedFactor { get; set; } = 0.003f;
 
-    public bool IsProjectailPathVisible { get; set; } = true;
+    public bool IsProjectilePathVisible { get; set; } = true;
+
+    //this value should be under 100 or it will do nothing
+    public int PreDrawingAmount { get; set; } = 40;
 
     public void SetProjectileValue(float numOfPostionPoint ,Vector3 projectilSpawnOffSet
         ,float projectileSpawnAngle ,float projectileSpawnDistance ,float initialControlPointDistance
         ,float targetControlPointDistance ,float delayBetweenShoot,float timeSpeedFactor)
     {
-        NumOfPostionPoint = numOfPostionPoint;
+        NumOfPostionPoint = (int)numOfPostionPoint;
         ProjectilSpawnOffSet = projectilSpawnOffSet;
         ProjectileSpawnAngle = projectileSpawnAngle;
         ProjectileSpawnDistance = projectileSpawnDistance;
@@ -165,26 +168,58 @@ public class ProjectileManager : MonoBehaviour
             yield break;
 
         ImProjectile projectileClass = projectile.GetComponent<ImProjectile>();
-        if (projectileClass != null)
-        {
-            if(projectileClass is DirectProjectile)
-                projectile.transform.LookAt(targetPosition);
-            if(IsProjectailPathVisible)
-                DrawProjectailPathLine(initialPosition, targetPosition, intialControlPoint, targetControlPoint, projectile);
+        if (projectileClass == null)
+            yield break;
 
-            float t = 0;
-            float eachTimePoint = 1 / NumOfPostionPoint;
-            while (!projectileClass.IsCollideWithOther && t <= 1)
+        if (projectileClass is DirectProjectile)
+                projectile.transform.LookAt(targetPosition);
+        float lt = 0;
+        float t = 0;
+        float eachTimePoint = 1 / (float)NumOfPostionPoint;
+        var lineRenderer = projectile.GetComponent<LineRenderer>();
+        var isProjectilePathON = false;
+        var realDrawingAmount = (int)(NumOfPostionPoint * 0.01 * PreDrawingAmount);
+
+        DrawSomeAmountOfPathLine(initialPosition, targetPosition, intialControlPoint, targetControlPoint, ref lt, eachTimePoint, lineRenderer, ref isProjectilePathON, realDrawingAmount);
+
+        while (!projectileClass.IsCollideWithOther && t <= 1)
+        {
+            if (isProjectilePathON && realDrawingAmount <= NumOfPostionPoint)
             {
-                yield return new WaitForSeconds(TimeSpeedFactor);
-                projectile.transform.position = CalculateCubicBezierCurve(t, initialPosition, intialControlPoint, targetControlPoint, targetPosition);
-                t += eachTimePoint;
+                lineRenderer.positionCount = realDrawingAmount + 1;
+                lineRenderer.SetPosition(realDrawingAmount, CalculateCubicBezierCurve(lt, initialPosition, intialControlPoint, targetControlPoint, targetPosition));
+                lt += eachTimePoint;
+                realDrawingAmount++;
             }
 
-            if(projectileClass.IsDisposing == false)// if object is still active
-                projectileClass.AfterThrow();
+            yield return new WaitForSeconds(TimeSpeedFactor);
+            projectile.transform.position = CalculateCubicBezierCurve(t, initialPosition, intialControlPoint, targetControlPoint, targetPosition);
+            t += eachTimePoint;
+        }
+
+        if (projectileClass.IsDisposing == false)// if object is still active
+            projectileClass.AfterThrow();
+
+    }
+
+    private void DrawSomeAmountOfPathLine(Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, ref float lt, float eachTimePoint, LineRenderer lineRenderer, ref bool isProjectilePathON, int realDrawingAmount)
+    {
+        if (IsProjectilePathVisible)
+        {
+            if (lineRenderer != null)
+            {
+                isProjectilePathON = true;
+
+                for (int i = 0; i < realDrawingAmount; i++)
+                {
+                    lineRenderer.positionCount = i + 1;
+                    lineRenderer.SetPosition(i, CalculateCubicBezierCurve(lt, initialPosition, intialControlPoint, targetControlPoint, targetPosition));
+                    lt += eachTimePoint;
+                }
+            }
         }
     }
+
     // give random projectile with given initial position
     private GameObject GetInstantiateProjectile(Vector3 initialPosition, GameObject projectileGameObject)
     {
@@ -196,13 +231,13 @@ public class ProjectileManager : MonoBehaviour
         //initialPosition include boss mob position + Some Offset
         return projectileGameObject;
     }
-
-    private void DrawProjectailPathLine(Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, GameObject projectile)
+    //draw line before start
+    private void PreDrawProjectailPathLine(int preDrawingAmount, Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, GameObject projectile)
     {
         var lineRenderer = projectile.GetComponent<LineRenderer>();
         if (lineRenderer != null)
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < preDrawingAmount; i++)
             {
                 lineRenderer.SetPosition(i, CalculateCubicBezierCurve(i * 0.01f, initialPosition, intialControlPoint, targetControlPoint, targetPosition));
             }

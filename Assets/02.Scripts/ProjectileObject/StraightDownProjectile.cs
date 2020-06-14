@@ -23,7 +23,11 @@ public class StraightDownProjectile : MonoBehaviour,ImProjectile
             OnCollisionWithPlayer(coll.gameObject);
         }
     }
-
+    //since after object pooling this also need to be reset
+    void OnEnable()
+    {
+        IsDisposing = false;
+    }
     //This method is usless for this projectile as this projectile will pierce through them
     public void OnCollisionWithObstacle()
     {

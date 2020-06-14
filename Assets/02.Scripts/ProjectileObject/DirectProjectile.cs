@@ -16,6 +16,7 @@ public class DirectProjectile : MonoBehaviour, ImProjectile
     private float explosionPower= 30f;
     private float explosionRadius = 3.2f;
     private float upForce = 5f;
+
     void OnCollisionEnter(Collision coll)
     {
 
@@ -32,7 +33,11 @@ public class DirectProjectile : MonoBehaviour, ImProjectile
             OnCollisionWithObstacle();
         }
     }
-
+    //since after object pooling this also need to be reset
+    void OnEnable()
+    {
+        IsDisposing = false;
+    }
     //This method call destory method when they collide with Obstacle
     public void OnCollisionWithObstacle()
     {

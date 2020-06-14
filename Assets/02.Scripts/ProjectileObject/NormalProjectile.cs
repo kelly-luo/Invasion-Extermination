@@ -12,7 +12,7 @@ public class NormalProjectile : MonoBehaviour, ImProjectile
 
     public bool IsDisposing { get; set; } = false;
     public bool IsCollideWithOther { get; set; } = false;
-
+    float destroyDelayAfterThrow = 5f;
     private Rigidbody rigidbody { get; set; }
 
     void Awake()
@@ -34,15 +34,21 @@ public class NormalProjectile : MonoBehaviour, ImProjectile
         }
     }
 
+    //since after object pooling this also need to be reset
+    void OnEnable()
+    {
+        IsDisposing = false;
+    }
+
     //This method call destory method when they collide with Obstacle
     public void OnCollisionWithObstacle()
     {
-        IsDisposing = true;
         StartCoroutine(SelfDestroy(DestroyDelay));
     }
 
     private IEnumerator SelfDestroy(float delay)
     {
+        IsDisposing = true;
         yield return new WaitForSeconds(delay);
         gameObject.SetActive(false);
     }
@@ -62,6 +68,8 @@ public class NormalProjectile : MonoBehaviour, ImProjectile
     }
     public void AfterThrow()
     {
-        rigidbody.useGravity = true; 
+        rigidbody.useGravity = true;
+        
+        StartCoroutine(SelfDestroy(destroyDelayAfterThrow));
     }
 }

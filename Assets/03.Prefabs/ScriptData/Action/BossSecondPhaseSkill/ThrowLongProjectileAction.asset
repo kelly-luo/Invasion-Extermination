@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ThrowLongProjectileAction
   m_EditorClassIdentifier: 
   numOfPostionPoint: 100
-  projectilSpawnOffSet: {x: 0, y: 2, z: 0}
+  projectilSpawnOffSet: {x: 0, y: 3, z: 0}
   projectileSpawnAngle: 150
   projectileSpawnDistance: 5
-  initialControlPointDistance: 50
-  targetControlPointDistance: 50
+  initialControlPointDistance: 40
+  targetControlPointDistance: 10
   delayBetweenShoot: 0.75
   timeSpeedFactor: 0.006
   numberOfProjectileToThrow: 3

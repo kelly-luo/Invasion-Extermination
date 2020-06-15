@@ -21,7 +21,7 @@ namespace Tests
             weapon = new GameObject();
             weaponClass = weapon.AddComponent<WeaponM1911>();
             a = 1;
-            target.transform.position = new Vector3(0f, 30f, 50f);
+            target.transform.position = new Vector3(0f, 13f, 13f);
             target.layer = LayerMask.NameToLayer("Obstacle");
             BoxCollider boxCollider = target.AddComponent<BoxCollider>();
             boxCollider.size = new Vector3(10f, 10f, 10f);
@@ -96,5 +96,11 @@ namespace Tests
 
         }
 
+        [TearDown]
+        public void Teardown()
+        {
+            Object.DestroyImmediate(target);
+            Object.DestroyImmediate(weapon);
+        }
     }
 }

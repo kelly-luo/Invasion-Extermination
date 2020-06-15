@@ -8,7 +8,10 @@ public class PatrolAction : Action
 {
     public override void Act(IStateController controller)
     {
-        var monsterController = controller as MonsterController;
-        monsterController.Patrolling = true;
+        if (controller is MonsterController monsterController)
+        {
+            monsterController.StateUpdateDelayTime = 0.075f;
+            monsterController.Patrolling = true;
+        }
     }
 }

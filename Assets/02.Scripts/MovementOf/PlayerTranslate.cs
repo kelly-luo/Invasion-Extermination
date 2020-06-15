@@ -55,12 +55,11 @@ public class PlayerTranslate : ICharacterTranslate
     }
 
     public bool IsJumping { get; set; } = false;
-    private float speedDuringJump = 0.1f;
+    public float SpeedDuringJump { get; set; } = 0.1f;
 
     public PlayerTranslate(Transform character)
     {
         this.Character = character;
-        this.UnityService = UnityServiceManager.Instance;
         this.SetGroundLayer();
         if (character != null)
         {
@@ -73,11 +72,24 @@ public class PlayerTranslate : ICharacterTranslate
     {
         if (CharacterRigidbody != null)
         {
-            CheckCharacterIsOnGround();
             MoveDirection = moveDir;
             var actualSpeed = this.Speed;
             if (IsJumping)
-                actualSpeed = speedDuringJump;
+                actualSpeed = SpeedDuringJump;
+            DesiredPosition = Character.position + moveDir.normalized * actualSpeed * UnityService.DeltaTime;
+            CharacterRigidbody.MovePosition(DesiredPosition);
+        }
+    }
+    public void TranslateCharacterOnGround(bool IsCheckingGround,Vector3 moveDir)
+    {
+        if (CharacterRigidbody != null)
+        {
+            if(IsCheckingGround)
+                CheckCharacterIsOnGround();
+            MoveDirection = moveDir;
+            var actualSpeed = this.Speed;
+            if (IsJumping)
+                actualSpeed = SpeedDuringJump;
             DesiredPosition = Character.position + moveDir.normalized * actualSpeed * UnityService.DeltaTime;
             CharacterRigidbody.MovePosition(DesiredPosition);
         }

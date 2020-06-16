@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     public int maxHuman = 30;
     public int maxAlien = 5;
-    private const int LOGVALUEALIEN = 20;
+    private const int LOGVALUESPAWNRATE = 20;
 
     public bool ishand = false;
 
@@ -48,8 +48,9 @@ public class GameManager : MonoBehaviour
     private bool clearRound;
 
 
-    private int requiredScore = 10;
+ 
     private const int LOGVALUESCORE = 50;
+    private int requiredScore = 50;
     public int RequiredScore
     {
         get { return requiredScore; }
@@ -63,16 +64,18 @@ public class GameManager : MonoBehaviour
             if(value)
             {
                 roundNo++;
-                maxAlien = (int) CalculateLog(maxAlien, LOGVALUEALIEN); //Increase Enemy size logarithmically 
+                maxAlien = (int) CalculateLog(maxAlien, LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
+                maxHuman = (int)CalculateLog(maxHuman , LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
                 requiredScore =(int) CalculateLog(requiredScore,LOGVALUESCORE); //Increase round score requirement logarithmically 
                 if (roundNo == maxRound) SpawnBoss();
             }
+            
         }
     }
 
     private float CalculateLog(int original, int log)
     {
-        return (float)original * Mathf.Log10(log); ;
+        return (float)original * Mathf.Log10(log);
     }
 
     void Awake()
@@ -128,24 +131,13 @@ public class GameManager : MonoBehaviour
             if (numberOfHuman <= maxHuman)
             {
                 SpawnHuman();
-                if (isScoreSet)
-                    experienceScore += -10;
-
-                if (experienceScore >= requiredScore)
-                    ClearRound = true;
-
             }
             else if (numberOfAlien <= maxAlien)
             {
                 SpawnAlien();
-                if (isScoreSet)
-                    experienceScore += 10;
             }
             else
             {
-                isScoreSet = true;
-                if (experienceScore >= requiredScore)
-                    ClearRound = true;
                 yield return null;
             }
         }

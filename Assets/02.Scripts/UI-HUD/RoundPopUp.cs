@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class RoundPopUp : MonoBehaviour
 {
-    public GameObject gameObject;
     public Animator animator;
+    public bool playing;
 
     public void playAnimation()
     {
-        animator.SetBool("Activate", true);
+        playing = true;
+        if(animator!= null)animator.SetBool("Activate", true);
         StartCoroutine(this.timerWait());
     }
 
@@ -24,6 +25,7 @@ public class RoundPopUp : MonoBehaviour
     private IEnumerator timerWait()
     {
         yield return new WaitForSeconds(3f);
-        animator.SetBool("Activate", false);
+        if (animator != null) animator.SetBool("Activate", false);
+        playing = false;
     }
 }

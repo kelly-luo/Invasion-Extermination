@@ -35,6 +35,14 @@ public class MonsterController : MonoBehaviour, IStateController
     private readonly int hashIsHoldingWeapon = Animator.StringToHash("IsHoldingWeapon");
     private readonly int hashReload = Animator.StringToHash("Reload");
     private readonly int hashFire = Animator.StringToHash("Fire");
+    private readonly int hashTakeHit = Animator.StringToHash("TakeHit");
+    private readonly int hashThrowAttackFullOne = Animator.StringToHash("ThrowAttackFullOne");
+    private readonly int hashThrowAttackFullTwo = Animator.StringToHash("ThrowAttackFullTwo");
+    private readonly int hashThrowDirectAttack = Animator.StringToHash("ThrowDirectAttack");
+    private readonly int hashThrowAttack = Animator.StringToHash("ThrowAttack");
+
+    public bool isBoss = false;
+
 
     #endregion
 
@@ -64,13 +72,11 @@ public class MonsterController : MonoBehaviour, IStateController
     public int LayerMask { get; set; }
     #endregion
 
-
     #region PatrolWayPoints
     public List<Transform> WayPoints { get; set; } = new List<Transform>();
     public int NextWayPointIndex { get; set; }
 
     #endregion
-
 
     #region Speed Value     
     private readonly float patrolSpeed = 1.5f;
@@ -81,6 +87,10 @@ public class MonsterController : MonoBehaviour, IStateController
     {
         get { return Agent.velocity.magnitude; }
     }
+    #endregion
+
+    #region projectile
+    public ProjectileManager ProjectileManager { get; set; }
     #endregion
 
     #region State Value properties
@@ -123,8 +133,13 @@ public class MonsterController : MonoBehaviour, IStateController
     }
     #endregion
 
+    public float StateUpdateDelayTime { get; set; } = 0.075f;
+    private float currentTime = 0f;
+
 
     public NavMeshAgent Agent { get; set; }
+
+    public bool isEnabled;
 
     private bool isAgentEnabled;
     public bool IsAgentEnabled
@@ -149,8 +164,7 @@ public class MonsterController : MonoBehaviour, IStateController
     #region MonoBehaviour Base Function
     void Awake()
     {
-        
-       
+        ProjectileManager = GetComponentInChildren<ProjectileManager>();
         var transforms = GetComponentsInChildren<Transform>();
         foreach (Transform tr in transforms)
         {
@@ -158,13 +172,22 @@ public class MonsterController : MonoBehaviour, IStateController
                 weaponHolderTr = tr;
         }
         this.Stats = new MonsterStats();
-        this.Stats.Health = 100f;
+        if (isBoss)
+        {
+            this.Stats.Health = 5000f;
+        }
+        else
+        {
+            this.Stats.Health = 100f;
+        }
+
         this.ObjectTransform = gameObject.transform;
         this.Animator = GetComponent<Animator>();
 
         this.playerInformation = GameObject.Find("Player").GetComponent<PlayerInformation>();
 
-   
+        if (isEnabled)
+            IsAgentEnabled = true;
 
     }
 
@@ -185,6 +208,7 @@ public class MonsterController : MonoBehaviour, IStateController
             Animator.SetBool(hashIsHoldingWeapon, true);
             EquipWeapon(weapon);
         }
+
     }
 
 
@@ -194,7 +218,13 @@ public class MonsterController : MonoBehaviour, IStateController
 
         if (isAgentEnabled)
         {
-            CurrentState.UpdateState(this);
+            
+            //timer
+            if (currentTime + StateUpdateDelayTime < UnityService.TimeAtFrame)
+            {
+                CurrentState.UpdateState(this);
+                currentTime = UnityService.TimeAtFrame;
+            }
         }
     }
 
@@ -207,6 +237,7 @@ public class MonsterController : MonoBehaviour, IStateController
 
     #endregion
 
+    #region Initiallize Method
     private void InitilizeLayerMask()
     {
         PlayerTr = GameObject.FindGameObjectWithTag("Player").transform;
@@ -253,7 +284,9 @@ public class MonsterController : MonoBehaviour, IStateController
         }
 
     }
+    #endregion
 
+    #region Animation
     private void SetFireAnimtion()
     {
         Animator.SetTrigger(hashFire);
@@ -263,6 +296,41 @@ public class MonsterController : MonoBehaviour, IStateController
     {
 
     }
+    public void TriggerTakeHit()
+    {
+        Animator.SetTrigger(hashTakeHit);
+    }
+    public void TriggerThrowAttackFullOne()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowAttackFullOne);
+    }
+    public void TriggerThrowAttackFullTwo()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowAttackFullTwo);
+    }
+    public void TriggerThrowDirectAttack()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowDirectAttack);
+    }
+    public void TriggerThrowAttack()
+    {
+        StopAgent();
+        Animator.SetBool(hashCanMove, false);
+        Animator.SetFloat(hashSpeed, 0f);
+        Animator.SetTrigger(hashThrowAttack);
+    }
+
+    #endregion
+
 
 
     #region State Related Method
@@ -328,7 +396,7 @@ public class MonsterController : MonoBehaviour, IStateController
 
     }
     #endregion
-
+ 
     public void StopAgent()
     { //Stop All
         Agent.isStopped = true;
@@ -373,6 +441,11 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void TakeDamage(float Damage)
     {
+        if(isBoss)
+        {
+            Debug.Log($"Boss Health Left: {Stats.Health.ToString()}");
+            this.TriggerTakeHit();
+        }
         Debug.Log($"{this.gameObject.tag} has taken {Damage}");
         Stats.Health -= Damage;
         healthbar.onDamage(Stats.Health);

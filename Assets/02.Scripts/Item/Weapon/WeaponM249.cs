@@ -19,7 +19,7 @@ public class WeaponM249 : MonoBehaviour,ImWeapon
     #endregion
 
     #region Bullet
-    public int MaxBullet { get; } = 30;
+    public int MaxBullet { get; set; } = 30;
     private int numOfBullet = 30;
     public int NumOfBullet
     {

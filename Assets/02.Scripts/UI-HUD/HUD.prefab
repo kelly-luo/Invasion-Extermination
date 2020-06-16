@@ -2670,7 +2670,7 @@ GameObject:
   - component: {fileID: 1937151106875868797}
   - component: {fileID: 1937151106875868796}
   - component: {fileID: 1937151106875868799}
-  - component: {fileID: 1937151106875868798}
+  - component: {fileID: 8129618198383218853}
   m_Layer: 5
   m_Name: Save
   m_TagString: Untagged
@@ -2814,7 +2814,7 @@ MonoBehaviour:
   currentState: 3
   pressed: 0
   buttonClicked: {fileID: 0}
---- !u!114 &1937151106875868798
+--- !u!114 &8129618198383218853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9df323f006cda7c4e80d7a4ccdfb7db6, type: 3}
+  m_Name: BossSkillPatternOneState
+  m_EditorClassIdentifier: 
+  actions:
+  - {fileID: 11400000, guid: 260f287d0ad176c4da7a0b9867690137, type: 2}
+  - {fileID: 11400000, guid: de8938bfc98fe1946b7b18b304cdf043, type: 2}
+  transitions:
+  - decision: {fileID: 11400000, guid: 01a6c55778540b04badf3379b3322eab, type: 2}
+    trueState: {fileID: 11400000, guid: daaffa72f7ee36244aa7c4aba14ec5c6, type: 2}
+    falseState: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783, type: 2}

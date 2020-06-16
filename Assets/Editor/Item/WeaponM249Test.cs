@@ -97,5 +97,11 @@ namespace Tests
             yield return null;
         }
 
+        [TearDown]
+        public void Teardown()
+        {
+            Object.DestroyImmediate(target);
+            Object.DestroyImmediate(weapon);
+        }
     }
 }

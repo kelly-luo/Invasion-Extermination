@@ -5,6 +5,7 @@ public class PlayerSaveData
     public int Score { get; set; }
     public int Money { get; set; }
     public float Health { get; set; }
+    public int Ammo { get; set; }
 
     public float[] position;
 

@@ -9,7 +9,7 @@
 // Revision History
 // ~~~~~~~~~~~~~~~~
 // 18.05.2020 Creation date (Kelly)
-// 23.05.2020 Added player inventory to equip/unequip guns (Howard)
+// 23.05.2020 Added player inventory to equip/unequip guns (Yuki)
 
 //
 // Unity support packages
@@ -25,7 +25,12 @@ public class PlayerInformation : MonoBehaviour
         get { return score; }
         set { if ((value) <= 0) { score = 0; } else score = value; }
     }
-    [field: SerializeField] public int Money { get; set; }
+    public int money = 0;
+    [field: SerializeField] public int Money {
+        get { return money; }
+        set { money = value; } 
+    }
+
 
     private float health = 100f;
     [field: SerializeField] public float Health 
@@ -39,7 +44,14 @@ public class PlayerInformation : MonoBehaviour
     public Inventory PlayerInventory = new Inventory();
     public GameObject[] guns;
     public int equipped;
-    public int Ammo = 100;
+    public int ammo  = 100;
+
+    [field: SerializeField] public int Ammo
+    {
+        get { return ammo; }
+        set { ammo = value; }
+    }
+
 
     //
     // Start()

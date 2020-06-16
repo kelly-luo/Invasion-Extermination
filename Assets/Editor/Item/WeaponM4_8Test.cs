@@ -108,6 +108,12 @@ namespace Tests
 
         }
 
+        [TearDown]
+        public void Teardown()
+        {
+            Object.DestroyImmediate(target);
+            Object.DestroyImmediate(weapon);
+        }
     }
 
 }

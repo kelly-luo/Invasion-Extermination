@@ -16,9 +16,9 @@ public class ControlsImageTest : MonoBehaviour
         //ARRANGE
         script.InternalImageID = new int[3];
         for (int i = 0; i < 3; i++) script.InternalImageID[i] = i;
-        button.setButtonClicked(script);
+        button.SetButtonClicked(script);
         //ACT
-        button.click(null);
+        button.Click(null);
         //ASSERT
         Assert.AreEqual(1, script.CurrentIndex);
     }
@@ -32,9 +32,9 @@ public class ControlsImageTest : MonoBehaviour
         //ARRANGE
         script.InternalImageID = new int[3];
         for (int i = 0; i < 3; i++) script.InternalImageID[i] = i;
-        button.setButtonClicked(script);
+        button.SetButtonClicked(script);
         //ACT
-        for(int i = 0; i < 3;i++) button.click(null);
+        for(int i = 0; i < 3;i++) button.Click(null);
         //ASSERT
         Assert.AreEqual(0, script.CurrentIndex);
     }

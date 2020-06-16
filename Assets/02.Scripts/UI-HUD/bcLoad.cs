@@ -25,9 +25,15 @@ using UnityEngine.EventSystems;
 
 public class bcLoad : ButtonClicked
 {
-    [SerializeField] public PlayerInformation playerInformation;
+    [SerializeField] public UIManager manager;
+    [HideInInspector]
+    public PlayerInformation playerInformation;
     [SerializeField] public TMP_Text saveLoadText;
 
+    private void Start()
+    {
+        playerInformation = manager.playerInformation;
+    }
     //
     // ButtonEvent()
     // ~~~~~~~~~~~~~

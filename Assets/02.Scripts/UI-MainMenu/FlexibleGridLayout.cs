@@ -1,11 +1,17 @@
-﻿using System.Collections;
+﻿/*FlexibleGridLayout - A BETTER GRID LAYOUT THAN UNITY GRID (NOT OUR CODE)
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * https://www.youtube.com/watch?v=CGsEJToeXmA&t=3s <- Code from this tutorial
+ *  Handles some UI organization.
+ * 
+ *  Unity support packages
+ */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FlexibleGridLayout : LayoutGroup
 {
-    //https://www.youtube.com/watch?v=CGsEJToeXmA&t=3s <- Code from this tutorial
     public enum FitType
     {
         Uniform,

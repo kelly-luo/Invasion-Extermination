@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSubstitute;
+using System;
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,10 +16,12 @@ public class Inventory
     public Dictionary<int, ImItem> inventory = new Dictionary<int, ImItem>();
 
     
-    public void Add(ImItem item)
+    public bool Add(ImItem item)
     {
+        bool addedItem = false;
         if (inventory.Count < 24) 
         {
+            addedItem = true;
             if (!inventory.ContainsKey(item.InstanceID))
             {
                 inventory.Add(item.InstanceID, item);
@@ -37,6 +40,7 @@ public class Inventory
                 StackUpItem(item);
             }
         }
+        return addedItem;
     }
 
     private void StackUpItem(ImItem item)
@@ -61,6 +65,11 @@ public class Inventory
     {
         if(Secondary != null)
             selected = Secondary;
+    }
+
+    public ImWeapon Equppied()
+    {
+        return (ImWeapon)selected;
     }
 
     public bool Remove(ImItem item)
@@ -113,4 +122,22 @@ public class Inventory
     {
         return inventory.Count;
     }
+
+    public ImItem GetItem(ImItem item)
+    {
+        if (this.inventory.ContainsValue(item)) return item;
+        return null;
+    }
+
+    public ImItem GetItem(int key)
+    {
+        if (this.inventory.ContainsKey(key))
+        {
+            ImItem value;
+            this.inventory.TryGetValue(key, out value);
+            return value;
+        }
+        return null;
+    }
+
 }

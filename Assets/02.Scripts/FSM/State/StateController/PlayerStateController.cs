@@ -157,16 +157,14 @@ public class PlayerStateController : MonoBehaviour, IStateController
 
         this.playerStats = GetComponent<PlayerInformation>();
         playerStats.Health = 100f;
-
         PlayerTranslate = new PlayerTranslate(ObjectTransform);
-        actualHeadRot = headTr.localRotation;
-
-        spawn = new Spawn();
-
     }
 
     void Start()
     {
+        actualHeadRot = headTr.localRotation;
+        spawn = new Spawn();
+
         InitilizeCameraSetting();
 
         gameObject.GetComponentInChildren<SkinnedMeshRenderer>().shadowCastingMode = ShadowCastingMode.ShadowsOnly;
@@ -440,7 +438,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
         if (IsHoldingRifle)
             if (!WeaponManager.IsReloading)
             {
-                WeaponManager.StartReload(ref playerStats.Ammo);
+                WeaponManager.StartReload(ref playerStats.ammo);
                 Animator.SetTrigger(hashReload);
             }
     }

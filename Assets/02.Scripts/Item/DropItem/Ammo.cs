@@ -23,7 +23,9 @@ public class Ammo : MonoBehaviour, ImDropableItem
 
     void OnEnable()
     {
-        gameObject.transform.localScale = new Vector3(6f, 6f, 6f);
+        gameObject.transform.localPosition = ObjectTransform.position;
+        gameObject.transform.localScale = InitialScale;
+        gameObject.transform.rotation = Quaternion.Euler(270,90,0);
         InitialSpawnLootPopUpEffect();
     }
 

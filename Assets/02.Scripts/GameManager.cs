@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
 
         CreateMoneyBillPooling();
+        CreateAmmoPooling();
         CreateDirectProjectilePrefabsPooling();
         CreateStraightDownProjectilePrefabsPooling();
         CreateNormalProjectilePrefabsPooling();
@@ -206,19 +207,33 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public void CreateDroppedItemsPool()
+    public void CreateMoneyBillPooling()
     {
-        GameObject moneyPools = new GameObject("MoneyBillPools");
-        GameObject ammoPools = new GameObject("AmmoPools");
+        GameObject objectPools = new GameObject("MoneyBillPools");
 
         for (int i = 0; i < maxMoneyBillPool; i++)
         {
-            var obj = Instantiate<GameObject>(moneyBillPrefab, moneyPools.transform);
+            var obj = Instantiate<GameObject>(moneyBillPrefab, objectPools.transform);
             obj.name = "MoneyBill_" + i.ToString("00");
 
             obj.SetActive(false);
 
             moneyBillPool.Add(obj);
+        }
+    }
+
+    public void CreateAmmoPooling()
+    {
+        GameObject ammoPools = new GameObject("AmmoPools");
+
+        for (int i = 0; i < maxAmmoPool; i++)
+        {
+            var obj = Instantiate<GameObject>(ammoPrefab, ammoPools.transform);
+            obj.name = "Ammo_" + i.ToString("00");
+
+            obj.SetActive(false);
+
+            ammoPool.Add(obj);
         }
     }
 

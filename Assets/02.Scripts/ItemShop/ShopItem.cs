@@ -5,7 +5,7 @@ using UnityEngine.Assertions.Must;
 
 public class ShopItem
 {
-    private IUnityServiceManager UnityService;
+    public IUnityServiceManager UnityService;
     public int costLowerRange = 900;
     public int costUpperRange = 1100;
     public int cost;

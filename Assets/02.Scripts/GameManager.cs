@@ -24,8 +24,16 @@ public class GameManager : MonoBehaviour
 
     public float spawnDeley = 2f;
 
+    private int roundNo = 1;
+    public int RoundNo
+    {
+        get { return roundNo; }
+    }
+    public const int maxRound = 10;
+
     public int maxHuman = 30;
     public int maxAlien = 5;
+    private const int LOGVALUESPAWNRATE = 20;
 
     public bool ishand = false;
 
@@ -66,6 +74,16 @@ public class GameManager : MonoBehaviour
 
     private bool isScoreSet;
     private bool clearRound;
+
+
+ 
+    private const int LOGVALUESCORE = 50;
+    private int requiredScore = 50;
+    public int RequiredScore
+    {
+        get { return requiredScore; }
+    }
+
     public bool ClearRound
     {
         get { return clearRound; }
@@ -73,15 +91,21 @@ public class GameManager : MonoBehaviour
         {
             if(value)
             {
-
-                maxAlien *= 10;
-                requiredScore *= 10;
+                roundNo++;
+                maxAlien = (int) CalculateLog(maxAlien, LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
+                maxHuman = (int)CalculateLog(maxHuman , LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
+                requiredScore =(int) CalculateLog(requiredScore,LOGVALUESCORE); //Increase round score requirement logarithmically 
+                if (roundNo == maxRound) SpawnBoss();
             }
+            
         }
     }
 
-    private int requiredScore = 50;
-   
+    private float CalculateLog(int original, int log)
+    {
+        return (float)original * Mathf.Log10(log);
+    }
+
     void Awake()
     {
         if(instance == null)
@@ -138,24 +162,13 @@ public class GameManager : MonoBehaviour
             if (numberOfHuman <= maxHuman)
             {
                 SpawnHuman();
-                if (isScoreSet)
-                    experienceScore += -10;
-
-                if (experienceScore >= requiredScore)
-                    ClearRound = true;
-
             }
             else if (numberOfAlien <= maxAlien)
             {
                 SpawnAlien();
-                if (isScoreSet)
-                    experienceScore += 10;
             }
             else
             {
-                isScoreSet = true;
-                if (experienceScore >= requiredScore)
-                    ClearRound = true;
                 yield return null;
             }
         }
@@ -171,6 +184,11 @@ public class GameManager : MonoBehaviour
     void SpawnAlien()
     {
         EnemyFactory.CreateMobWithWeapon(GetRandomSpawnPoint());
+    }
+
+    void SpawnBoss()
+    {
+        //Put Spawn for boss here :)
     }
 
     Vector3 GetRandomSpawnPoint()

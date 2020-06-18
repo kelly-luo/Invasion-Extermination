@@ -7,11 +7,18 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
+    public GameManager gameManager;
+
     public GameObject healthObject;
     public Slider healthView;
     public Image healthFill;
 
+    public Slider scoreProgress;
+    public TMP_Text roundView;
+    public RoundPopUp roundPopUp;
     public TMP_Text scoreView;
+    public TMP_Text reqScoreView;
+
     public TMP_Text moneyView;
     public TMP_Text gunammoView;
     public TMP_Text amountammoView;
@@ -27,6 +34,7 @@ public class UIManager : MonoBehaviour
     //Temp values, change to 0 after testing
     public int displaymoney;
     public int displayscore;
+    public int displayreqscore;
     public int displaygunammo;
     public int displayamountammo;
     public int displayhealth;
@@ -42,7 +50,10 @@ public class UIManager : MonoBehaviour
     public void Intialize()
     {
 
-        if(playerInformation != null)
+        if (roundView != null) roundView.text = FormatValue(gameManager.RoundNo);
+        if (reqScoreView != null) reqScoreView.text = FormatValue(gameManager.RequiredScore);
+
+        if (playerInformation != null)
         {
             SetHealth(playerInformation.Health);
             SetAmountAmmo(playerInformation.Ammo);
@@ -65,6 +76,8 @@ public class UIManager : MonoBehaviour
         if (displaygunammo != playerInformation.PlayerInventory.Equppied().NumOfBullet) SetGunAmmo(playerInformation.PlayerInventory.Equppied().NumOfBullet);
         if (displayamountammo != playerInformation.Ammo) SetAmountAmmo(playerInformation.Ammo);
         if (displayscore != playerInformation.Score) SetScore(playerInformation.Score);
+        if (displayreqscore != gameManager.RequiredScore) SetReqScore(gameManager.RequiredScore);
+
         CheckInput();
     }
 
@@ -121,16 +134,30 @@ public class UIManager : MonoBehaviour
     #region Displaying_Information
     public void SetScore(int score)
     {
-        displayscore = score;
         if (score <= 0) displayscore = 0;
         else displayscore = score;
 
+        if (displayscore >= displayreqscore && displayreqscore != 0)
+        {
+            roundPopUp.playAnimation();
+            gameManager.ClearRound = true;
+            if(roundView != null)roundView.text = FormatValue(gameManager.RoundNo);
+            if(reqScoreView != null) reqScoreView.text = FormatValue(gameManager.RequiredScore);
+        }
+
         if (scoreView != null) scoreView.text = FormatValue(displayscore);
-       
+        if (scoreProgress != null) scoreProgress.value = (float)displayscore / (float)gameManager.RequiredScore;    
     }
+
+    public void SetReqScore(int reqScore)
+    {
+        displayreqscore = reqScore;
+        if (reqScoreView != null) reqScoreView.text = FormatValue(reqScore);
+    }
+
+
     public void SetMoney(int money)
     {
-        displaymoney = money;
         if (money <= 0) displaymoney = 0;
         else displaymoney = money;
 
@@ -219,6 +246,11 @@ public class UIManager : MonoBehaviour
         if (panel.transform.localScale.x == 1)return true;
         else return false;
         
+    }
+
+    public void displayRoundPopUp()
+    {
+
     }
     #endregion
 }

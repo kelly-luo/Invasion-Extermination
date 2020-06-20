@@ -20,7 +20,8 @@ namespace Tests
             itemShop.PlayerInfo.Money = 10000;
             shopItem = new ShopItem();
 
-            itemShop.PlayerInfo = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInformation>();
+            // itemShop.PlayerInfo = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInformation>();
+            itemShop.PlayerInfo = new GameObject().AddComponent<PlayerInformation>();
             itemShop.weaponsArray = new ShopItem[itemShop.numWeapons];
             itemShop.gunPrefabs = new GameObject[6];
 

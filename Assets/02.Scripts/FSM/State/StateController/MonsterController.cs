@@ -171,15 +171,19 @@ public class MonsterController : MonoBehaviour, IStateController
             if (tr.gameObject.name == "RWeaponHolder")
                 weaponHolderTr = tr;
         }
-        this.Stats = new MonsterStats();
+        MonsterStats mStats = new MonsterStats();
         if (isBoss)
         {
-            this.Stats.Health = 5000f;
+            mStats.Health = 5000f;
+            mStats.maxHealth = mStats.Health;
         }
         else
         {
-            this.Stats.Health = 100f;
+            mStats.Health = 100f;
+            mStats.maxHealth = mStats.Health;
         }
+
+        this.Stats = mStats;
 
         this.ObjectTransform = gameObject.transform;
         this.Animator = GetComponent<Animator>();
@@ -448,7 +452,7 @@ public class MonsterController : MonoBehaviour, IStateController
         }
         Debug.Log($"{this.gameObject.tag} has taken {Damage}");
         Stats.Health -= Damage;
-        healthbar.onDamage(Stats.Health);
+        healthbar.onDamage(Stats);
         if (Stats.Health <= 0)
         {
             Debug.Log($"{this.gameObject.tag} has died.");

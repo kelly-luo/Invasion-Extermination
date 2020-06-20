@@ -18,6 +18,10 @@ public class UI_HUD_Test : MonoBehaviour
         InventoryManager invManager = new InventoryManager();
         invManager.inventoryPanel = new GameObject();
         uiManager.invManager = invManager;
+        uiManager.shopManager = new GameObject().AddComponent<ShopManager>();
+        UIManager.MakeInvisble(uiManager.shopManager.gameObject);
+        uiManager.healthObject = new GameObject();
+        uiManager.GameMenuPanel = new GameObject();
     }
 
     [Test]
@@ -97,21 +101,18 @@ public class UI_HUD_Test : MonoBehaviour
     public IEnumerator Inventory_slot_Appears_when_press_key_i()
     {
         //Arrange
-        var uiManagertemp = new GameObject().AddComponent<UIManager>();
-        uiManagertemp.invManager = new GameObject().AddComponent<InventoryManager>();
-        uiManagertemp.invManager.inventoryPanel = new GameObject();
-        uiManagertemp.invManager.inventoryPanel.transform.localScale = new Vector3(0, 0, 0);
+        uiManager.invManager.inventoryPanel.transform.localScale = Vector3.zero;
 
         //Act
         var unityService = Substitute.For<IUnityServiceManager>();
         unityService.GetKeyUp(KeyCode.I).Returns(true);
-        uiManagertemp.UnityService = unityService;
+        uiManager.UnityService = unityService;
 
-        uiManagertemp.CheckInput();
+        uiManager.CheckInput();
         yield return null;
 
         //Assert
-        float actual = uiManagertemp.invManager.inventoryPanel.transform.localScale.x;
+        float actual = uiManager.invManager.inventoryPanel.transform.localScale.x;
         Assert.AreEqual(1f, actual);
     }
 
@@ -119,21 +120,18 @@ public class UI_HUD_Test : MonoBehaviour
     public IEnumerator Inventory_slot_Disppears_when_press_key_i()
     {
         //Arrange
-        var uiManagertemp = new GameObject().AddComponent<UIManager>();
-        uiManagertemp.invManager = new GameObject().AddComponent<InventoryManager>();
-        uiManagertemp.invManager.inventoryPanel = new GameObject();
-        uiManagertemp.invManager.inventoryPanel.transform.localScale = new Vector3(1, 1, 1);
+        uiManager.invManager.inventoryPanel.transform.localScale = Vector3.one;
 
         //Act
         var unityService = Substitute.For<IUnityServiceManager>();
         unityService.GetKeyUp(KeyCode.I).Returns(true);
-        uiManagertemp.UnityService = unityService;
+        uiManager.UnityService = unityService;
 
-        uiManagertemp.CheckInput();
+        uiManager.CheckInput();
         yield return null;
 
         //Assert
-        float actual = uiManagertemp.invManager.inventoryPanel.transform.localScale.x;
+        float actual = uiManager.invManager.inventoryPanel.transform.localScale.x;
         Assert.AreEqual(0f, actual);
     }
 
@@ -142,20 +140,17 @@ public class UI_HUD_Test : MonoBehaviour
     public IEnumerator Game_Menu_appears_when_press_key_Escape()
     {
         //Arrange
-        var uiManagertemp = new GameObject().AddComponent<UIManager>();
-        uiManagertemp.GameMenuPanel = new GameObject();
-        uiManagertemp.GameMenuPanel.transform.localScale = new Vector3(0, 0, 0);
-
+        uiManager.GameMenuPanel.transform.localScale = Vector3.zero;
         //Act
         var unityService = Substitute.For<IUnityServiceManager>();
         unityService.GetKeyUp(KeyCode.Escape).Returns(true);
-        uiManagertemp.UnityService = unityService;
+        uiManager.UnityService = unityService;
 
-        uiManagertemp.CheckInput();
+        uiManager.CheckInput();
         yield return null;
 
         //Assert
-        float actual = uiManagertemp.GameMenuPanel.transform.localScale.x;
+        float actual = uiManager.GameMenuPanel.transform.localScale.x;
         Assert.AreEqual(1f, actual);
     }
 
@@ -163,20 +158,19 @@ public class UI_HUD_Test : MonoBehaviour
     public IEnumerator Game_Menu_disappears_when_press_key_Escape()
     {
         //Arrange
-        var uiManagertemp = new GameObject().AddComponent<UIManager>();
-        uiManagertemp.GameMenuPanel = new GameObject();
-        uiManagertemp.GameMenuPanel.transform.localScale = new Vector3(1, 1, 1);
+        //Arrange
+        uiManager.GameMenuPanel.transform.localScale = Vector3.one;
 
         //Act
         var unityService = Substitute.For<IUnityServiceManager>();
         unityService.GetKeyUp(KeyCode.Escape).Returns(true);
-        uiManagertemp.UnityService = unityService;
+        uiManager.UnityService = unityService;
 
-        uiManagertemp.CheckInput();
+        uiManager.CheckInput();
         yield return null;
 
         //Assert
-        float actual = uiManagertemp.GameMenuPanel.transform.localScale.x;
+        float actual = uiManager.GameMenuPanel.transform.localScale.x;
         Assert.AreEqual(0f, actual);
     }
 }

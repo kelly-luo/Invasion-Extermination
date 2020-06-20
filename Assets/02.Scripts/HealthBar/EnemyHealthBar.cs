@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using IEGame.FiniteStateMachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,16 +42,21 @@ public class EnemyHealthBar : MonoBehaviour
         }
     }
 
-    public void onDamage(float currentHealth)
+    public void onDamage(ObjectStats objectStats)
     {
-        displayHp = currentHealth / initHp;
-        hpSlider.value = displayHp;
-
-        if(displayHp <= 0.0f)
+        if(objectStats is MonsterStats mStats)
         {
-            hpSlider.gameObject.SetActive(false);
-            hpSlider = null;
+            displayHp = mStats.Health / mStats.maxHealth;
+            hpSlider.value = displayHp;
+
+            if (displayHp <= 0.0f)
+            {
+                hpSlider.gameObject.SetActive(false);
+                hpSlider = null;
+            }
         }
+
+
     }
     public void SetHPBar()
     {

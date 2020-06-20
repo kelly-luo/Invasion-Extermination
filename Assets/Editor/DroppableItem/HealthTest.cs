@@ -25,14 +25,14 @@ namespace Tests
     {
         GameObject health;
         GameObject player;
-        Ammo healthClass;
+        HealthDrop healthClass;
         PlayerInformation playerInfo;
 
         [SetUp]
         public void SetUpTest()
         {
             health = new GameObject();
-            healthClass = health.AddComponent<Health>();
+            healthClass = health.AddComponent<HealthDrop>();
 
             player = new GameObject();
             playerInfo = player.AddComponent<PlayerInformation>();

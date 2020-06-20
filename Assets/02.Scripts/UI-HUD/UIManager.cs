@@ -86,7 +86,8 @@ public class UIManager : MonoBehaviour
 
         if (UnityService.GetKeyUp(KeyCode.I))
         {
-            if (invManager.inventoryPanel != null && !IsVisible(shopManager.gameObject)) VisibleOnScreen(invManager.inventoryPanel);
+            if (invManager.inventoryPanel != null && !IsVisible(shopManager.gameObject)) 
+                VisibleOnScreen(invManager.inventoryPanel);
         }
 
         if (UnityService.GetKeyUp(KeyCode.B))

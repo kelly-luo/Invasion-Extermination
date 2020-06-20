@@ -29,4 +29,6 @@ public abstract class MobFactory : MonoBehaviour
     public abstract GameObject CreateMob(Vector3 spawnLocation);
 
     public abstract GameObject CreateMobWithWeapon(Vector3 spawnLocation);
+
+    public abstract GameObject CreateBoss(Vector3 spawnLocation);
 }

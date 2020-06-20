@@ -140,14 +140,21 @@ public class UIManager : MonoBehaviour
 
         if (displayscore >= displayreqscore && displayreqscore != 0)
         {
-            roundPopUp.playAnimation();
-            gameManager.ClearRound = true;
-            if(roundView != null)roundView.text = FormatValue(gameManager.RoundNo);
-            if(reqScoreView != null) reqScoreView.text = FormatValue(gameManager.RequiredScore);
+
+            if (!gameManager.bossRound)
+            {
+                roundPopUp.playAnimation();
+                gameManager.ClearRound = true;
+
+                if (roundView != null) roundView.text = FormatValue(gameManager.RoundNo);
+                if (reqScoreView != null) reqScoreView.text = FormatValue(gameManager.RequiredScore);
+            }
+
         }
 
         if (scoreView != null) scoreView.text = FormatValue(displayscore);
-        if (scoreProgress != null) scoreProgress.value = (float)displayscore / (float)gameManager.RequiredScore;    
+        if (scoreProgress != null && !gameManager.bossRound) scoreProgress.value = (float)displayscore / (float)gameManager.RequiredScore;
+        else if (scoreProgress != null) scoreProgress.value = 1f;
     }
 
     public void SetReqScore(int reqScore)

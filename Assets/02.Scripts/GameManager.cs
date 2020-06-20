@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using IEGame.FiniteStateMachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
+    private ObjectStats bossStats;
 
     public List<Transform> SpawnPoints { get; set; } = new List<Transform>();
 
@@ -16,6 +18,7 @@ public class GameManager : MonoBehaviour
     }
 
     [Header("Enemy Create Info")]
+
     public int numberOfAlien;
 
     public int numberOfHuman;
@@ -29,7 +32,7 @@ public class GameManager : MonoBehaviour
     {
         get { return roundNo; }
     }
-    public const int maxRound = 10;
+    public const int maxRound = 2;
 
     public int maxHuman = 30;
     public int maxAlien = 5;
@@ -46,8 +49,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Prefab of Direct Projectile Pool")]
     public GameObject[] directProjectilePrefabs;
-    public int numberOfEachDirectProjectile=3;
-    private int directProjectileIdx =0;
+    public int numberOfEachDirectProjectile = 3;
+    private int directProjectileIdx = 0;
     public List<GameObject> directProjectilePool = new List<GameObject>();
     [Header("Prefab of Straight Down Projectile Pool")]
     public GameObject[] straightDownProjectilePrefabs;
@@ -71,10 +74,12 @@ public class GameManager : MonoBehaviour
     private bool isScoreSet;
     private bool clearRound;
 
+    public bool bossRound { get; set; } = false ;
+
 
  
     private const int LOGVALUESCORE = 50;
-    private int requiredScore = 50;
+    private int requiredScore = 10;
     public int RequiredScore
     {
         get { return requiredScore; }
@@ -87,11 +92,18 @@ public class GameManager : MonoBehaviour
         {
             if(value)
             {
-                roundNo++;
-                maxAlien = (int) CalculateLog(maxAlien, LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
-                maxHuman = (int)CalculateLog(maxHuman , LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
-                requiredScore =(int) CalculateLog(requiredScore,LOGVALUESCORE); //Increase round score requirement logarithmically 
-                if (roundNo == maxRound) SpawnBoss();
+                if(roundNo != maxRound) roundNo++;
+                if (roundNo >= maxRound && !bossRound)
+                {
+                    bossRound = true;
+                    SpawnBoss();
+                }
+                else if(!bossRound)
+                {
+                    maxAlien = (int)CalculateLog(maxAlien, LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
+                    maxHuman = (int)CalculateLog(maxHuman, LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
+                    requiredScore = (int)CalculateLog(requiredScore, LOGVALUESCORE); //Increase round score requirement logarithmically
+                }
             }
             
         }
@@ -144,6 +156,14 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (bossRound)
+        {
+            if(bossStats.Health <= 0)
+            {
+                bossRound = false;
+                SceneManager.LoadScene("Credits", LoadSceneMode.Single); 
+            }
+        }
     }
 
     #region Enemy Spawn method
@@ -183,7 +203,8 @@ public class GameManager : MonoBehaviour
 
     void SpawnBoss()
     {
-        //Put Spawn for boss here :)
+       GameObject boss =  EnemyFactory.CreateBoss(GetRandomSpawnPoint());
+       bossStats = boss.GetComponent<MonsterController>().Stats;
     }
 
     Vector3 GetRandomSpawnPoint()

@@ -487,6 +487,7 @@ public class MonsterController : MonoBehaviour, IStateController
 
         LootMoneyPopUp();
         LootAmmoPopUp();
+        LootHealthPopUp();
 
         var script = GetComponent<MonsterController>();
         script.enabled = false;
@@ -522,6 +523,23 @@ public class MonsterController : MonoBehaviour, IStateController
                 ammoObject.transform.position = transform.position;
                 ammoObject.transform.rotation = transform.rotation;
                 ammoObject.SetActive(true);
+            }
+        }
+    }
+
+    private void LootHealthPopUp()
+    {
+        var numberOfHealth = UnityService.UnityRandomRange(0, 2);
+
+        for (int i = 0; i < numberOfHealth; i++)
+        {
+            var healthObject = GameManager.Instance.GetHealthObject();
+            if (healthObject != null)
+            {
+                healthObject.GetComponent<HealthDrop>().HealthAmount = UnityService.UnityRandomRange(20, 30);
+                healthObject.transform.position = transform.position;
+                healthObject.transform.rotation = transform.rotation;
+                healthObject.SetActive(true);
             }
         }
     }

@@ -46,6 +46,10 @@ public class GameManager : MonoBehaviour
     public int maxAmmoPool = 500;
     public List<GameObject> ammoPool = new List<GameObject>();
 
+    public GameObject healthPrefab;
+    public int maxHealthPool = 500;
+    public List<GameObject> healthPool = new List<GameObject>();
+
     private MobFactory EnemyFactory;
 
     [Header("Prefab of Direct Projectile Pool")]
@@ -123,6 +127,7 @@ public class GameManager : MonoBehaviour
 
         CreateMoneyBillPooling();
         CreateAmmoPooling();
+        CreateHealthPooling();
         CreateDirectProjectilePrefabsPooling();
         CreateStraightDownProjectilePrefabsPooling();
         CreateNormalProjectilePrefabsPooling();
@@ -213,18 +218,6 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
-    public GameObject GetAmmoObject()
-    {
-        for (int i = 0; i < ammoPool.Count; i++)
-        {
-            if (ammoPool[i].activeSelf == false)
-            {
-                return ammoPool[i];
-            }
-        }
-        return null;
-    }
-
     public void CreateMoneyBillPooling()
     {
         GameObject objectPools = new GameObject("MoneyBillPools");
@@ -240,6 +233,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public GameObject GetAmmoObject()
+    {
+        for (int i = 0; i < ammoPool.Count; i++)
+        {
+            if (ammoPool[i].activeSelf == false)
+            {
+                return ammoPool[i];
+            }
+        }
+        return null;
+    }
+
     public void CreateAmmoPooling()
     {
         GameObject ammoPools = new GameObject("AmmoPools");
@@ -252,6 +257,33 @@ public class GameManager : MonoBehaviour
             obj.SetActive(false);
 
             ammoPool.Add(obj);
+        }
+    }
+
+    public GameObject GetHealthObject()
+    {
+        for (int i = 0; i < healthPool.Count; i++)
+        {
+            if (healthPool[i].activeSelf == false)
+            {
+                return healthPool[i];
+            }
+        }
+        return null;
+    }
+
+    public void CreateHealthPooling()
+    {
+        GameObject healthPools = new GameObject("HealthPools");
+
+        for (int i = 0; i < maxHealthPool; i++)
+        {
+            var obj = Instantiate<GameObject>(healthPrefab, healthPools.transform);
+            obj.name = "Health_" + i.ToString("00");
+
+            obj.SetActive(false);
+
+            healthPool.Add(obj);
         }
     }
 

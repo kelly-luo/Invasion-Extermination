@@ -48,11 +48,6 @@ public class CameraControl : MonoBehaviour , ICameraControl
             }
         }
 
-        public void setInvert(bool invert)
-        {
-            IsInvertMouse = invert;
-        }
-
         private bool smooth = false;
         public bool Smooth
         {
@@ -66,8 +61,8 @@ public class CameraControl : MonoBehaviour , ICameraControl
                         view.IsSmooth = value;
                 }
             }
-        }
-
+        } 
+        
         private float smoothTime;
         public float SmoothTime
         {
@@ -234,7 +229,19 @@ public class CameraControl : MonoBehaviour , ICameraControl
     public void InvertMouse(bool invert)
     {
         cameraMode.IsInvertMouse = invert;
+    }
 
+    public float maxSen()
+    {
+        return cameraMode.MaxSensitivity;
+    }
+    public void SetMouseX(float xSen)
+    {
+        cameraMode.XSensitivity = maxSen() * xSen;
+    }
+    public void SetMouseY(float ySen)
+    {
+        cameraMode.YSensitivity =  maxSen() * ySen;
     }
     #endregion
 
@@ -258,7 +265,7 @@ public class CameraControl : MonoBehaviour , ICameraControl
         //targetNeckTr = target.GetComponent<Animator>().avatar.GetBone("Left Arm/Shoulder");
         //get the Instance in the cameraView Class and put it in the cameraViewList
         cameraMode.InitView(target.transform, cameraRigTr, cameraTr, UnityService);
-
+        cameraMode.Smooth = false;
     }
 
     void Update()

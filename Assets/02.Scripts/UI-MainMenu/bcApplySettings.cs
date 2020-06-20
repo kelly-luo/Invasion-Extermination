@@ -71,6 +71,8 @@ public class bcApplySettings : ButtonClicked
         SetMute(mutetg.isOn);
 
         cameraControl.InvertMouse(invertMousetg.isOn);
+        cameraControl.SetMouseY(MouseY.value);
+        cameraControl.SetMouseX(MouseX.value);
 
         Screen.SetResolution(width, height, windowsMode);
 

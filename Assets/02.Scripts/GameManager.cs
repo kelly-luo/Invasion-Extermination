@@ -160,9 +160,7 @@ public class GameManager : MonoBehaviour
         {
             if(bossStats.Health <= 0)
             {
-                bossRound = false;
                 StartCoroutine(this.timerWait());
-           
             }
         }
     }
@@ -170,6 +168,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator timerWait()
     {
         yield return new WaitForSeconds(15f);
+        bossRound = false;
         SceneManager.LoadScene("Credits", LoadSceneMode.Single);
         Destroy(this.gameObject);
     }

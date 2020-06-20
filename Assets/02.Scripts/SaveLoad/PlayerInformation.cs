@@ -33,14 +33,15 @@ public class PlayerInformation : MonoBehaviour
     }
 
 
-    private float health = MAX_HEALTH;
+    private float health = 100f;
     [field: SerializeField] public float Health 
     { 
         get { return health; }
-        set { if ((health += value) <= 0)
+        set { if (value <= 0)
             { 
                 health = 0; 
-            } else if((health += value) >= MAX_HEALTH)
+            }
+            else if (value >= MAX_HEALTH)
             {
                 health = MAX_HEALTH;
             }

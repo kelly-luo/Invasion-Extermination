@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     {
         get { return roundNo; }
     }
-    public const int maxRound = 2;
+    public const int maxRound = 5;
 
     public int maxHuman = 30;
     public int maxAlien = 5;
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
  
     private const int LOGVALUESCORE = 50;
-    private int requiredScore = 10;
+    private int requiredScore = 50;
     public int RequiredScore
     {
         get { return requiredScore; }
@@ -161,9 +161,17 @@ public class GameManager : MonoBehaviour
             if(bossStats.Health <= 0)
             {
                 bossRound = false;
-                SceneManager.LoadScene("Credits", LoadSceneMode.Single); 
+                StartCoroutine(this.timerWait());
+           
             }
         }
+    }
+
+    private IEnumerator timerWait()
+    {
+        yield return new WaitForSeconds(15f);
+        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+        Destroy(this.gameObject);
     }
 
     #region Enemy Spawn method

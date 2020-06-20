@@ -18,8 +18,6 @@ public interface IUnityServiceManager
 
     int UnityRandomRange(int min, int max);
 
-    float UnityRandomGaussian(float mean, float standDev);
-  
     float TimeAtFrame { get; }
 
     Vector3 InsideUnitSphere { get; }

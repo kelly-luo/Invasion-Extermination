@@ -70,5 +70,76 @@ namespace Tests
             Assert.LessOrEqual(shopItem.cost, 1100);
         }
 
+        [Test]
+        public void weapon_has_damage_between_base_and_10perc_extra()
+        {
+            //ARRANGE
+            float damage;
+            float initialDamage;
+            int entityID;
+
+            //ACT
+            shopItem.InstantiateShopItem(itemShop.gunPrefabs);
+
+            if(shopItem.item is ImWeapon gunImWeapon)
+            {
+                damage = gunImWeapon.Damage;
+                entityID = gunImWeapon.EntityID;
+                if (gunImWeapon is WeaponAK74 ak)
+                    initialDamage = new GameObject().AddComponent<WeaponAK74>().Damage;
+                else if (gunImWeapon is WeaponM107 M107)
+                    initialDamage = new GameObject().AddComponent<WeaponM107>().Damage;
+                else if (gunImWeapon is WeaponM249 M249)
+                    initialDamage = new GameObject().AddComponent<WeaponM249>().Damage;
+                else if (gunImWeapon is WeaponM4_8 M4_8)
+                    initialDamage = new GameObject().AddComponent<WeaponM4_8>().Damage;
+                else if (gunImWeapon is WeaponBennelli_M4 M4)
+                    initialDamage = new GameObject().AddComponent<WeaponBennelli_M4>().Damage;
+                else initialDamage = 0;
+
+                //ASSERT
+                Assert.GreaterOrEqual(damage, initialDamage);
+                Assert.LessOrEqual(damage,initialDamage*1.1);
+            }
+        }
+        [Test]
+        public void weapon_has_max_bullet_between_base_and_10perc_extra()
+        {
+            //ARRANGE
+            float bullets;
+            float initialBullets;
+            int entityID;
+
+            //ACT
+            shopItem.InstantiateShopItem(itemShop.gunPrefabs);
+
+            if (shopItem.item is ImWeapon gunImWeapon)
+            {
+                bullets = gunImWeapon.MaxBullet;
+                entityID = gunImWeapon.EntityID;
+                if (gunImWeapon is WeaponAK74 ak)
+                    initialBullets = new GameObject().AddComponent<WeaponAK74>().MaxBullet;
+                else if (gunImWeapon is WeaponM107 M107)
+                    initialBullets = new GameObject().AddComponent<WeaponM107>().MaxBullet;
+                else if (gunImWeapon is WeaponM249 M249)
+                    initialBullets = new GameObject().AddComponent<WeaponM249>().MaxBullet;
+                else if (gunImWeapon is WeaponM4_8 M4_8)
+                    initialBullets = new GameObject().AddComponent<WeaponM4_8>().MaxBullet;
+                else if (gunImWeapon is WeaponBennelli_M4 M4)
+                    initialBullets = new GameObject().AddComponent<WeaponBennelli_M4>().MaxBullet;
+                else initialBullets = 0;
+
+                //ASSERT
+                Assert.GreaterOrEqual(bullets, initialBullets);
+                Assert.LessOrEqual(bullets, initialBullets*1.1);
+            }
+        }
+        [TearDown]
+        public void TearDown()
+        {
+            shopItem = null;
+            itemShop = null;
+        }
+
     }
 }

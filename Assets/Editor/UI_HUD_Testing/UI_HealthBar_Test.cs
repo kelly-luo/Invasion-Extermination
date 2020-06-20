@@ -63,7 +63,9 @@ public class UI_HealthBar_Test : MonoBehaviour
     public void Convert_Damage_To_Percentage()
     {
         //Arrange
-        float tempHealh = 56.0f;
+        MonsterStats tempHealh = new MonsterStats();
+        tempHealh.Health = 56f;
+        tempHealh.maxHealth = 100f;
         //Act
         healthBar.onDamage(tempHealh);
         //Assert
@@ -75,7 +77,9 @@ public class UI_HealthBar_Test : MonoBehaviour
     public void Make_Slider_NULL_If_Health_Is_Zero()
     {
         //Arrange
-        float tempHealh = 0f;
+        MonsterStats tempHealh = new MonsterStats();
+        tempHealh.Health = 0f;
+        tempHealh.maxHealth = 100f;
         //Act
         healthBar.onDamage(tempHealh);
         //Assert
@@ -87,7 +91,9 @@ public class UI_HealthBar_Test : MonoBehaviour
     public void Make_Slider_NULL_If_Health_Is_Less_Than_Zero()
     {
         //Arrange
-        float tempHealh = -100.0f;
+        MonsterStats tempHealh = new MonsterStats();
+        tempHealh.Health = -100f;
+        tempHealh.maxHealth = 100f;
         //Act
         healthBar.onDamage(tempHealh);
         //Assert

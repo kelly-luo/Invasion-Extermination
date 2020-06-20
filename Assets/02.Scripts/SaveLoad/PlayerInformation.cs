@@ -18,6 +18,7 @@ using UnityEngine;
 
 public class PlayerInformation : MonoBehaviour
 {
+    private const float MAX_HEALTH = 100f;
 
     private int score = 0;
     [field: SerializeField] public int Score
@@ -36,7 +37,18 @@ public class PlayerInformation : MonoBehaviour
     [field: SerializeField] public float Health 
     { 
         get { return health; }
-        set { if ((health += value) <= 0) { health = 0; } else health = value; }
+        set { if (value <= 0)
+            { 
+                health = 0; 
+            }
+            else if (value >= MAX_HEALTH)
+            {
+                health = MAX_HEALTH;
+            }
+            else health = value; 
+        
+        }
+
     }
 
     public PlayerStateController player;

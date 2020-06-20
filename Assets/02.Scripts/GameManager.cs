@@ -24,8 +24,16 @@ public class GameManager : MonoBehaviour
 
     public float spawnDeley = 2f;
 
+    private int roundNo = 1;
+    public int RoundNo
+    {
+        get { return roundNo; }
+    }
+    public const int maxRound = 10;
+
     public int maxHuman = 30;
     public int maxAlien = 5;
+    private const int LOGVALUESPAWNRATE = 20;
 
     public bool ishand = false;
 
@@ -33,6 +41,14 @@ public class GameManager : MonoBehaviour
     public GameObject moneyBillPrefab;
     public int maxMoneyBillPool = 500; //Number limit of Money objects simultaneously allows in one scene.
     public List<GameObject> moneyBillPool = new List<GameObject>();
+
+    public GameObject ammoPrefab;
+    public int maxAmmoPool = 500;
+    public List<GameObject> ammoPool = new List<GameObject>();
+
+    public GameObject healthPrefab;
+    public int maxHealthPool = 500;
+    public List<GameObject> healthPool = new List<GameObject>();
 
     private MobFactory EnemyFactory;
 
@@ -62,6 +78,16 @@ public class GameManager : MonoBehaviour
 
     private bool isScoreSet;
     private bool clearRound;
+
+
+ 
+    private const int LOGVALUESCORE = 50;
+    private int requiredScore = 50;
+    public int RequiredScore
+    {
+        get { return requiredScore; }
+    }
+
     public bool ClearRound
     {
         get { return clearRound; }
@@ -69,15 +95,21 @@ public class GameManager : MonoBehaviour
         {
             if(value)
             {
-
-                maxAlien *= 10;
-                requiredScore *= 10;
+                roundNo++;
+                maxAlien = (int) CalculateLog(maxAlien, LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
+                maxHuman = (int)CalculateLog(maxHuman , LOGVALUESPAWNRATE); //Increase Enemy size logarithmically 
+                requiredScore =(int) CalculateLog(requiredScore,LOGVALUESCORE); //Increase round score requirement logarithmically 
+                if (roundNo == maxRound) SpawnBoss();
             }
+            
         }
     }
 
-    private int requiredScore = 50;
-   
+    private float CalculateLog(int original, int log)
+    {
+        return (float)original * Mathf.Log10(log);
+    }
+
     void Awake()
     {
         if(instance == null)
@@ -94,6 +126,8 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
 
         CreateMoneyBillPooling();
+        CreateAmmoPooling();
+        CreateHealthPooling();
         CreateDirectProjectilePrefabsPooling();
         CreateStraightDownProjectilePrefabsPooling();
         CreateNormalProjectilePrefabsPooling();
@@ -133,24 +167,13 @@ public class GameManager : MonoBehaviour
             if (numberOfHuman <= maxHuman)
             {
                 SpawnHuman();
-                if (isScoreSet)
-                    experienceScore += -10;
-
-                if (experienceScore >= requiredScore)
-                    ClearRound = true;
-
             }
             else if (numberOfAlien <= maxAlien)
             {
                 SpawnAlien();
-                if (isScoreSet)
-                    experienceScore += 10;
             }
             else
             {
-                isScoreSet = true;
-                if (experienceScore >= requiredScore)
-                    ClearRound = true;
                 yield return null;
             }
         }
@@ -166,6 +189,11 @@ public class GameManager : MonoBehaviour
     void SpawnAlien()
     {
         EnemyFactory.CreateMobWithWeapon(GetRandomSpawnPoint());
+    }
+
+    void SpawnBoss()
+    {
+        //Put Spawn for boss here :)
     }
 
     Vector3 GetRandomSpawnPoint()
@@ -202,6 +230,60 @@ public class GameManager : MonoBehaviour
             obj.SetActive(false);
 
             moneyBillPool.Add(obj);
+        }
+    }
+
+    public GameObject GetAmmoObject()
+    {
+        for (int i = 0; i < ammoPool.Count; i++)
+        {
+            if (ammoPool[i].activeSelf == false)
+            {
+                return ammoPool[i];
+            }
+        }
+        return null;
+    }
+
+    public void CreateAmmoPooling()
+    {
+        GameObject ammoPools = new GameObject("AmmoPools");
+
+        for (int i = 0; i < maxAmmoPool; i++)
+        {
+            var obj = Instantiate<GameObject>(ammoPrefab, ammoPools.transform);
+            obj.name = "Ammo_" + i.ToString("00");
+
+            obj.SetActive(false);
+
+            ammoPool.Add(obj);
+        }
+    }
+
+    public GameObject GetHealthObject()
+    {
+        for (int i = 0; i < healthPool.Count; i++)
+        {
+            if (healthPool[i].activeSelf == false)
+            {
+                return healthPool[i];
+            }
+        }
+        return null;
+    }
+
+    public void CreateHealthPooling()
+    {
+        GameObject healthPools = new GameObject("HealthPools");
+
+        for (int i = 0; i < maxHealthPool; i++)
+        {
+            var obj = Instantiate<GameObject>(healthPrefab, healthPools.transform);
+            obj.name = "Health_" + i.ToString("00");
+
+            obj.SetActive(false);
+
+            healthPool.Add(obj);
         }
     }
 

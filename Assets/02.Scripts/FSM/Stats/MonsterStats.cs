@@ -5,5 +5,5 @@ using IEGame.FiniteStateMachine;
 
 public class MonsterStats : ObjectStats
 {
-
+    public float maxHealth { get; set; }
 }

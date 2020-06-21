@@ -486,6 +486,8 @@ public class MonsterController : MonoBehaviour, IStateController
         GetComponent<CapsuleCollider>().enabled = false;
 
         LootMoneyPopUp();
+        LootAmmoPopUp();
+        LootHealthPopUp();
 
         var script = GetComponent<MonsterController>();
         script.enabled = false;
@@ -493,8 +495,9 @@ public class MonsterController : MonoBehaviour, IStateController
 
     private void LootMoneyPopUp()
     {
-      
+
         var numberOfBill = UnityService.UnityRandomRange(1, 10);
+
         for (int i = 0; i < numberOfBill; i++)
         {
             var moneyBillObject = GameManager.Instance.GetMoneyBillObject();
@@ -504,6 +507,39 @@ public class MonsterController : MonoBehaviour, IStateController
                 moneyBillObject.transform.position = transform.position;
                 moneyBillObject.transform.rotation = transform.rotation;
                 moneyBillObject.SetActive(true);
+            }
+        }
+    }
+    private void LootAmmoPopUp()
+    {
+        var numberOfAmmo = UnityService.UnityRandomRange(1, 5);
+
+        for (int i = 0; i < numberOfAmmo; i++)
+        {
+            var ammoObject = GameManager.Instance.GetAmmoObject();
+            if (ammoObject != null)
+            {
+                ammoObject.GetComponent<Ammo>().AmmoAmount = UnityService.UnityRandomRange(10, 20);
+                ammoObject.transform.position = transform.position;
+                ammoObject.transform.rotation = transform.rotation;
+                ammoObject.SetActive(true);
+            }
+        }
+    }
+
+    private void LootHealthPopUp()
+    {
+        var numberOfHealth = UnityService.UnityRandomRange(0, 2);
+
+        for (int i = 0; i < numberOfHealth; i++)
+        {
+            var healthObject = GameManager.Instance.GetHealthObject();
+            if (healthObject != null)
+            {
+                healthObject.GetComponent<HealthDrop>().HealthAmount = UnityService.UnityRandomRange(20, 30);
+                healthObject.transform.position = transform.position;
+                healthObject.transform.rotation = transform.rotation;
+                healthObject.SetActive(true);
             }
         }
     }

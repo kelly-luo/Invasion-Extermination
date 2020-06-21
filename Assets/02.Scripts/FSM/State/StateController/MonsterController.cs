@@ -496,6 +496,9 @@ public class MonsterController : MonoBehaviour, IStateController
     private void LootMoneyPopUp()
     {
 
+        //Spwan itemPopUpEffect
+        GameManager.Instance.SpawnItemPopUpEffectObject(gameObject.transform.position, Quaternion.identity);
+
         var numberOfBill = UnityService.UnityRandomRange(1, 10);
 
         for (int i = 0; i < numberOfBill; i++)
@@ -509,6 +512,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 moneyBillObject.SetActive(true);
             }
         }
+
     }
     private void LootAmmoPopUp()
     {

@@ -1,5 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*Credits Class
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This class plays the credits, and then loads the main menu
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  11.06.2020 Creation date (Yuki)
+ *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
+ *  
+ *  
+ *  UnityEngine support packages
+ */
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +20,11 @@ public class Credits : MonoBehaviour
 {
     public Animator animator;
 
+    //
+    // Start()
+    // ~~~~~~~~~~~
+    // Start Credit animations.
+    //
     void Start()
     {
         if (animator != null) animator.SetBool("Animation", true);

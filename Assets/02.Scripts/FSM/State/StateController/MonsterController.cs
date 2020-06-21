@@ -199,7 +199,7 @@ public class MonsterController : MonoBehaviour, IStateController
     {
         healthbar = this.gameObject.AddComponent<EnemyHealthBar>();
         healthbar.hpBarPrefab = healthBarObject;
-        healthbar.SetHPBar();
+        healthbar.SetHealthBar();
 
         UnityService = UnityServiceManager.Instance;
 

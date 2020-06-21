@@ -1,7 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*ShopManager MenuButton
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This class handles the GUI for the itemshop
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  10.06.2020 Creation date (Yuki)
+ *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
+ *  
+ *  
+ *  UnityEngine support packages
+ */
 using UnityEngine;
 using UnityEngine.UI;
+//Text Mesh Pro support packages
 using TMPro;
 
 
@@ -22,19 +35,22 @@ public class ShopManager : MonoBehaviour
 
     private bool start = false;
 
-   
     void Start()
     {
-        Intiliaze();
+        Initialize();
     }
 
-    public void Intiliaze()
+    public void Initialize()
     {
-        MakeGunPanel(0);
+        MakeGunPanel(0,true);
         UpdateInventory();
     }
 
-    
+    /*
+    * Update()
+    *  ~~~~~~~~~~~~~~~~
+    *  Updates GUI for the shop, when itemshop changes
+    */
     void Update()
     {
         if(itemShop.PlayerInfo.Ammo != displayAmmo)
@@ -46,11 +62,16 @@ public class ShopManager : MonoBehaviour
         if (itemShop.weaponsArray != null && !start)
         {
             start = true;
-            MakeGunPanel(0);
+            MakeGunPanel(0,true);
             UpdateInventory();
         }
     }
-
+    #region Shop_GUI
+    /*
+    * UpdateInventory()
+    *  ~~~~~~~~~~~~~~~~
+    *  Updates shop inventory GUI for the shop
+    */
     public void UpdateInventory()
     {
         if(itemShop != null && itemShop.weaponsArray != null)
@@ -64,36 +85,56 @@ public class ShopManager : MonoBehaviour
 
 
     }
+    /*
+    * MakeGunPanel()
+    *  ~~~~~~~~~~~~~~~~
+    *  Updates shop gun GUI for the shop
+    */
+    public void MakeGunPanel(int index, bool select)
+    {
+        if (itemShop.weaponsArray != null)
+        {
+            ShopItem currentWeapon = itemShop.weaponsArray[index];
+            if (select)
+            {
+                selectedindex = index;
+                selecteditem = currentWeapon;
+            }
+            // ImWeapon weapon = (ImWeapon)selecteditem.item;
+            if (currentWeapon.item is ImWeapon weapon)
+            {
+                gunSprite = GetImage(weapon.EntityID);
+                panel.SetImage(gunSprite);
+                panel.SetGunName(gunSprite.name);
+                panel.SetGunDamage((int)weapon.Damage);
+                panel.SetGunClipSize((int)weapon.MaxBullet);
+                panel.SetGunPrice(selecteditem.cost);
+            }
 
+        }
+
+    }
+    #endregion
+
+    #region Buying
     public void BuyGun()
     {
         itemShop.BuyItem(selectedindex);
         UpdateInventory();
-        MakeGunPanel(0);
+        MakeGunPanel(0,true);
     }
 
     public void BuyAmmo()
     {
         itemShop.BuyAmmo();
     }
+    #endregion
 
-    public void MakeGunPanel(int index)
-    {
-        if(itemShop.weaponsArray != null)
-        {
-            selectedindex = index;
-            selecteditem = itemShop.weaponsArray[index];
-            ImWeapon weapon = (ImWeapon)selecteditem.item;
-            gunSprite = GetImage(weapon.EntityID);
-            panel.SetImage(gunSprite);
-            panel.SetGunName(gunSprite.name);
-            panel.SetGunDamage((int)weapon.Damage);
-            panel.SetGunClipSize((int)weapon.MaxBullet);
-            panel.SetGunPrice(selecteditem.cost);
-        }
-
-    }
-
+    /*
+    * GetImage()
+    *  ~~~~~~~~~~~~~~~~
+    *  Get gun sprite
+    */
     public Sprite GetImage(int id)
     {
         return sprites[id];

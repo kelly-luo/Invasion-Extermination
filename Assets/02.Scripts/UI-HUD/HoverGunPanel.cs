@@ -1,10 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*HoverPanelValues Class
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This handles displaying information on the gun panel in the hover panel
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  11.06.2020 Creation date (Yuki)
+ *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
+ *  
+ *  
+ *  UnityEngine support packages
+ */
 using UnityEngine;
 using UnityEngine.UI;
+//Text mesh pro support package
 using TMPro;
 
-public class HoverPanelValues : MonoBehaviour
+public class HoverGunPanel : MonoBehaviour
 {
     public TMP_Text[] textvalues;
     public TMP_Text gunName;
@@ -12,7 +25,7 @@ public class HoverPanelValues : MonoBehaviour
     public Image selectedImage;
     public Image gunImage;
 
-
+    //These classes displays the information onto the hover Panel
     public int getSize()
     {
         return textvalues.Length;

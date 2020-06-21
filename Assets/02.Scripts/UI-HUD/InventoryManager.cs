@@ -1,5 +1,19 @@
-﻿using System.Collections;
+﻿/*InventoryManager Class
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This class handles the GUI of the player's inventory
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  22.05.2020 Creation date (Yuki)
+ *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
+ *  
+ *  
+ *  System support packages
+ */
 using System.Collections.Generic;
+//UnityEngine support packages
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +39,12 @@ public class InventoryManager : MonoBehaviour
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
-    public void Intialize(Inventory inventory)
+    /*
+    * Intialize()
+    *  ~~~~~~~~~~~~~~~~
+    *  Intializes the class, and connects the player inventory to GUI inventory
+    */
+    public void Initialize(Inventory inventory)
     {
         PlayerInventory = inventory;
         inventoryHoverPanel.transform.localScale = Vector3.zero;
@@ -44,6 +63,11 @@ public class InventoryManager : MonoBehaviour
     }
 
     #region Inventory_Management
+    /*
+    * SetPrimary()
+    *  ~~~~~~~~~~~~~~~~
+    *  Select primary gun
+    */
     public void SetPrimary(int key)
     {
         if (PlayerInventory.ContainsKey(key))
@@ -53,7 +77,11 @@ public class InventoryManager : MonoBehaviour
    
         }
     }
-
+    /*
+    * SetSecondary()
+    *  ~~~~~~~~~~~~~~~~
+    *  Select Secondary gun
+    */
     public void SetSecondary(int key)
     {
         if (PlayerInventory.ContainsKey(key))
@@ -63,7 +91,11 @@ public class InventoryManager : MonoBehaviour
           
         }
     }
-
+    /*
+    * RemoveItem()
+    *  ~~~~~~~~~~~~~~~~
+    *  Removes gun from inventory
+    */
     public void RemoveItem(int key)
     {
 
@@ -79,6 +111,11 @@ public class InventoryManager : MonoBehaviour
     #endregion
 
     #region GUI_Management
+    /*
+    * UpdateWeaponSlots()
+    *  ~~~~~~~~~~~~~~~~
+    *  Updates the primary & secondary weapons slots
+    */
     public void UpdateWeaponSlots()
     {
         if(PlayerInventory.Primary != null)
@@ -96,8 +133,11 @@ public class InventoryManager : MonoBehaviour
         }else
             Secondary.SetActive(false);
     }
-    
-
+    /*
+    * GetImage()
+    *  ~~~~~~~~~~~~~~~~
+    *  Gets the sprite of the gun
+    */
     private Sprite GetImage(int id)
     {
         if (weaponInstance == null) return null;
@@ -109,7 +149,11 @@ public class InventoryManager : MonoBehaviour
         }
         return null;
     }
-
+    /*
+    * UpdateInventoryGUI()
+    *  ~~~~~~~~~~~~~~~~
+    *  Updates the inventory slots, with the proper sprites and information
+    */
     public void UpdateInventoryGUI()
     {
         UpdateWeaponSlots();
@@ -124,7 +168,7 @@ public class InventoryManager : MonoBehaviour
             bcSlotSelect slotInfo = invslots.slots[slotNo].GetComponent<bcSlotSelect>();
 
             slotInfo.InstanceId = Weapon.Key;
-            slotInfo.setSprite(GetImage(Weapon.Value.EntityID));
+            slotInfo.SetSprite(GetImage(Weapon.Value.EntityID));
             slotInfo.stack_text.text = UIManager.FormatValue(Weapon.Value.StackAmount);
          
         }
@@ -135,13 +179,17 @@ public class InventoryManager : MonoBehaviour
             invslots.slots[i].SetActive(false);
         }
     }
-
+    /*
+    * DisplayHoverPanel()
+    *  ~~~~~~~~~~~~~~~~
+    *  Display the gun information in the hover panel
+    */
     public void DisplayHoverPanel(int key)
     {
         if (inventoryHoverPanel.transform.localScale.x == 0) inventoryHoverPanel.transform.localScale = Vector3.one;
         ImWeapon gunInfo = (ImWeapon)PlayerInventory.FindItem(key);
 
-        HoverPanelValues displayvalues = inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        HoverGunPanel displayvalues = inventoryHoverPanel.GetComponent<HoverGunPanel>();
         Sprite GunImage = GetImage(gunInfo.EntityID);
 
         if (GunImage != null)
@@ -158,13 +206,22 @@ public class InventoryManager : MonoBehaviour
         displayvalues.setText(1, gunInfo.MaxBullet);//Display clip size
 
     }
-
+    /*
+    * HideHoverPanel()
+    *  ~~~~~~~~~~~~~~~~
+    *  Hides the hover panel
+    */
     public void HideHoverPanel()
     {
         if (inventoryHoverPanel.transform.localScale.x == 1) inventoryHoverPanel.transform.localScale = Vector3.zero;
     }
 
     #endregion
+    /*
+    * Update()
+    *  ~~~~~~~~~~~~~~~~
+    *  Checks if the GUI inventory needs to updated to match the player's inventory
+    */
     void Update()
     {
 

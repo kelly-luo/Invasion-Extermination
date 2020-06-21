@@ -11,7 +11,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
 {
     public InventoryManager invManager;
     public bcSlotSelect menuButton;
-    public HoverPanelValues hoverPanel;
+    public HoverGunPanel hoverPanel;
     public Inventory inventory;
     public ImWeapon gun;
 
@@ -22,7 +22,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
         menuButton = new GameObject().AddComponent<bcSlotSelect>();
         menuButton.inventoryManager = invManager;
         GameObject gbhoverpanel = new GameObject();
-        gbhoverpanel.AddComponent<HoverPanelValues>();
+        gbhoverpanel.AddComponent<HoverGunPanel>();
         invManager.inventoryHoverPanel = gbhoverpanel;
 
         //Add temp guns into inventory for HUD to display
@@ -38,7 +38,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
 
 
         //Making makeshift display
-        hoverPanel = invManager.inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        hoverPanel = invManager.inventoryHoverPanel.GetComponent<HoverGunPanel>();
         hoverPanel.textvalues = new TMP_Text[2];
         hoverPanel.textvalues[0] = Substitute.For<TMP_Text>();
         hoverPanel.textvalues[1] = Substitute.For<TMP_Text>();
@@ -81,7 +81,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
         //Act
         menuButton.ButtonHover(null);
         //Assert
-        HoverPanelValues temp = invManager.inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        HoverGunPanel temp = invManager.inventoryHoverPanel.GetComponent<HoverGunPanel>();
         string actual = temp.textvalues[0].text;
         Assert.AreEqual("" + gun.Damage, actual);
     }
@@ -94,7 +94,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
         //Act
         menuButton.ButtonHover(null);
         //Assert
-        HoverPanelValues temp = invManager.inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        HoverGunPanel temp = invManager.inventoryHoverPanel.GetComponent<HoverGunPanel>();
         string actual = temp.textvalues[1].text;
         Assert.AreEqual("" + gun.MaxBullet, actual);
     }
@@ -107,7 +107,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
         //Act
         menuButton.ButtonHover(null);
         //Assert
-        HoverPanelValues temp = invManager.inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        HoverGunPanel temp = invManager.inventoryHoverPanel.GetComponent<HoverGunPanel>();
         string actual = temp.selectedText.text;
         Assert.AreEqual("Primary", actual);
     }
@@ -120,7 +120,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
         //Act
         menuButton.ButtonHover(null);
         //Assert
-        HoverPanelValues temp = invManager.inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        HoverGunPanel temp = invManager.inventoryHoverPanel.GetComponent<HoverGunPanel>();
         string actual = temp.selectedText.text;
         Assert.AreEqual("Secondary", actual);
     }
@@ -133,7 +133,7 @@ public class UI_HUD_Test_Inventory : MonoBehaviour
         //Act
         menuButton.ButtonHover(null);
         //Assert
-        HoverPanelValues temp = invManager.inventoryHoverPanel.GetComponent<HoverPanelValues>();
+        HoverGunPanel temp = invManager.inventoryHoverPanel.GetComponent<HoverGunPanel>();
         string actual = temp.selectedText.text;
         Assert.AreEqual("Not Selected", actual);
     }

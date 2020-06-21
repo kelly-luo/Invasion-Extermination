@@ -1,7 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*UIManager class
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This class handles the UI of the hud
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  11.06.2020 Creation date (Yuki)
+ *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
+ *  
+ *  
+ *  UnityEngine support packages
+ */
 using UnityEngine;
 using UnityEngine.UI;
+// Text mesh Pro support system
 using TMPro;
 using System;
 
@@ -44,10 +57,14 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        Intialize();
+        Initialize();
     }
-
-    public void Intialize()
+    /*
+    * Initialize()
+    *  ~~~~~~~~~~~~~~~~
+    *  Initialize the GUI, and sets up everything
+    */
+    public void Initialize()
     {
 
         if (roundView != null) roundView.text = FormatValue(gameManager.RoundNo);
@@ -61,14 +78,18 @@ public class UIManager : MonoBehaviour
             SetScore(playerInformation.Score);
         }
 
-        invManager.Intialize(playerInformation.PlayerInventory);
+        invManager.Initialize(playerInformation.PlayerInventory);
         invManager.UpdateWeaponSlots();
 
         if (shopManager != null) VisibleOnScreen(shopManager.gameObject);
         if (GameMenuPanel != null) VisibleOnScreen(GameMenuPanel);
         if (invManager.inventoryPanel != null) VisibleOnScreen(invManager.inventoryPanel);
     }
-
+    /*
+    * Update()
+    *  ~~~~~~~~~~~~~~~~
+    *  Updates display information when internal information changes
+    */
     void Update()
     {
         if (displayhealth != Convert.ToInt32(playerInformation.Health)) SetHealth(playerInformation.Health);
@@ -80,18 +101,24 @@ public class UIManager : MonoBehaviour
 
         CheckInput();
     }
-
+    /*
+    * CheckInput()
+    *  ~~~~~~~~~~~~~~~~
+    *  Handles User's inputs, and handles what GUI to display or hide depending on the user input
+    */
     public void CheckInput()
     {
 
         if (UnityService.GetKeyUp(KeyCode.I))
         {
+            //Toggle inventory panel (Only if shop is not active)
             if (invManager.inventoryPanel != null && !IsVisible(shopManager.gameObject)) 
                 VisibleOnScreen(invManager.inventoryPanel);
         }
 
         if (UnityService.GetKeyUp(KeyCode.B))
         {
+            //Toggle Shop panel
             if (!IsVisible(shopManager.gameObject))
             {
                 MakeVisible(invManager.inventoryPanel,shopManager.gameObject);
@@ -106,6 +133,7 @@ public class UIManager : MonoBehaviour
 
         if (UnityService.GetKeyUp(KeyCode.Escape))
         {
+            //Toggle game menu panel
             if (!IsVisible(GameMenuPanel))
             {
                 MakeVisible(GameMenuPanel);
@@ -119,11 +147,13 @@ public class UIManager : MonoBehaviour
 
         }
 
+        //Change to player's primary weapon
         if (UnityService.GetKeyUp(KeyCode.Alpha1))
         {
             if (invManager.PlayerInventory != null) invManager.PlayerInventory.SelectPrimary();
         }
 
+        //Change to player's secondary weapon
         if (UnityService.GetKeyUp(KeyCode.Alpha2))
         {
             if (invManager.PlayerInventory != null) invManager.PlayerInventory.SelectSecondary();
@@ -133,6 +163,7 @@ public class UIManager : MonoBehaviour
 
 
     #region Displaying_Information
+    //Displays and show UI information
     public void SetScore(int score)
     {
         if (score <= 0) displayscore = 0;
@@ -210,6 +241,7 @@ public class UIManager : MonoBehaviour
 
     #endregion
     #region Managing_UI
+    //Static functions to handle/format UI
     static public string FormatValue(int value)
     {
         if(value < 10)
@@ -256,9 +288,5 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void displayRoundPopUp()
-    {
-
-    }
     #endregion
 }

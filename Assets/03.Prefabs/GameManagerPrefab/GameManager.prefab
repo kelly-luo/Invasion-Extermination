@@ -55,6 +55,14 @@ MonoBehaviour:
     type: 3}
   maxMoneyBillPool: 500
   moneyBillPool: []
+  ammoPrefab: {fileID: 2637118757316884225, guid: bbee2ea52613c8c429d331e22f3ee44b,
+    type: 3}
+  maxAmmoPool: 500
+  ammoPool: []
+  healthPrefab: {fileID: 1000012970591572, guid: e7664adf432542443a785eb28eccb94e,
+    type: 3}
+  maxHealthPool: 500
+  healthPool: []
   directProjectilePrefabs:
   - {fileID: 164098, guid: bf88a80cce4a40f4aa08f941cc054831, type: 3}
   - {fileID: 157676, guid: 61d2663dd97ceca4fbdfc4438e370eb9, type: 3}

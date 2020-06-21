@@ -283,19 +283,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region GetPoolObject
-    public GameObject GetMoneyBillObject()
-    {
-        for (int i = 0; i < moneyBillPool.Count; i++)
-        {
-            if (moneyBillPool[i].activeSelf == false)
-            {
-                return moneyBillPool[i];
-            }
-        }
-        return null;
-
-    }
-
     //since every I want show there is alot of projectiles so I iterate the pool list using own index(idx)
     public GameObject GetDirectProjectileObject()
     {
@@ -359,10 +346,18 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region CreatingPooling
-
+    public GameObject GetMoneyBillObject()
+    {
+        for (int i = 0; i < moneyBillPool.Count; i++)
+        {
+            if (moneyBillPool[i].activeSelf == false)
+            {
+                return moneyBillPool[i];
+            }
+        }
+        return null;
 
     }
-
 
     public void CreateMoneyBillPooling()
     {
@@ -370,7 +365,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < maxMoneyBillPool; i++)
         {
-            var obj = Instantiate<GameObject>(explosiveEffectPrefab, objectPools.transform);
+            var obj = Instantiate<GameObject>(moneyBillPrefab, objectPools.transform);
             obj.name = "MoneyBill_" + i.ToString("00");
 
             obj.SetActive(false);

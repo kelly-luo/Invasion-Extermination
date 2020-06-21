@@ -58,7 +58,7 @@ public class MonsterController : MonoBehaviour, IStateController
     #region Character Information
     public ObjectStats Stats { get; set; }
     public Transform ObjectTransform { get; set; }
-
+    public float SelfDestroyDelay { get; set; } = 10f;
     #endregion
 
     #region Target Information
@@ -491,9 +491,13 @@ public class MonsterController : MonoBehaviour, IStateController
         LootAmmoPopUp();
         LootHealthPopUp();
 
+        Destroy(gameObject,SelfDestroyDelay);
+
         var script = GetComponent<MonsterController>();
         script.enabled = false;
     }
+
+
 
     private void LootMoneyPopUp()
     {
@@ -564,4 +568,6 @@ public class MonsterController : MonoBehaviour, IStateController
         isHoldingWeapon = false;
         Animator.SetBool(hashIsHoldingWeapon, false);
     }
+
+
 }

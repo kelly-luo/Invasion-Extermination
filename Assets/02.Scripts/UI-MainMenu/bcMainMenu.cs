@@ -55,7 +55,7 @@ public class bcMainMenu : ButtonClicked
      *  ~~~~~~~~~~~~~~~~
      *  get the current panel that is view to the player
      */
-    public GameObject getInView()
+    public GameObject GetInView()
     {
         return inView;
     }
@@ -64,7 +64,7 @@ public class bcMainMenu : ButtonClicked
      *  ~~~~~~~~~~~~~~~~
      *  Set the frame(panel) that is attached to this button
      */
-    public void setFrame(GameObject frame)
+    public void SetFrame(GameObject frame)
     {
         this.frame = frame;
     }

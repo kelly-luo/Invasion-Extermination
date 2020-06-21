@@ -14,7 +14,7 @@ public class ButtonClicked : MonoBehaviour
         bcMainMenu optionClick = new bcMainMenu();
         GameObject frame = new GameObject();
         frame.SetActive(false);
-        optionClick.setFrame(frame);
+        optionClick.SetFrame(frame);
         button.SetButtonClicked(optionClick);
         //ACT
         button.OnPointerClick(null);
@@ -32,7 +32,7 @@ public class ButtonClicked : MonoBehaviour
         bcMainMenu optionClick = new bcMainMenu();
         GameObject frame = new GameObject();
         frame.SetActive(false);
-        optionClick.setFrame(frame);
+        optionClick.SetFrame(frame);
         button.SetButtonClicked(optionClick);
         button.OnPointerClick(null);
         //ACT
@@ -50,7 +50,7 @@ public class ButtonClicked : MonoBehaviour
         bcMainMenu optionClick = new bcMainMenu();
         GameObject frame = new GameObject();
         frame.SetActive(false);
-        optionClick.setFrame(frame);
+        optionClick.SetFrame(frame);
         button.SetButtonClicked(optionClick);
 
         //ACT

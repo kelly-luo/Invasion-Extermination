@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (bossRound && bossStats.Health <= 0) Destroy(this);
+  
     }
 
     private IEnumerator timerWait()

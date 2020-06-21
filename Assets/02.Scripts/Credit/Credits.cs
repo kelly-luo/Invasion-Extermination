@@ -27,6 +27,7 @@ public class Credits : MonoBehaviour
     //
     void Start()
     {
+        Destroy(GameObject.Find("GameManager"));
         if (animator != null) animator.SetBool("Animation", true);
         StartCoroutine(this.timerWait());
     }

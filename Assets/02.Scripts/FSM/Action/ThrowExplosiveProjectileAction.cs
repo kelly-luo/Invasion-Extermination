@@ -7,7 +7,7 @@ using IEGame.FiniteStateMachine;
 [CreateAssetMenu(menuName = "PluggableScript/EnemyAction/ThrowExplosiveProjectileAction")]
 public class ThrowExplosiveProjectileAction : Action
 {
-    public float numOfPostionPoint = 50;
+    public int numOfPostionPoint = 50;
     public Vector3 projectilSpawnOffSet = new Vector3(0, 2f, 0);
     public float projectileSpawnAngle = 90; // 180 = left 0 = right
     public float projectileSpawnDistance = 5f;
@@ -27,11 +27,12 @@ public class ThrowExplosiveProjectileAction : Action
             if (monsterController.ProjectileManager != null)
             {
                 monsterController.StateUpdateDelayTime = stateUpdateDelayTime;
-                monsterController.ProjectileManager.SetProjectileValue(numOfPostionPoint, projectilSpawnOffSet
-                    , projectileSpawnAngle, projectileSpawnDistance, initialControlPointDistance, targetControlPointDistance
-                    , delayBetweenShoot, timeSpeedFactor);
                 monsterController.TriggerThrowAttackFullOne();
-                monsterController.ProjectileManager.StartThrowNumberOfExplosiveProjectile(monsterController.PlayerTr.position
+                monsterController.ProjectileManager.DelayBetweenShoot = delayBetweenShoot;
+                monsterController.ProjectileManager.InitialControlPointDistance = initialControlPointDistance;
+                monsterController.ProjectileManager.TargetControlPointDistance = targetControlPointDistance;
+                monsterController.ProjectileManager.TimeSpeedFactor = timeSpeedFactor;
+                monsterController.ProjectileManager.StartThrowNumberOfExplosiveProjectile(numOfPostionPoint, monsterController.PlayerTr.position
                     , numberOfProjectileToThrow);
             }
         }

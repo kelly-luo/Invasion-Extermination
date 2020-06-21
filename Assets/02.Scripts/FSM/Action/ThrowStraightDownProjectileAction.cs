@@ -5,10 +5,9 @@ using IEGame.FiniteStateMachine;
 //action of falling projectile that spawn above player
 [CreateAssetMenu(menuName = "PluggableScript/EnemyAction/ThrowStraightDownProjectileAction")]
 public class ThrowStraightDownProjectileAction : Action
-{
-
-
-    public float numOfPostionPoint = 500;
+{ 
+    
+    public int numOfPostionPoint = 500;
     public float delayBetweenShoot = 10f;
     public float timeSpeedFactor = 0.03f; // delay of translate projectile toward each point of path  
     public int numberOfProjectileToThrow = 1;
@@ -26,7 +25,7 @@ public class ThrowStraightDownProjectileAction : Action
                 monsterController.ProjectileManager.DelayBetweenShoot = delayBetweenShoot;
                 monsterController.ProjectileManager.StraightDownProjectailSpawn = straightDownProjectailSpawn;
                 monsterController.TriggerThrowAttackFullTwo();
-                monsterController.ProjectileManager.StartThrowNumberOfStraightDownProjectile(monsterController.PlayerTr.position
+                monsterController.ProjectileManager.StartThrowNumberOfStraightDownProjectile(numOfPostionPoint, monsterController.PlayerTr.position
                     ,numberOfProjectileToThrow);
             }
         }

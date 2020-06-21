@@ -351,10 +351,6 @@ public class PlayerStateController : MonoBehaviour, IStateController
         {
             this.Attack();
         }
-        if (UnityService.GetMouseButtonUp(0))
-        {
-            this.Attack();
-        }
         if (UnityService.GetKeyUp(KeyCode.LeftShift))
         {
             IsRunning = !isRunning;

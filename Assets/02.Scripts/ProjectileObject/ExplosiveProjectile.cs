@@ -19,13 +19,14 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
     private float upForce = 2.5f;
     void OnCollisionEnter(Collision coll)
     {
-        Debug.Log($"{coll.collider.gameObject.layer.ToString()}");
         if (coll.collider.CompareTag("Player"))
         {
+            GameManager.Instance.SpawnExplosiveEffectObject(this.gameObject.transform.position, Quaternion.identity);
             OnCollisionWithPlayer(coll.gameObject);
         }
         if (coll.collider.CompareTag("Human"))
         {
+            GameManager.Instance.SpawnExplosiveEffectObject(this.gameObject.transform.position, Quaternion.identity);
             OnCollisionWithHuman(coll.gameObject);
         }
         if (coll.collider.gameObject.layer == 16)
@@ -76,6 +77,7 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
     {
         Vector3 explosionPosition = gameObject.transform.position;
         Collider[] colliders = Physics.OverlapSphere(explosionPosition, explosionRadius);
+        
         foreach (Collider hit in colliders)
         {
             if(hit.CompareTag("Player")|| hit.CompareTag("Human"))
@@ -93,6 +95,7 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
 
     public void AfterThrow()
     {
+        GameManager.Instance.SpawnExplosiveEffectObject(this.gameObject.transform.position, Quaternion.identity);
         this.ProjectileExplosion();
         StartCoroutine(SelfDestroy(DestroyDelay));
     }

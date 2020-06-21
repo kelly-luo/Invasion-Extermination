@@ -38,6 +38,10 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
     {
         IsDisposing = false;
     }
+    void OnDisable()
+    {
+        gameObject.GetComponent<LineRenderer>().positionCount = 0;
+    }
     //This method call destory method when they collide with Obstacle
     public void OnCollisionWithObstacle()
     {

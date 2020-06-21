@@ -133,6 +133,8 @@ public class MonsterController : MonoBehaviour, IStateController
     }
     #endregion
 
+    public float ItemSelfDestoryDelay { get; set; } = 60f;
+
     public float StateUpdateDelayTime { get; set; } = 0.075f;
     private float currentTime = 0f;
 
@@ -510,6 +512,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 moneyBillObject.transform.position = transform.position;
                 moneyBillObject.transform.rotation = transform.rotation;
                 moneyBillObject.SetActive(true);
+                StartCoroutine(SelfDeActiveWithDelay(moneyBillObject, ItemSelfDestoryDelay));
             }
         }
 
@@ -527,6 +530,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 ammoObject.transform.position = transform.position;
                 ammoObject.transform.rotation = transform.rotation;
                 ammoObject.SetActive(true);
+                StartCoroutine(SelfDeActiveWithDelay(ammoObject, ItemSelfDestoryDelay));
             }
         }
     }
@@ -544,8 +548,15 @@ public class MonsterController : MonoBehaviour, IStateController
                 healthObject.transform.position = transform.position;
                 healthObject.transform.rotation = transform.rotation;
                 healthObject.SetActive(true);
+                StartCoroutine(SelfDeActiveWithDelay(healthObject, ItemSelfDestoryDelay));
             }
         }
+    }
+   
+    private IEnumerator SelfDeActiveWithDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(false);
     }
 
     private void TurnOffWeaponAnimation()

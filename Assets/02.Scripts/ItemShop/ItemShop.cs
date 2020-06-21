@@ -1,4 +1,13 @@
-﻿using System;
+﻿//
+// ItemShop
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This class contains an array of ShopItems, an Item class with a cost attached to it. 
+// The class initializes on start, populating the array of ShopItems.
+// 
+// AUT University - 2020 - Howard Mao
+//
+//
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -12,7 +21,8 @@ public class ItemShop : MonoBehaviour
     public PlayerInformation PlayerInfo { get; set; }
     public int ammoCost = 10; 
     public int ammoBatch = 10;
-    public GameObject[] gunPrefabs;
+    //The prefabs for gunPrefabs underneath come from clicking and dragging prefabs into the script on unity
+    public GameObject[] gunPrefabs;     
 
 
     void Start()
@@ -28,6 +38,15 @@ public class ItemShop : MonoBehaviour
             weaponsArray[i] = weaponsArray[i] ?? new ShopItem().InstantiateShopItem(gunPrefabs);
     }
 
+    //
+    // BuyItem()
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // The BuyItem() method puts the item from the given index into the player's inventory and
+    // takes away the right amount of money from them.
+    //
+    // index        the index of the item to be bought
+    //
+    // returns      true if an item is bought, false if the item isn't bought (due to not enough money)
     public Boolean BuyItem(int index)
     {
         ShopItem buying = weaponsArray[index];
@@ -43,8 +62,6 @@ public class ItemShop : MonoBehaviour
         }
         return false;
     }
-
-
 
     public void BuyAmmo()
     {

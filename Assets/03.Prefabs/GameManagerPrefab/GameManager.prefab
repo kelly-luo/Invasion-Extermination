@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8491395032101453468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8491395032101453465}
+  - component: {fileID: 8491395032101453470}
+  - component: {fileID: 8491395032101453471}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8491395032101453465
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8491395032101453468}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -121.53125, y: -16.96875, z: 40.01953}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8491395032101453470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8491395032101453468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11fca7775941c942badd8b13a99ca78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfAlien: 0
+  numberOfHuman: 0
+  experienceScore: 0
+  spawnDeley: 0.5
+  maxHuman: 30
+  maxAlien: 5
+  ishand: 0
+  moneyBillPrefab: {fileID: 5410974633553944853, guid: 1fa1df7a5c5c9e44cbe353cb895f69ad,
+    type: 3}
+  maxMoneyBillPool: 500
+  moneyBillPool: []
+  ammoPrefab: {fileID: 2637118757316884225, guid: bbee2ea52613c8c429d331e22f3ee44b,
+    type: 3}
+  maxAmmoPool: 500
+  ammoPool: []
+  healthPrefab: {fileID: 1000012970591572, guid: e7664adf432542443a785eb28eccb94e,
+    type: 3}
+  maxHealthPool: 500
+  healthPool: []
+  directProjectilePrefabs:
+  - {fileID: 164098, guid: bf88a80cce4a40f4aa08f941cc054831, type: 3}
+  - {fileID: 157676, guid: 61d2663dd97ceca4fbdfc4438e370eb9, type: 3}
+  - {fileID: 141870, guid: f4e26e9ea636fc048be17f62b86a51fc, type: 3}
+  - {fileID: 189930, guid: 16b96e2e32a8fca4587a8ebb922fd876, type: 3}
+  - {fileID: 198730, guid: 4213ff422670da14e91ec973607843bd, type: 3}
+  - {fileID: 127632, guid: d8a7e9a9f75e1f545ab491f87817e070, type: 3}
+  - {fileID: 175378, guid: a545615791097d34ea2ab905fa0d9972, type: 3}
+  - {fileID: 130278, guid: 5713b854f7568004d828e9a95942a512, type: 3}
+  numberOfEachDirectProjectile: 3
+  directProjectilePool: []
+  straightDownProjectilePrefabs:
+  - {fileID: 198584, guid: 0708672b9974ea249b18be8fe2438317, type: 3}
+  - {fileID: 182348, guid: 9a9d7aa1bc2e9584d9324cc3286e87b7, type: 3}
+  - {fileID: 100086, guid: 8781d21e89abe3b4d9424ada65563949, type: 3}
+  - {fileID: 120682, guid: eaff550718c74f64fa95253752f1d962, type: 3}
+  numberOfEachStraightDownProjectile: 3
+  straightDownProjectilePool: []
+  normalProjectilePrefabs:
+  - {fileID: 199508, guid: 6160ad9c6399e8b4386cd542934c6394, type: 3}
+  - {fileID: 179172, guid: b7956a89800806641bb3210b0616cb1d, type: 3}
+  - {fileID: 132640, guid: 48e4316432f09c94f9bb465ee097e7ef, type: 3}
+  - {fileID: 106796, guid: f3f8cb8dd57ebe6499f4bbaee06a80dc, type: 3}
+  - {fileID: 118212, guid: 7051ee155509fc74d911e1935e959a78, type: 3}
+  - {fileID: 197498, guid: c60c47dcc7215e44c91ffc3f8c3301d1, type: 3}
+  - {fileID: 195414, guid: 21af051404c92544389e5fc686d01ae7, type: 3}
+  - {fileID: 129530, guid: bb5c7099ea733154c934959a1f91d0c3, type: 3}
+  - {fileID: 155622, guid: 296893142ca40114aa66d074bebdd258, type: 3}
+  - {fileID: 128712, guid: e6c4d7e7d7d85e0459f44ed458e8a751, type: 3}
+  - {fileID: 194032, guid: 441eb5680524ee84882ca0def1d611c9, type: 3}
+  - {fileID: 121442, guid: fbb9de41c775fba4aba150e5442a98e5, type: 3}
+  - {fileID: 171374, guid: 4b79d038d4c4e0e4eae3dafc37698820, type: 3}
+  - {fileID: 160556, guid: 8bbfba5c273e61040b7542c4e7f1bac4, type: 3}
+  - {fileID: 122982, guid: 96a6063647658cb45aa7315a86038535, type: 3}
+  - {fileID: 139926, guid: e70796a53cadb9445a8febf6f1575931, type: 3}
+  - {fileID: 176468, guid: b9461ac90d402e443bd38d57a748e2c7, type: 3}
+  - {fileID: 121614, guid: 33b2354a66d3a8141972de2a8ec966e4, type: 3}
+  - {fileID: 132414, guid: ccf90cc5d496f0243b9ef24dcfdcf051, type: 3}
+  - {fileID: 174670, guid: 53d39208671d6fe47958ad1caa6466ca, type: 3}
+  - {fileID: 153048, guid: 2ab3b9949f854894193dba980bbe4c76, type: 3}
+  - {fileID: 103300, guid: af470644fbf7b284490ffad73d4c272f, type: 3}
+  - {fileID: 122224, guid: c2f03ebb92149f849b6da49f9b2eb982, type: 3}
+  - {fileID: 182694, guid: b27d176aee74efb4da4d3b51e41673d8, type: 3}
+  - {fileID: 194538, guid: 83cc08565cd2c7644ac4a805523f539b, type: 3}
+  numberOfEachNormalProjectile: 3
+  normalProjectilePool: []
+  explosiveProjectilePrefabs:
+  - {fileID: 153506, guid: 62d36f4ffa75ff6478bdf4984c8d1e00, type: 3}
+  - {fileID: 128674, guid: 38d04f6fb96a4d24faef1f5f0e0dd18a, type: 3}
+  - {fileID: 183608, guid: e40a910b04aa5d14492a7d47772e12be, type: 3}
+  - {fileID: 184310, guid: e5d49d72056d9a74dad12a5d351bc1da, type: 3}
+  - {fileID: 107314, guid: c70167b5f4d692c41b83199b5c63d45e, type: 3}
+  - {fileID: 166044, guid: c41b9efef91ae8645b30a28d93ca8c1c, type: 3}
+  - {fileID: 153682, guid: c9a059fd8070df244972a42ae7cc5648, type: 3}
+  - {fileID: 183828, guid: 7fa9b2f648918d3458e1f0291d33aa03, type: 3}
+  - {fileID: 191860, guid: 70e764b06ba6a1149bfc093ac2821e68, type: 3}
+  numberOfEachExplosiveProjectile: 5
+  explosiveProjectilePool: []
+  explosiveEffectPrefab: {fileID: 5394708617016930071, guid: 2e039c8faece4314ab78f60ff563fd45,
+    type: 3}
+  maxExplosiveEffectPool: 30
+  explosiveEffectDelay: 2
+  explosiveEffectPool: []
+  explosiveEffectOffset: {x: 0, y: 0.3, z: 0}
+  bulletHitEffectPrefab: {fileID: 7589303486082028951, guid: e3b3ff2aae37ef842b1a302cc7f6b835,
+    type: 3}
+  maxBulletHitEffectPool: 40
+  bulletHitEffectDelay: 0.3
+  bulletHitEffectPool: []
+  itemPopUpEffectPrefab: {fileID: 100000, guid: bdd5688b409047141a73c46be1fc2399,
+    type: 3}
+  maxItemPopUpEffectPool: 50
+  itemPopUpEffectDelay: 3
+  itemPopUpEffectPool: []
+  itemPopUpEffectOffset: {x: 0, y: 1, z: 0}
+--- !u!114 &8491395032101453471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8491395032101453468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc0ae34a181ed4d4190e3e6a11fc7bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pistol: {fileID: 1694449805434718, guid: 6f1a7354265853f44b0ed5e2e43676ad, type: 3}
+  Alien: {fileID: 3132950753699696931, guid: bd3c95990744dd844ac4d68b5c474948, type: 3}
+  Human: {fileID: 5142144469805748907, guid: 57271a203f6be1a4788d27f333eb9ca4, type: 3}

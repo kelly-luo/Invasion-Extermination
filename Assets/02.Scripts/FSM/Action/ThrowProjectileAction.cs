@@ -9,7 +9,7 @@ public class ThrowProjectileAction : Action
 {
 
 
-    public float numOfPostionPoint = 50;
+    public int numOfPostionPoint = 50;
     public Vector3 projectilSpawnOffSet = new Vector3(0, 2f, 0);
     public float projectileSpawnAngle = 90; // 180 = left 0 = right
     public float projectileSpawnDistance = 5f;
@@ -29,11 +29,11 @@ public class ThrowProjectileAction : Action
             if(monsterController.ProjectileManager != null)
             {
                 monsterController.StateUpdateDelayTime = stateUpdateDelayTime;
-                monsterController.ProjectileManager.SetProjectileValue(numOfPostionPoint, projectilSpawnOffSet
+                monsterController.ProjectileManager.SetProjectileValue(projectilSpawnOffSet
                     , projectileSpawnAngle, projectileSpawnDistance, initialControlPointDistance, targetControlPointDistance
                     ,delayBetweenShoot, timeSpeedFactor);
                 monsterController.TriggerThrowAttack();
-                monsterController.ProjectileManager.StartThrowNumberOfProjectile(monsterController.PlayerTr.position
+                monsterController.ProjectileManager.StartThrowNumberOfProjectile(numOfPostionPoint, monsterController.PlayerTr.position
                     , numberOfProjectileToThrow);
             }
         }

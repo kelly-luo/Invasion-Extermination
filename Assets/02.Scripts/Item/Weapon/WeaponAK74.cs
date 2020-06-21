@@ -168,11 +168,14 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
         {
             var hitObject = hit.collider.gameObject;
+            BulletHitEffect(hit);
             if (hitObject.CompareTag(("Enemy")) || hitObject.CompareTag(("Human")))
             {
                 var control = hitObject.GetComponent<MonsterController>();
                 control.TakeDamage(Damage);
                 hitObject.GetComponent<Rigidbody>().AddForce(shootDirection * ShakeMagnitudePos * ShootKnockbackVector, ForceMode.Impulse);
+                //get Rotation and position of hit point
+               
                 isShooting = false;
             }
 
@@ -187,6 +190,11 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         }
     }
 
+    private void BulletHitEffect(RaycastHit hit)
+    {
+        Quaternion rot = Quaternion.FromToRotation(-Vector3.forward, hit.normal);
+        GameManager.Instance.SpawnBulletHitObject(hit.point, rot);
+    }
 
     void OnDrawGizmos( )
     {

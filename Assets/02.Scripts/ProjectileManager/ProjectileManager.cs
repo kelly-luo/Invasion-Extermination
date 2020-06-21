@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 //This component class allows to Manage and Throw projectile for each shot 
 public class ProjectileManager : MonoBehaviour
 {
-    public int NumOfPostionPoint { get; set; } = 50;
     public Vector3 ProjectilSpawnOffSet { get; set; } = new Vector3(0, 2f, 0);
     public float ProjectileSpawnAngle { get; set; } = 90; // 180 = left 0 = right
     public float ProjectileSpawnDistance { get; set; } = 5f;
@@ -24,11 +27,10 @@ public class ProjectileManager : MonoBehaviour
     //this value should be under 100 or it will do nothing
     public int PreDrawingAmount { get; set; } = 40;
 
-    public void SetProjectileValue(float numOfPostionPoint ,Vector3 projectilSpawnOffSet
+    public void SetProjectileValue(Vector3 projectilSpawnOffSet
         ,float projectileSpawnAngle ,float projectileSpawnDistance ,float initialControlPointDistance
         ,float targetControlPointDistance ,float delayBetweenShoot,float timeSpeedFactor)
     {
-        NumOfPostionPoint = (int)numOfPostionPoint;
         ProjectilSpawnOffSet = projectilSpawnOffSet;
         ProjectileSpawnAngle = projectileSpawnAngle;
         ProjectileSpawnDistance = projectileSpawnDistance;
@@ -41,14 +43,14 @@ public class ProjectileManager : MonoBehaviour
     
 
     //Wrapped the corutine code so other Non MonoBehaviour class can call without referencing extra Unity Library
-    public void StartThrowNumberOfProjectile(Vector3 targetPosition, int numberOfProjectile)
+    public void StartThrowNumberOfProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
-        StartCoroutine(ThrowNumberOfProjectile(targetPosition,numberOfProjectile));
+        StartCoroutine(ThrowNumberOfProjectile(NumOfPostionPoint, targetPosition,numberOfProjectile));
     }
 
 
     //calculate the player's position and throw a projectile but each proejectile have different path and spawn point 
-    private IEnumerator ThrowNumberOfProjectile(Vector3 targetPosition, int numberOfProjectile)
+    private IEnumerator ThrowNumberOfProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
 
         for (int i = 0; i < numberOfProjectile; i++)
@@ -71,7 +73,7 @@ public class ProjectileManager : MonoBehaviour
                 , 0f))
                 + targetPosition;
 
-            StartCoroutine(ThrowRandomProjectile(projectailSpawnPosition, targetPosition + randomOffset
+            StartCoroutine(ThrowRandomProjectile(NumOfPostionPoint, projectailSpawnPosition, targetPosition + randomOffset
                 , initialControlPointPosition, targetControlPointPosition, GameManager.Instance.GetNormalProjectileObject()));
 
             ProjectileSpawnAngle = ((ProjectileSpawnAngle + 30) % 180);
@@ -79,13 +81,13 @@ public class ProjectileManager : MonoBehaviour
 
         }
     }
-    public void StartThrowNumberOfExplosiveProjectile(Vector3 targetPosition, int numberOfProjectile)
+    public void StartThrowNumberOfExplosiveProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
-        StartCoroutine(ThrowNumberOfExplosiveProjectile(targetPosition, numberOfProjectile));
+        StartCoroutine(ThrowNumberOfExplosiveProjectile(NumOfPostionPoint, targetPosition, numberOfProjectile));
     }
 
     //calculate the player's position and throw a projectile but each proejectile have different path and spawn point 
-    private IEnumerator ThrowNumberOfExplosiveProjectile(Vector3 targetPosition, int numberOfProjectile)
+    private IEnumerator ThrowNumberOfExplosiveProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
 
         for (int i = 0; i < numberOfProjectile; i++)
@@ -108,7 +110,7 @@ public class ProjectileManager : MonoBehaviour
                 , 0f))
                 + targetPosition;
 
-            StartCoroutine(ThrowRandomProjectile(projectailSpawnPosition, targetPosition + randomOffset
+            StartCoroutine(ThrowRandomProjectile(NumOfPostionPoint, projectailSpawnPosition, targetPosition + randomOffset
                 , initialControlPointPosition, targetControlPointPosition, GameManager.Instance.GetExplosiveProjectileObject()));
 
             ProjectileSpawnAngle = ((ProjectileSpawnAngle + 30) % 180);
@@ -117,13 +119,13 @@ public class ProjectileManager : MonoBehaviour
         }
     }
     //Wrapped the corutine code so other Non MonoBehaviour class can call without referencing extra Unity Library
-    public void StartThrowNumberOfDirectProjectile(Vector3 targetPosition, int numberOfProjectile)
+    public void StartThrowNumberOfDirectProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
-        StartCoroutine(ThrowNumberOfDirectProjectile(targetPosition, numberOfProjectile));
+        StartCoroutine(ThrowNumberOfDirectProjectile(NumOfPostionPoint, targetPosition, numberOfProjectile));
     }
 
     //calculate the player's position and throw a projectile but each proejectile have different path and spawn point 
-    private IEnumerator ThrowNumberOfDirectProjectile(Vector3 targetPosition, int numberOfProjectile)
+    private IEnumerator ThrowNumberOfDirectProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
 
         for (int i = 0; i < numberOfProjectile; i++)
@@ -133,7 +135,7 @@ public class ProjectileManager : MonoBehaviour
                 , 0f
                 , DirectProjectileSpawnRadius);
 
-            StartCoroutine(ThrowRandomProjectile(randomOffset + targetPosition, -randomOffset + targetPosition
+            StartCoroutine(ThrowRandomProjectile(NumOfPostionPoint, randomOffset + targetPosition, -randomOffset + targetPosition
                 , randomOffset + targetPosition, -randomOffset + targetPosition, GameManager.Instance.GetDirectProjectileObject()));
 
 
@@ -141,26 +143,26 @@ public class ProjectileManager : MonoBehaviour
 
         }
     }
-    public void StartThrowNumberOfStraightDownProjectile(Vector3 targetPosition, int numberOfProjectile)
+    public void StartThrowNumberOfStraightDownProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
-        StartCoroutine(ThrowNumberOfStraightDownProjectile(targetPosition, numberOfProjectile));
+        StartCoroutine(ThrowNumberOfStraightDownProjectile(NumOfPostionPoint, targetPosition, numberOfProjectile));
     }
     //calculate the player's position and spawn projectile and each proejectile go straight down
-    private IEnumerator ThrowNumberOfStraightDownProjectile(Vector3 targetPosition, int numberOfProjectile)
+    private IEnumerator ThrowNumberOfStraightDownProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
 
         for (int i = 0; i < numberOfProjectile; i++)
         {
             var OffSet = new Vector3(0f, StraightDownProjectailSpawn, 0f);
             var EndOffSet = new Vector3(0f, StraightDownProjectailSpawn - 20, 0f);
-            StartCoroutine(ThrowRandomProjectile(OffSet + targetPosition, -EndOffSet + targetPosition
+            StartCoroutine(ThrowRandomProjectile(NumOfPostionPoint, OffSet + targetPosition, -EndOffSet + targetPosition
                 , OffSet + targetPosition, -EndOffSet + targetPosition, GameManager.Instance.GetStraightDownProjectileObject()));
 
             yield return new WaitForSeconds(DelayBetweenShoot);
         }
     }
-    //throw one projectile using CalculateCubicBezierCurve path
-    private IEnumerator ThrowRandomProjectile(Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, GameObject projectileGameObject)
+    //throw one projectile using CalculateCubicBezierCurve path //seperate
+    private IEnumerator ThrowRandomProjectile(int NumOfPostionPoint, Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, GameObject projectileGameObject)
     {
         var projectile = GetInstantiateProjectile(initialPosition, projectileGameObject);
 
@@ -171,38 +173,71 @@ public class ProjectileManager : MonoBehaviour
         if (projectileClass == null)
             yield break;
 
-        if (projectileClass is DirectProjectile)
+        if (projectileClass is DirectProjectile )
                 projectile.transform.LookAt(targetPosition);
-        float lt = 0;
-        float t = 0;
-        float eachTimePoint = 1 / (float)NumOfPostionPoint;
+
+        float timeBetweenEachPoint = 1 / (float)NumOfPostionPoint;
         var lineRenderer = projectile.GetComponent<LineRenderer>();
         var isProjectilePathON = false;
-        var realDrawingAmount = (int)(NumOfPostionPoint * 0.01 * PreDrawingAmount);
+        var realDrawingAmount = (int)(NumOfPostionPoint * 0.01f * PreDrawingAmount);
+        Debug.Log($" DelayBetweenShot :{DelayBetweenShoot.ToString()} + realDrawingAmount {realDrawingAmount.ToString()} ");
+        NativeArray <float3> positionArray = new NativeArray<float3>(NumOfPostionPoint, Allocator.TempJob);
 
-        DrawSomeAmountOfPathLine(initialPosition, targetPosition, intialControlPoint, targetControlPoint, ref lt, eachTimePoint, lineRenderer, ref isProjectilePathON, realDrawingAmount);
-
-        while (!projectileClass.IsCollideWithOther && t <= 1)
+        ProjectilePositionCalculationJob projectilePositionCalculatioParallelJob = new ProjectilePositionCalculationJob
         {
-            if (isProjectilePathON && realDrawingAmount <= NumOfPostionPoint)
+            positionArray = positionArray,
+            initialPosition = initialPosition,
+            intialControlPoint = intialControlPoint,
+            targetControlPoint = targetControlPoint,
+            targetPosition = targetPosition,
+            timeBetweenEachPoint = timeBetweenEachPoint,
+        };
+
+        JobHandle calculationJobHandle = projectilePositionCalculatioParallelJob.Schedule(NumOfPostionPoint, 5);
+
+        yield return new WaitWhile(() => !calculationJobHandle.IsCompleted);
+        calculationJobHandle.Complete();
+
+
+        //predraw some of path line
+        if (IsProjectilePathVisible)
+        {
+            if (lineRenderer != null)
+            {
+                for (int i = 0; i < realDrawingAmount; i++)
+                {
+                    lineRenderer.positionCount = i + 1;
+                    lineRenderer.SetPosition(i, positionArray[i]);
+                }
+            }
+        }
+
+        int indexOfProjectilePath = 0;
+        while (!projectileClass.IsCollideWithOther && indexOfProjectilePath < NumOfPostionPoint)
+        {
+            if (IsProjectilePathVisible && realDrawingAmount < NumOfPostionPoint)
             {
                 lineRenderer.positionCount = realDrawingAmount + 1;
-                lineRenderer.SetPosition(realDrawingAmount, CalculateCubicBezierCurve(lt, initialPosition, intialControlPoint, targetControlPoint, targetPosition));
-                lt += eachTimePoint;
+                lineRenderer.SetPosition(realDrawingAmount, positionArray[realDrawingAmount]);
                 realDrawingAmount++;
             }
 
             yield return new WaitForSeconds(TimeSpeedFactor);
-            projectile.transform.position = CalculateCubicBezierCurve(t, initialPosition, intialControlPoint, targetControlPoint, targetPosition);
-            t += eachTimePoint;
+            projectile.transform.position = positionArray[indexOfProjectilePath];
+            indexOfProjectilePath++;
         }
 
         if (projectileClass.IsDisposing == false)// if object is still active
             projectileClass.AfterThrow();
 
+        //Dispose native array
+        positionArray.Dispose();
     }
 
-    private void DrawSomeAmountOfPathLine(Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, ref float lt, float eachTimePoint, LineRenderer lineRenderer, ref bool isProjectilePathON, int realDrawingAmount)
+
+    /*
+    private void DrawSomeAmountOfPathLine(Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, ref float lt, float eachTimePoint,
+        LineRenderer lineRenderer, ref bool isProjectilePathON, int realDrawingAmount)
     {
         if (IsProjectilePathVisible)
         {
@@ -219,7 +254,7 @@ public class ProjectileManager : MonoBehaviour
             }
         }
     }
-
+    */
     // give random projectile with given initial position
     private GameObject GetInstantiateProjectile(Vector3 initialPosition, GameObject projectileGameObject)
     {
@@ -254,6 +289,39 @@ public class ProjectileManager : MonoBehaviour
         float ttt = tt * t;
 
         Vector3 p = uuu * p0;
+        p += 3 * uu * t * p1;
+        p += 3 * u * tt * p2;
+        p += ttt * p3;
+
+        return p;
+    }
+}
+
+[BurstCompile]
+public struct ProjectilePositionCalculationJob : IJobParallelFor
+{
+    public NativeArray<float3> positionArray;
+
+    public float3 initialPosition;
+    public float3 intialControlPoint;
+    public float3 targetControlPoint;
+    public float3 targetPosition;
+    public float timeBetweenEachPoint;
+
+    public void Execute(int index)
+    {
+        positionArray[index] = CalculateCubicBezierCurve((float)index * timeBetweenEachPoint, initialPosition, intialControlPoint, targetControlPoint, targetPosition);
+    }
+
+    private float3 CalculateCubicBezierCurve(float t, float3 p0, float3 p1, float3 p2, float3 p3)
+    {
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+        float uuu = uu * u;
+        float ttt = tt * t;
+
+        float3 p = uuu * p0;
         p += 3 * uu * t * p1;
         p += 3 * u * tt * p2;
         p += ttt * p3;

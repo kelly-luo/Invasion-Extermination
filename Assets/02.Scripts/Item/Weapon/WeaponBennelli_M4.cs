@@ -166,6 +166,7 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
         RaycastHit hit;
         if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
         {
+            BulletHitEffect(hit);
             var hitObject = hit.collider.gameObject;
             if (hitObject.CompareTag(("Enemy")) || hitObject.CompareTag(("Human")))
             {
@@ -184,6 +185,12 @@ public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
         {
             return null;
         }
+    }
+
+    private void BulletHitEffect(RaycastHit hit)
+    {
+        Quaternion rot = Quaternion.FromToRotation(-Vector3.forward, hit.normal);
+        GameManager.Instance.SpawnBulletHitObject(hit.point, rot);
     }
 
     void OnDrawGizmos()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class MonsterController : MonoBehaviour, IStateController
 {
@@ -174,7 +175,7 @@ public class MonsterController : MonoBehaviour, IStateController
         MonsterStats mStats = new MonsterStats();
         if (isBoss)
         {
-            mStats.Health = 5000f;
+            mStats.Health = 100f;
             mStats.maxHealth = mStats.Health;
         }
         else
@@ -229,6 +230,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 CurrentState.UpdateState(this);
                 currentTime = UnityService.TimeAtFrame;
             }
+
         }
     }
 
@@ -491,6 +493,11 @@ public class MonsterController : MonoBehaviour, IStateController
 
         var script = GetComponent<MonsterController>();
         script.enabled = false;
+
+        if (isBoss)
+        {
+            SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+        }
     }
 
     private void LootMoneyPopUp()

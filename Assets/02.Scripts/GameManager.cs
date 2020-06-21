@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     {
         get { return roundNo; }
     }
-    public const int maxRound = 5;
+    public const int maxRound = 2;
 
     public int maxHuman = 30;
     public int maxAlien = 5;
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
 
  
     private const int LOGVALUESCORE = 50;
-    private int requiredScore = 50;
+    private int requiredScore =10;
     public int RequiredScore
     {
         get { return requiredScore; }
@@ -166,20 +166,14 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (bossRound)
-        {
-            if(bossStats.Health <= 0)
-            {
-                StartCoroutine(this.timerWait());
-            }
-        }
+        if (bossRound && bossStats.Health <= 0) Destroy(this);
     }
 
     private IEnumerator timerWait()
     {
-        yield return new WaitForSeconds(15f);
+        yield return new WaitForSeconds(7f);
         bossRound = false;
-        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+        SceneManager.LoadScene("MainMenuV2", LoadSceneMode.Single);
         Destroy(this.gameObject);
     }
 

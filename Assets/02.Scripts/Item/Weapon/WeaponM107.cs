@@ -185,7 +185,8 @@ public class WeaponM107 : MonoBehaviour, ImWeapon
     private void BulletHitEffect(RaycastHit hit)
     {
         Quaternion rot = Quaternion.FromToRotation(-Vector3.forward, hit.normal);
-        GameManager.Instance.SpawnBulletHitObject(hit.point, rot);
+        if (GameManager.Instance != null)
+            GameManager.Instance.SpawnBulletHitObject(hit.point, rot);
     }
 
     void OnDrawGizmos()

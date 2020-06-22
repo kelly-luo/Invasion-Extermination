@@ -21,12 +21,12 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
     {
         if (coll.collider.CompareTag("Player"))
         {
-            GameManager.Instance.SpawnExplosiveEffectObject(this.gameObject.transform.position, Quaternion.identity);
+            SpwanEffect();
             OnCollisionWithPlayer(coll.gameObject);
         }
         if (coll.collider.CompareTag("Human"))
         {
-            GameManager.Instance.SpawnExplosiveEffectObject(this.gameObject.transform.position, Quaternion.identity);
+            SpwanEffect();
             OnCollisionWithHuman(coll.gameObject);
         }
         if (coll.collider.gameObject.layer == 16)
@@ -99,8 +99,14 @@ public class ExplosiveProjectile : MonoBehaviour, ImProjectile
 
     public void AfterThrow()
     {
-        GameManager.Instance.SpawnExplosiveEffectObject(this.gameObject.transform.position, Quaternion.identity);
+        SpwanEffect();
         this.ProjectileExplosion();
         StartCoroutine(SelfDestroy(DestroyDelay));
+    }
+
+    private void SpwanEffect()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.SpawnExplosiveEffectObject(this.gameObject.transform.position, Quaternion.identity);
     }
 }

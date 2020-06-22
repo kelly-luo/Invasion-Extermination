@@ -162,7 +162,6 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         OnShotFire?.Invoke();
         if (audio != null)
             audio.PlayOneShot(fireSfx, SoundVolume);
-
         NumOfBullet--;
         RaycastHit hit;
         if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))
@@ -193,7 +192,8 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
     private void BulletHitEffect(RaycastHit hit)
     {
         Quaternion rot = Quaternion.FromToRotation(-Vector3.forward, hit.normal);
-        GameManager.Instance.SpawnBulletHitObject(hit.point, rot);
+        if(GameManager.Instance != null)
+            GameManager.Instance.SpawnBulletHitObject(hit.point, rot);
     }
 
     void OnDrawGizmos( )

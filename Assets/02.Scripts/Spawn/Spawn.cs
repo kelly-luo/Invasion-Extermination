@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
-
+/// <summary>
+/// This is a class that allows spwan in ramdom point the Player when player call spawn 
+/// </summary>
 public class Spawn
 {
     public Transform player { get; set; }

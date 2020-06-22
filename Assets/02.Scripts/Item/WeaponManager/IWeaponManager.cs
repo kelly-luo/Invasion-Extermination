@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//This interface of weapon manager which allows gameobject to use gun or weapon with current camera View.
 public interface IWeaponManager 
 {
     bool IsReloading { get; set; }

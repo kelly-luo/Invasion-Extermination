@@ -493,27 +493,30 @@ public class MonsterController : MonoBehaviour, IStateController
         LootAmmoPopUp();
         LootHealthPopUp();
 
+        
+        if (isBoss)
+        {
+            StartCoroutine(this.timerWait());
+        }
+
+
         Destroy(gameObject,SelfDestroyDelay);
 
         var script = GetComponent<MonsterController>();
         script.enabled = false;
 
-        if (isBoss)
-        {
-            StartCoroutine(this.timerWait());
-        }
     }
 
     //
     // timerWait()
     // ~~~~~~~~~~~
-    // Waits for 10 Seconds for player to get Boss loot
+    // Waits for 7 Seconds for player to get Boss loot
     //
     // returns      IEnumerator for Coroutine
     //
     private IEnumerator timerWait()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(7f);
         SceneManager.LoadScene("Credits", LoadSceneMode.Single);
     }
 

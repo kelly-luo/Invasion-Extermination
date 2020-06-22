@@ -153,3 +153,4 @@ MonoBehaviour:
   pistol: {fileID: 1694449805434718, guid: 6f1a7354265853f44b0ed5e2e43676ad, type: 3}
   Alien: {fileID: 3132950753699696931, guid: bd3c95990744dd844ac4d68b5c474948, type: 3}
   Human: {fileID: 5142144469805748907, guid: 57271a203f6be1a4788d27f333eb9ca4, type: 3}
+  Boss: {fileID: 5142144469805748907, guid: 56a09d72e494a2b4fa13f4a6c86952d9, type: 3}

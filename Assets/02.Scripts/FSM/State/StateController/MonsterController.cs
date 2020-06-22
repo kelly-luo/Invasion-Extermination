@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class MonsterController : MonoBehaviour, IStateController
 {
@@ -176,7 +177,7 @@ public class MonsterController : MonoBehaviour, IStateController
         MonsterStats mStats = new MonsterStats();
         if (isBoss)
         {
-            mStats.Health = 5000f;
+            mStats.Health = 100f;
             mStats.maxHealth = mStats.Health;
         }
         else
@@ -201,7 +202,7 @@ public class MonsterController : MonoBehaviour, IStateController
     {
         healthbar = this.gameObject.AddComponent<EnemyHealthBar>();
         healthbar.hpBarPrefab = healthBarObject;
-        healthbar.SetHPBar();
+        healthbar.SetHealthBar();
 
         UnityService = UnityServiceManager.Instance;
 
@@ -231,6 +232,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 CurrentState.UpdateState(this);
                 currentTime = UnityService.TimeAtFrame;
             }
+
         }
     }
 
@@ -491,13 +493,32 @@ public class MonsterController : MonoBehaviour, IStateController
         LootAmmoPopUp();
         LootHealthPopUp();
 
+        
+        if (isBoss)
+        {
+            StartCoroutine(this.timerWait());
+        }
+
+
         Destroy(gameObject,SelfDestroyDelay);
 
         var script = GetComponent<MonsterController>();
         script.enabled = false;
+
     }
 
-
+    //
+    // timerWait()
+    // ~~~~~~~~~~~
+    // Waits for 7 Seconds for player to get Boss loot
+    //
+    // returns      IEnumerator for Coroutine
+    //
+    private IEnumerator timerWait()
+    {
+        yield return new WaitForSeconds(7f);
+        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+    }
 
     private void LootMoneyPopUp()
     {
@@ -568,6 +589,8 @@ public class MonsterController : MonoBehaviour, IStateController
         isHoldingWeapon = false;
         Animator.SetBool(hashIsHoldingWeapon, false);
     }
+
+
 
 
 }

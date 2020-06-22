@@ -1,6 +1,19 @@
-﻿using IEGame.FiniteStateMachine;
-using System.Collections;
-using System.Collections.Generic;
+﻿/*EnemyHealthBar class
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This class handles the enmey health bars
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  10.06.2020 Creation date (Yuki)
+ *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
+ *  
+ *  
+ * FinteStateMachine
+ */
+using IEGame.FiniteStateMachine;
+// Unity Engine Support package
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +27,6 @@ public class EnemyHealthBar : MonoBehaviour
             return displayHp;
         }
     }
-    private float initHp = 100.0f;
 
    [SerializeField] public GameObject hpBarPrefab;
     //offset of enemy's hp bar
@@ -41,7 +53,11 @@ public class EnemyHealthBar : MonoBehaviour
             hpSlider = value;
         }
     }
-
+    /*
+    * onDamage()
+    *  ~~~~~~~~~~~~~~~~
+    *  When the Monster takes damage then display that change on the UI
+    */
     public void onDamage(ObjectStats objectStats)
     {
         if(objectStats is MonsterStats mStats)
@@ -58,7 +74,12 @@ public class EnemyHealthBar : MonoBehaviour
 
 
     }
-    public void SetHPBar()
+    /*
+    * SetHealthBar()
+    *  ~~~~~~~~~~~~~~~~
+    *  Set-Up Health bar UI
+    */
+    public void SetHealthBar()
     {
         uiCanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
 

@@ -1,5 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*RoundPopUp Class
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * This class handles displaying the round completion
+ * 
+ * AUT University - 2020 - Yuki Liyanage
+ * 
+ * Revision History
+ *  ~~~~~~~~~~~~~~~~
+ *  14.06.2020 Creation date (Yuki)
+ *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
+ *  
+ *  
+ *  System support packages
+ */
+using System.Collections;
+//UnityEngine support package
 using UnityEngine;
 
 public class RoundPopUp : MonoBehaviour
@@ -18,7 +32,7 @@ public class RoundPopUp : MonoBehaviour
     //
     // timerWait()
     // ~~~~~~~~~~~
-    // Waits for 3 seconds and then disables the save completed/incompleted text
+    // Waits for 3 seconds to hide the round completed banner
     //
     // returns      IEnumerator for Coroutine
     //

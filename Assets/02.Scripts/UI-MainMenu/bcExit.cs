@@ -32,7 +32,7 @@ public class bcExit : ButtonClicked
      *  ~~~~~~~~~~~~~~~~
      *  returns if the game is ending or not
      */
-    public bool getIsEnding()
+    public bool GetIsEnding()
     {
         return isEnding;
     }

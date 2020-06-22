@@ -45,7 +45,7 @@ public class bcInstructions : ButtonClicked
     public override void ButtonEvent(PointerEventData eventData)
     {
         CurrentIndex++;
-        if (CurrentIndex == getSize()) CurrentIndex = 0;
+        if (CurrentIndex == GetSize()) CurrentIndex = 0;
         if(images != null) image.sprite = images[CurrentIndex];
     }
     /*
@@ -53,7 +53,7 @@ public class bcInstructions : ButtonClicked
      *  ~~~~~~~~~~~~~~~~
      *  Gets the size of the images array
      */
-    public int getSize()
+    public int GetSize()
     {
         if (images == null) return InternalImageID.Length;
         return images.Length;

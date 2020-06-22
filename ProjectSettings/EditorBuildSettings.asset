@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01.Scenes/Invex_w_Lighting_Final.unity
     guid: 3274777b4e73dee44b3cce436e68fe80
+  - enabled: 1
+    path: Assets/01.Scenes/Credits.unity
+    guid: 48cfcc1eb57f8e4428a211664b8afd57
   m_configObjects: {}

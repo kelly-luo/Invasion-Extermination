@@ -162,7 +162,6 @@ public class WeaponAK74 : MonoBehaviour, ImWeapon
         OnShotFire?.Invoke();
         if (audio != null)
             audio.PlayOneShot(fireSfx, SoundVolume);
-
         NumOfBullet--;
         RaycastHit hit;
         if (Physics.Raycast(playerPosition, shootDirection, out hit, FiringRange, layerMask))

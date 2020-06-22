@@ -195,7 +195,6 @@ public class MonsterController : MonoBehaviour, IStateController
 
         if (isEnabled)
             IsAgentEnabled = true;
-
     }
 
     void Start()
@@ -219,7 +218,7 @@ public class MonsterController : MonoBehaviour, IStateController
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         DistancePlayerAndEnemy = (PlayerTr.position - ObjectTransform.position).sqrMagnitude;
 

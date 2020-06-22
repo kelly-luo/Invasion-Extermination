@@ -1,4 +1,6 @@
-﻿using IEGame.FiniteStateMachine;
+﻿//This is GameManager Class which spawn enemy and boss at beginning of each around and create pool of prefabs
+//this class is Unity Singleton
+using IEGame.FiniteStateMachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -203,6 +205,7 @@ public class GameManager : MonoBehaviour
     }
 
     #region Enemy Spawn method
+    //Coruotine of  Creating enmey till the max number we specified 
     private IEnumerator CreateEnemy()
     {
         while (!ClearRound)
@@ -226,7 +229,7 @@ public class GameManager : MonoBehaviour
 
 
     }
-
+    
     void SpawnHuman()
     {
         EnemyFactory.CreateMob(GetRandomSpawnPoint());
@@ -250,7 +253,7 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-
+    //Method that spawns effect on the position where got it from the caller classes.
     #region SpawnEffect
     public void SpawnExplosiveEffectObject(Vector3 position, Quaternion angle)
     {
@@ -303,7 +306,7 @@ public class GameManager : MonoBehaviour
 
 
     #endregion
-
+    //Method Get the Prefaber object from the 
     #region GetPoolObject
     //since every I want show there is alot of projectiles so I iterate the pool list using own index(idx)
     public GameObject GetDirectProjectileObject()
@@ -366,7 +369,7 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-
+    //create pool at beginning of game so we dont have to initiate many time and Keep the Resouce and GC stable. 
     #region CreatingPooling
     public GameObject GetMoneyBillObject()
     {

@@ -5,7 +5,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-//This component class allows to Manage and Throw projectile for each shot 
+//This component class allows to Manage and Throw projectile for each shot using Job (Multi Thread)
 public class ProjectileManager : MonoBehaviour
 {
     public Vector3 ProjectilSpawnOffSet { get; set; } = new Vector3(0, 2f, 0);
@@ -143,6 +143,7 @@ public class ProjectileManager : MonoBehaviour
 
         }
     }
+
     public void StartThrowNumberOfStraightDownProjectile(int NumOfPostionPoint, Vector3 targetPosition, int numberOfProjectile)
     {
         StartCoroutine(ThrowNumberOfStraightDownProjectile(NumOfPostionPoint, targetPosition, numberOfProjectile));
@@ -296,7 +297,10 @@ public class ProjectileManager : MonoBehaviour
         return p;
     }
 }
-
+/// <summary>
+/// This is a class that Calculated Position of cubic Bezier Curve using Unity Job system (multi thread)  
+/// and Mathatics class in unity.
+/// </summary>
 [BurstCompile]
 public struct ProjectilePositionCalculationJob : IJobParallelFor
 {
@@ -312,7 +316,7 @@ public struct ProjectilePositionCalculationJob : IJobParallelFor
     {
         positionArray[index] = CalculateCubicBezierCurve((float)index * timeBetweenEachPoint, initialPosition, intialControlPoint, targetControlPoint, targetPosition);
     }
-
+    // float3 vesion of CalculatedCubicBezierCurve
     private float3 CalculateCubicBezierCurve(float t, float3 p0, float3 p1, float3 p2, float3 p3)
     {
         float u = 1 - t;

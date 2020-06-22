@@ -1,11 +1,15 @@
-﻿using System;
+﻿/// <summary>
+///  This is a Class that control camera with features like changing camera mode 
+///  
+///  
+/// </summary>
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 
 public class CameraControl : MonoBehaviour , ICameraControl
 {
@@ -154,12 +158,6 @@ public class CameraControl : MonoBehaviour , ICameraControl
             this.XSensitivity = 1.3f;
             this.YSensitivity = 1.3f;
             this.Smooth = true;
-        }
-
-        public void TransferRotationData()
-        {
-            var currentCameraRigRot = cameraViewList[viewListIdx].CameraRigRot;
-            var currentCameraRot = cameraViewList[viewListIdx].CameraRot;
         }
 
         public ICameraView NextView()

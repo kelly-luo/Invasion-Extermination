@@ -4,7 +4,8 @@ namespace IEGame.FiniteStateMachine
 {
     public interface IStateController
     {
-
+        State CurrentState { get; set; }
+        State RemainState { get; set; }
         //stats of something that inherit from ObjectStats
 
 

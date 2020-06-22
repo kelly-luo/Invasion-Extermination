@@ -500,11 +500,22 @@ public class MonsterController : MonoBehaviour, IStateController
 
         if (isBoss)
         {
-            SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+            StartCoroutine(this.timerWait());
         }
     }
 
-
+    //
+    // timerWait()
+    // ~~~~~~~~~~~
+    // Waits for 10 Seconds for player to get Boss loot
+    //
+    // returns      IEnumerator for Coroutine
+    //
+    private IEnumerator timerWait()
+    {
+        yield return new WaitForSeconds(10f);
+        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+    }
 
     private void LootMoneyPopUp()
     {
@@ -575,6 +586,8 @@ public class MonsterController : MonoBehaviour, IStateController
         isHoldingWeapon = false;
         Animator.SetBool(hashIsHoldingWeapon, false);
     }
+
+
 
 
 }

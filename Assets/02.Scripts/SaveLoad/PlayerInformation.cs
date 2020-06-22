@@ -73,21 +73,13 @@ public class PlayerInformation : MonoBehaviour
     void Start()
     {
         transform = GetComponent<Transform>();
-        
-        if (player.HasWeapon)
-        {
-            player.UnEquipWeapon();
-        }
+       
+        PlayerStateController controller = GetComponent<PlayerStateController>();
+        GameObject weapon = controller.weapon;
+        PlayerInventory.Add(weapon.GetComponent<ImWeapon>());
 
-        for (int i = 0; i < guns.Length; i++)
-        {
-            var gun = guns[i].GetComponent<ImWeapon>();
-            gun.InstanceID = i;
-            gun.StackAmount = 1;
-
-            PlayerInventory.Add(gun);
-        }
-        equipped = PlayerInventory.Primary.EntityID;
+        player.IsHoldingRifle = true;
+        equipped = weapon.GetComponent<ImWeapon>().EntityID;
     }
 
     //

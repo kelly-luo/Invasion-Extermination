@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         get { return roundNo; }
     }
-    public const int maxRound = 2;
+    public const int maxRound = 5;
 
     public int maxHuman = 30;
     public int maxAlien = 5;
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
 
  
     private const int LOGVALUESCORE = 50;
-    private int requiredScore =10;
+    private int requiredScore = 50;
     public int RequiredScore
     {
         get { return requiredScore; }

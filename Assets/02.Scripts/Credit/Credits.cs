@@ -43,6 +43,8 @@ public class Credits : MonoBehaviour
     private IEnumerator timerWait()
     {
         yield return new WaitForSeconds(15f);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("MainMenuV2", LoadSceneMode.Single);
     }
 }

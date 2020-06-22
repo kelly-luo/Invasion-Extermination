@@ -1,6 +1,7 @@
 ﻿using IEGame.FiniteStateMachine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -32,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         get { return roundNo; }
     }
-    public const int maxRound = 5;
+    public const int maxRound = 2;
 
     public int maxHuman = 30;
     public int maxAlien = 5;
@@ -108,7 +109,7 @@ public class GameManager : MonoBehaviour
 
  
     private const int LOGVALUESCORE = 50;
-    private int requiredScore =50;
+    private int requiredScore =10;
     public int RequiredScore
     {
         get { return requiredScore; }
@@ -241,6 +242,17 @@ public class GameManager : MonoBehaviour
     {
        GameObject boss =  EnemyFactory.CreateBoss(GetRandomSpawnPoint());
        bossStats = boss.GetComponent<MonsterController>().Stats;
+
+       var bossFogVar = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/03.Prefabs/ParticlePrefab/BossFog.prefab");
+       GameObject fogPrefab = null;
+        //Instantiate prefab if it exists
+       if (bossFogVar != null)
+       {
+            fogPrefab = (GameObject)PrefabUtility.InstantiatePrefab(bossFogVar);
+       }
+
+       GameObject fog = (GameObject)Instantiate(fogPrefab);
+       fog.SetActive(true);
     }
 
     Vector3 GetRandomSpawnPoint()

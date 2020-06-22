@@ -18,6 +18,8 @@ public class ShopItem
     public IUnityServiceManager UnityService;
     public int costLowerRange = 900;
     public int costUpperRange = 1100;
+    private const float PRECENTAGE = 0.1f;
+    private const int ENTITYIDBUFFER = 1000;
     public int cost;
     public ImItem item;
 
@@ -49,13 +51,13 @@ public class ShopItem
     public ImWeapon CreateWeapon(GameObject[] guns)
     {
         var gun = GameObject.Instantiate(
-            guns[UnityService.UnityRandomRange(0, guns.Length)], new Vector3(0f, 0f, 0f), Quaternion.identity);
+            guns[UnityService.UnityRandomRange(0, guns.Length)], Vector3.zero, Quaternion.identity);
         var gunClass = gun.GetComponent<ImWeapon>();
-        gun.transform.localScale = new Vector3(0f, 0f, 0f);
+        gun.transform.localScale = Vector3.zero;
 
-        gunClass.Damage += UnityService.UnityRandomRange(0, (int)(gunClass.Damage * 0.1f));
-        gunClass.MaxBullet += UnityService.UnityRandomRange(0, (int)(gunClass.MaxBullet * 0.1f));
-        gunClass.InstanceID = gunClass.EntityID * 1000 + (int)gunClass.Damage;
+        gunClass.Damage += UnityService.UnityRandomRange(0, (int)(gunClass.Damage * PRECENTAGE));
+        gunClass.MaxBullet += UnityService.UnityRandomRange(0, (int)(gunClass.MaxBullet * PRECENTAGE));
+        gunClass.InstanceID = gunClass.EntityID * ENTITYIDBUFFER + (int)gunClass.Damage;
 
         return gunClass;
     }

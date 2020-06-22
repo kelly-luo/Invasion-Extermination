@@ -22,6 +22,9 @@ public class UI_HUD_Test : MonoBehaviour
         UIManager.MakeInvisble(uiManager.shopManager.gameObject);
         uiManager.healthObject = new GameObject();
         uiManager.GameMenuPanel = new GameObject();
+        uiManager.Controls = new GameObject();
+
+        UIManager.MakeInvisble(uiManager.GameMenuPanel);
     }
 
     [Test]

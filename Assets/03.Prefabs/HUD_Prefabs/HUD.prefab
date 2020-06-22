@@ -5064,6 +5064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  Controls: {fileID: 0}
   healthObject: {fileID: 3227371735610872435}
   healthView: {fileID: 1937151107386698454}
   healthFill: {fileID: 1937151107944753813}

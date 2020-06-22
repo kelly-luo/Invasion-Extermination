@@ -8,19 +8,23 @@
  *  ~~~~~~~~~~~~~~~~
  *  11.06.2020 Creation date (Yuki)
  *  21.06.2020 Refactored, and removed unnecessary code (Yuki)
- *  
+ *  22.06.2020 Add control panel disappearing after a set time (Yuki)
  *  
  *  UnityEngine support packages
  */
 using UnityEngine;
 using UnityEngine.UI;
-// Text mesh Pro support system
+// Text mesh Pro support system package
 using TMPro;
+//System support pacakge
 using System;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
     public GameManager gameManager;
+
+    public GameObject Controls;
 
     public GameObject healthObject;
     public Slider healthView;
@@ -55,9 +59,15 @@ public class UIManager : MonoBehaviour
 
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
+
+    private const int LOWHEALTH = 30;
+    private const int MEDIUMHEALTH = 50;
+    private const int MAXHEALTH = 100;
+
     void Start()
     {
         Initialize();
+        StartCoroutine(this.timerWait());
     }
     /*
     * Initialize()
@@ -112,23 +122,27 @@ public class UIManager : MonoBehaviour
         if (UnityService.GetKeyUp(KeyCode.I))
         {
             //Toggle inventory panel (Only if shop is not active)
-            if (invManager.inventoryPanel != null && !IsVisible(shopManager.gameObject)) 
+            if (invManager.inventoryPanel != null && !IsVisible(shopManager.gameObject) && !IsVisible(GameMenuPanel)) 
                 VisibleOnScreen(invManager.inventoryPanel);
         }
 
         if (UnityService.GetKeyUp(KeyCode.B))
         {
-            //Toggle Shop panel
-            if (!IsVisible(shopManager.gameObject))
+            if (!IsVisible(GameMenuPanel))
             {
-                MakeVisible(invManager.inventoryPanel,shopManager.gameObject);
-                MakeInvisble(healthObject);
+                //Toggle Shop panel
+                if (!IsVisible(shopManager.gameObject))
+                {
+                    MakeVisible(invManager.inventoryPanel, shopManager.gameObject);
+                    MakeInvisble(healthObject);
+                }
+                else
+                {
+                    MakeInvisble(invManager.inventoryPanel, shopManager.gameObject);
+                    MakeVisible(healthObject);
+                }
             }
-            else
-            {
-                MakeInvisble(invManager.inventoryPanel, shopManager.gameObject);
-                MakeVisible(healthObject);
-            }
+
         }
 
         if (UnityService.GetKeyUp(KeyCode.Escape))
@@ -137,7 +151,7 @@ public class UIManager : MonoBehaviour
             if (!IsVisible(GameMenuPanel))
             {
                 MakeVisible(GameMenuPanel);
-                MakeInvisble(invManager.inventoryPanel, shopManager.gameObject, healthObject);
+                MakeInvisble(invManager.inventoryPanel, shopManager.gameObject, healthObject, Controls);
             }
             else
             {
@@ -226,13 +240,13 @@ public class UIManager : MonoBehaviour
     {
         int health = Convert.ToInt32(fhealth);
         if (health <= 0) displayhealth = 0;
-        else if (health >= 100) displayhealth = 100;
+        else if (health >= MAXHEALTH) displayhealth = MAXHEALTH;
         else displayhealth = health;
 
         if (healthView != null && healthFill != null)
         {
-            if (displayhealth <= 50 && displayhealth > 30) healthFill.color = Color.yellow;
-            else if (displayhealth <= 30) healthFill.color = Color.red;
+            if (displayhealth <= MEDIUMHEALTH && displayhealth > LOWHEALTH) healthFill.color = Color.yellow;
+            else if (displayhealth <= LOWHEALTH) healthFill.color = Color.red;
             else healthFill.color = Color.white;
             healthView.value = displayhealth;
         }
@@ -244,6 +258,7 @@ public class UIManager : MonoBehaviour
     //Static functions to handle/format UI
     static public string FormatValue(int value)
     {
+        //When digit number is greater than double digit
         if(value < 10)
         {
             return "0" + value;
@@ -269,15 +284,16 @@ public class UIManager : MonoBehaviour
             if (!IsVisible(panel)) VisibleOnScreen(panel);
         }
     }
+    //Toggles visibility of gameobject (panel)
     static public void VisibleOnScreen(GameObject panel)
     {
         if (panel.transform.localScale.x == 1)
         {
-            panel.transform.localScale = new Vector3(0, 0, 0);
+            panel.transform.localScale = Vector3.zero;
         }
         else
         {
-            panel.transform.localScale = new Vector3(1, 1, 1);
+            panel.transform.localScale = Vector3.one;
         }
     }
 
@@ -286,6 +302,19 @@ public class UIManager : MonoBehaviour
         if (panel.transform.localScale.x == 1)return true;
         else return false;
         
+    }
+
+    //
+    // timerWait()
+    // ~~~~~~~~~~~
+    // Waits for 5 seconds and hides controls
+    //
+    // returns      IEnumerator for Coroutine
+    //
+    private IEnumerator timerWait()
+    {
+        yield return new WaitForSeconds(5f);
+        VisibleOnScreen(Controls);
     }
 
     #endregion

@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11fca7775941c942badd8b13a99ca78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossFog: {fileID: 0}
   numberOfAlien: 0
   numberOfHuman: 0
   experienceScore: 0

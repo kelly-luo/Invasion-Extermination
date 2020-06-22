@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    public GameObject bossFog;
+
     private ObjectStats bossStats;
 
     public List<Transform> SpawnPoints { get; set; } = new List<Transform>();
@@ -243,16 +246,7 @@ public class GameManager : MonoBehaviour
        GameObject boss =  EnemyFactory.CreateBoss(GetRandomSpawnPoint());
        bossStats = boss.GetComponent<MonsterController>().Stats;
 
-       var bossFogVar = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/03.Prefabs/ParticlePrefab/BossFog.prefab");
-       GameObject fogPrefab = null;
-        //Instantiate prefab if it exists
-       if (bossFogVar != null)
-       {
-            fogPrefab = (GameObject)PrefabUtility.InstantiatePrefab(bossFogVar);
-       }
-
-       GameObject fog = (GameObject)Instantiate(fogPrefab);
-       fog.SetActive(true);
+       bossFog.SetActive(true);
     }
 
     Vector3 GetRandomSpawnPoint()

@@ -95,6 +95,8 @@ namespace Tests
                     initialDamage = new GameObject().AddComponent<WeaponM4_8>().Damage;
                 else if (gunImWeapon is WeaponBennelli_M4 M4)
                     initialDamage = new GameObject().AddComponent<WeaponBennelli_M4>().Damage;
+                else if (gunImWeapon is WeaponM1911 M19)
+                    initialDamage = new GameObject().AddComponent<WeaponM1911>().Damage;
                 else initialDamage = 0;
 
                 //ASSERT

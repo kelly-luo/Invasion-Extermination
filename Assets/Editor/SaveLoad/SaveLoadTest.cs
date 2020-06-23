@@ -17,7 +17,6 @@ namespace US8Tests_SaveLoad
             // create a GameObject to attach the PlayerInformation component
             player = new GameObject();
             playerInformation = player.AddComponent<PlayerInformation>();
-            player.AddComponent<Transform>();
             playerInformation.transform = player.GetComponent<Transform>();
 
             // first initialise the player's stats and position

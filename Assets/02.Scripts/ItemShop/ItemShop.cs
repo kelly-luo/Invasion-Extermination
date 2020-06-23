@@ -6,7 +6,6 @@
 // 
 // AUT University - 2020 - Howard Mao
 //
-//
 using System;
 using System.Collections;
 using System.Collections.Generic;

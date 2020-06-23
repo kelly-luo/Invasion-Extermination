@@ -1,9 +1,13 @@
-﻿using NSubstitute;
-using System;
-using System.CodeDom;
-using System.Collections;
+﻿//
+// Inventory class
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Stores the player's inventory (ImItem) in a Dictionary. Keeps track of which weapons are the player's primary
+// and secondary.
+// 
+// AUT university - 2020 - Howard Mao and Yuki Liyanage
+//
+
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Inventory
 {
@@ -43,6 +47,13 @@ public class Inventory
         return addedItem;
     }
 
+    //
+    // StackUpItem
+    // ~~~~~~~~~~~~~~~~~~~~~
+    // If there's more than one of an item with the same instanceID, the items "stack" together to reduce space
+    // in the player's inventory.
+    //
+    // item     checks this item for a duplicate in the inventory
     private void StackUpItem(ImItem item)
     {
         inventory.TryGetValue(item.InstanceID, out ImItem value);
@@ -101,10 +112,12 @@ public class Inventory
     {
         SetPrimary(FindItem(key));
     }
+
     public void SetSecondary(int key)
     {
         SetSecondary(FindItem(key));
     }
+
     public void Remove(int key)
     {
         Remove(FindItem(key));
@@ -116,7 +129,6 @@ public class Inventory
 
         return inventory[key];
     }
-
 
     public int GetSize()
     {

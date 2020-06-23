@@ -25,7 +25,7 @@ public class ShopItem
 
     //
     // InstiateShopItem()
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //
     // This method uses the CreateWeapon() method to first create a weapon, then randomize the cost.
     //
     // gunPrefabs       An array of GameObjects of gun prefabs
@@ -41,7 +41,7 @@ public class ShopItem
 
     //
     // CreateWeapon()
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //
     // This method randomly chooses a gun prefab from an array of gun prefabs,  then it
     // randomly gives the gun 0-10% extra damage and clip size.
     //

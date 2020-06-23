@@ -2,7 +2,7 @@
 
 This is an project for the Auckland University of Technology (AUT) for paper COMP602 (Software Development Practice).
 
-Invasion Extermination is a casual game that is a fun 3rd person shooter with ragdoll physics where players fight against each other while aliens invade.
+Invasion Extermination is a fun 3rd person shooter Unity game where player fights against the alien invasion.
 
 ## Getting Started
 
@@ -17,8 +17,17 @@ In terms of running the project on Unity development environment, it is required
 To run the game for Sprint 1:
 ```
 1. Download the project files
-2. Navigate to folder "SPRINT 1 APPLICATION"
+2. Once downloaded, navigate to folder "SPRINT 1 APPLICATION"
 3. Within the folder there is a Invasion_Extermination.exe that can be run to start the built game
+```
+
+To run the game for Sprint 2:
+```
+1. Go to the Release tab
+1. Download the project files for Sprint 2 Release
+2. Once downloaded, navigate to folder "SPRINT 2 APPLICATION"
+3. Within the folder there is a README.txt for in-game control information
+4. Within the same folder, Invasion_Extermination.exe that can be run to start the built game
 ```
 
 ## Running the tests

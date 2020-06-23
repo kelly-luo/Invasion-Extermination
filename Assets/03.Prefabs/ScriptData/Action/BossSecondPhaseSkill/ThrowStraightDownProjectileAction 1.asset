@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ThrowStraightDownProjectileAction 1
   m_EditorClassIdentifier: 
   numOfPostionPoint: 250
-  delayBetweenShoot: 10
-  timeSpeedFactor: 0.04
+  delayBetweenShoot: 7
+  timeSpeedFactor: 0.01
   numberOfProjectileToThrow: 1
   stateUpdateDelayTime: 6
   straightDownProjectailSpawn: 40

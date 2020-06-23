@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fd246fb1f168f4aafd18f1b25b77f2, type: 3}
   m_Name: ThrowShortProjectileAction 1
   m_EditorClassIdentifier: 
-  numOfPostionPoint: 100
+  numOfPostionPoint: 50
   projectilSpawnOffSet: {x: 0, y: 3, z: 0}
-  projectileSpawnAngle: 150
+  projectileSpawnAngle: 120
   projectileSpawnDistance: 5
   initialControlPointDistance: 15
   targetControlPointDistance: 2
   delayBetweenShoot: 0.75
-  timeSpeedFactor: 0.006
+  timeSpeedFactor: 0.003
   numberOfProjectileToThrow: 5
   stateUpdateDelayTime: 3

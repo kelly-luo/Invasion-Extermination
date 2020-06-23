@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This is interface to use the Service that Unity provided for us
+/// current It have Some Input, Time and physics service from Unity
+/// </summary>
 public interface IUnityServiceManager 
 {
     int Range(int max, int min);

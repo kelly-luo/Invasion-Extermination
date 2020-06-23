@@ -1570,6 +1570,9 @@ GameObject:
   - component: {fileID: 757804722010703269}
   - component: {fileID: 757804722010703268}
   - component: {fileID: 757804722010703267}
+  - component: {fileID: 1784375286}
+  - component: {fileID: 1784375293}
+  - component: {fileID: 1784375296}
   m_Layer: 13
   m_Name: Player
   m_TagString: Player
@@ -1634,7 +1637,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &757804722010703268
 CapsuleCollider:
@@ -1667,9 +1670,65 @@ MonoBehaviour:
   <RemainState>k__BackingField: {fileID: 11400000, guid: ce55b20c642955b41a8365a140ad4783,
     type: 2}
   <ObjectTransform>k__BackingField: {fileID: 757804722365252282}
-  <CameraRig>k__BackingField: {fileID: 8610694588476011060, guid: 66f6cb8c4167a434cb3670426931985b,
-    type: 3}
+  playerStats: {fileID: 1784375286}
+  <CameraRig>k__BackingField: {fileID: 0}
   weapon: {fileID: 0}
+--- !u!114 &1784375286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757804722365509030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b046507b0c37dca4d84b55b71ec09810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  money: 0
+  player: {fileID: 757804722010703267}
+  transform: {fileID: 0}
+  guns:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  equipped: 0
+  ammo: 100
+--- !u!114 &1784375293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757804722365509030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dad3127eeac12d4b8ff57b9f62b17c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1784375296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757804722365509030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0afcdb813883dbb4bbb8a6a40e5bf518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numWeapons: 9
+  ammoCost: 10
+  ammoBatch: 10
+  gunPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &757804722365510938
 GameObject:
   m_ObjectHideFlags: 0
@@ -2028,7 +2087,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 757804722365525226}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 3
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1

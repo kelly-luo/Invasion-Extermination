@@ -14,6 +14,7 @@
 // .NET support packages
 // ~~~~~~~~~~~~~~~~~~~~~
 using IEGame.FiniteStateMachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 //
@@ -21,6 +22,7 @@ using System.Collections.Generic;
 // ~~~~~~~~~~~~~~~~~~~~~
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -117,7 +119,6 @@ public class GameManager : MonoBehaviour
     public Vector3 itemPopUpEffectOffset = new Vector3(0, 1f, 0);
 
 
-
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
     private bool isScoreSet;
@@ -211,7 +212,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-  
+
     }
 
     private IEnumerator timerWait()

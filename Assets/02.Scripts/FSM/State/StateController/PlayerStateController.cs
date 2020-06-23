@@ -469,7 +469,7 @@ public class PlayerStateController : MonoBehaviour, IStateController
     {
         if (IsHoldingRifle)
         {
-            StartCoroutine(WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward));
+            WeaponManager.Attack(CameraTr.transform.position, CameraTr.transform.forward);
         }
     }
 

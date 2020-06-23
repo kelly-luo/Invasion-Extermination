@@ -455,7 +455,10 @@ public class MonsterController : MonoBehaviour, IStateController
         }
         Debug.Log($"{this.gameObject.tag} has taken {Damage}");
         Stats.Health -= Damage;
-        healthbar.onDamage(Stats);
+        if(healthbar != null)
+        {
+            healthbar.onDamage(Stats);
+        }
         if (Stats.Health <= 0)
         {
             Debug.Log($"{this.gameObject.tag} has died.");
@@ -466,18 +469,9 @@ public class MonsterController : MonoBehaviour, IStateController
 
     public void OnDeath()
     {
-        if(this.gameObject.tag == "Enemy")
-        {
-            //player killed a monster and gains 10 points
-            this.playerInformation.Score += 10;
-        }
-        else if(this.gameObject.tag == "Human")
-        {
-            //player killed a human and 20 points deducted
-            this.playerInformation.Score -= 20;
-        }
+        GainOrDeductPoints();
 
-        if(isAgentEnabled) StopAgent();
+        if (isAgentEnabled) StopAgent();
 
         TurnOffWeaponAnimation();
 
@@ -492,18 +486,30 @@ public class MonsterController : MonoBehaviour, IStateController
         LootAmmoPopUp();
         LootHealthPopUp();
 
-        
         if (isBoss)
         {
             StartCoroutine(this.timerWait());
         }
 
-
-        Destroy(gameObject,SelfDestroyDelay);
+        Destroy(gameObject, SelfDestroyDelay);
 
         var script = GetComponent<MonsterController>();
         script.enabled = false;
 
+    }
+
+    public void GainOrDeductPoints()
+    {
+        if (this.gameObject.tag == "Enemy")
+        {
+            //player killed a monster and gains 10 points
+            this.playerInformation.Score += 10;
+        }
+        else if (this.gameObject.tag == "Human")
+        {
+            //player killed a human and 20 points deducted
+            this.playerInformation.Score -= 20;
+        }
     }
 
     //
@@ -513,7 +519,7 @@ public class MonsterController : MonoBehaviour, IStateController
     //
     // returns      IEnumerator for Coroutine
     //
-    private IEnumerator timerWait()
+        private IEnumerator timerWait()
     {
         yield return new WaitForSeconds(7f);
         SceneManager.LoadScene("Credits", LoadSceneMode.Single);
@@ -521,9 +527,11 @@ public class MonsterController : MonoBehaviour, IStateController
 
     private void LootMoneyPopUp()
     {
+        if (GameManager.Instance == null) return;
 
         //Spwan itemPopUpEffect
         GameManager.Instance.SpawnItemPopUpEffectObject(gameObject.transform.position, Quaternion.identity);
+        
 
         var numberOfBill = UnityService.UnityRandomRange(1, 10);
 
@@ -543,6 +551,8 @@ public class MonsterController : MonoBehaviour, IStateController
     }
     private void LootAmmoPopUp()
     {
+        if (GameManager.Instance == null) return;
+
         var numberOfAmmo = UnityService.UnityRandomRange(1, 5);
 
         for (int i = 0; i < numberOfAmmo; i++)
@@ -561,6 +571,8 @@ public class MonsterController : MonoBehaviour, IStateController
 
     private void LootHealthPopUp()
     {
+        if (GameManager.Instance == null) return;
+
         var numberOfHealth = UnityService.UnityRandomRange(0, 2);
 
         for (int i = 0; i < numberOfHealth; i++)

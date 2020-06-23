@@ -1,21 +1,33 @@
-﻿using NUnit.Framework;
+﻿//
+// US49SaveLoadTextTest
+// ~~~~~~~~~~~~~~~~~~~~
+// This test class is used to test user story 17: As a player I want to gain points after killing a Enemy so that it adds to my point system(Sprint 1) which is the first half
+// and user story US43: As a player I want points to be taken away when I kill humans so that I'm incentivized to not kill humans, and instead focus on killing the aliens. (Sprint 2) which is the second half
+// 
+// Player gains 10 points from killing a monster and deducted 20 points from killing a human. It uses the same SetUp() function and so it was decided to add to the same test class.
+
+//
+// AUT University - 2020 - Kelly Luo
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 2.06.2020 Creation date
+// 23.06.2020 Commenting and Unit Test success revision
+
+//
+// NUnit support packages
+// ~~~~~~~~~~~~~~~~~~~~~
+using NUnit.Framework;
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
-    /**
-     * This test class is used for testing US17:
-     * As a player I want to gain points after killing a Enemy so that it adds to my point system (Sprint 1) which is the first half
-     * 
-     * and US43: As a player I want points to be taken away when I kill humans so that I'm incentivized to not kill humans,
-     * and instead focus on killing the aliens. (Sprint 2) which is the second half
-     * 
-     * Player gains 10 points from killing a monster and deducted 20 points from killing a human.
-     * 
-     * It uses the same SetUp() function and so it was decided to add to the same test class.
-     **/
     public class GainAndDeductPointsTest
     {
         private GameObject player;
@@ -72,9 +84,7 @@ namespace Tests
         [Test]
         public void GainPointsTest_GainPointsAfterKillMonster()
         {
-            monsterController.Stats.Health = 20f;
-            monsterController.TakeDamage(20f);
-
+            monsterController.GainOrDeductPoints();
             Assert.AreEqual(10, playerInformation.Score);
 
             playerInformation.Score = 0; // reset score for each test
@@ -100,8 +110,7 @@ namespace Tests
         public void DeductPointsTest_PointsDeductedWhenHumanIsKilled()
         {
             playerInformation.Score = 50; // Player has 50 score points
-            humanController.Stats.Health = 20f;
-            humanController.TakeDamage(20f);
+            humanController.GainOrDeductPoints();
 
             Assert.AreEqual(30, playerInformation.Score);
 
@@ -113,8 +122,7 @@ namespace Tests
         public void DeductPointsTest_PointsDeductedBelowLineWhenHumanIsKilled()
         {
             playerInformation.Score = 15; // Player has 15 score points
-            humanController.Stats.Health = 20f;
-            humanController.TakeDamage(20f);
+            humanController.GainOrDeductPoints();
 
             Assert.AreEqual(0, playerInformation.Score);
 

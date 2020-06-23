@@ -1,12 +1,11 @@
-﻿using NSubstitute.Core;
-using System;
-using System.Collections;
+﻿//
+// Spawn class
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// When a player dies, they randomly spawn at 1 point out of a List of points. These points
+// are intialized as long as the GameObject with the respawn points is named "RespawnPointsGroup". 
+//
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
-/// <summary>
-/// This is a class that allows spwan in ramdom point the Player when player call spawn 
-/// </summary>
 public class Spawn
 {
     public Transform player { get; set; }

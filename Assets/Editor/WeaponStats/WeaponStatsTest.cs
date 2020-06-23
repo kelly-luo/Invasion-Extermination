@@ -127,7 +127,9 @@ namespace Tests
                     initialBullets = new GameObject().AddComponent<WeaponM4_8>().MaxBullet;
                 else if (gunImWeapon is WeaponBennelli_M4 M4)
                     initialBullets = new GameObject().AddComponent<WeaponBennelli_M4>().MaxBullet;
-                else initialBullets = 0;
+                else if (gunImWeapon is WeaponM1911 M1911)
+                    initialBullets = new GameObject().AddComponent<WeaponM1911>().MaxBullet;
+                else initialBullets = 123456;
 
                 //ASSERT
                 Assert.GreaterOrEqual(bullets, initialBullets);

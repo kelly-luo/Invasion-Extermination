@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This is M107 Weapon class 
+/// </summary>
 public class WeaponM107 : MonoBehaviour, ImWeapon
 {
     #region ID

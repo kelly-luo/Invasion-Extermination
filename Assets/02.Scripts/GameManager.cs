@@ -1,6 +1,7 @@
 ﻿//This is GameManager Class which spawn enemy and boss at beginning of each around and create pool of prefabs
 //this class is Unity Singleton
 using IEGame.FiniteStateMachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -103,7 +104,6 @@ public class GameManager : MonoBehaviour
     public Vector3 itemPopUpEffectOffset = new Vector3(0, 1f, 0);
 
 
-
     public IUnityServiceManager UnityService { get; set; } = UnityServiceManager.Instance;
 
     private bool isScoreSet;
@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-  
+
     }
 
     private IEnumerator timerWait()

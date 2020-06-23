@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50fd246fb1f168f4aafd18f1b25b77f2, type: 3}
   m_Name: ThrowLongProjectileAction
   m_EditorClassIdentifier: 
-  numOfPostionPoint: 100
+  numOfPostionPoint: 60
   projectilSpawnOffSet: {x: 0, y: 3, z: 0}
-  projectileSpawnAngle: 150
+  projectileSpawnAngle: 90
   projectileSpawnDistance: 5
   initialControlPointDistance: 40
   targetControlPointDistance: 10

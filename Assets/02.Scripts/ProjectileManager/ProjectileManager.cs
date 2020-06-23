@@ -235,7 +235,6 @@ public class ProjectileManager : MonoBehaviour
         positionArray.Dispose();
     }
 
-
     /*
     private void DrawSomeAmountOfPathLine(Vector3 initialPosition, Vector3 targetPosition, Vector3 intialControlPoint, Vector3 targetControlPoint, ref float lt, float eachTimePoint,
         LineRenderer lineRenderer, ref bool isProjectilePathON, int realDrawingAmount)

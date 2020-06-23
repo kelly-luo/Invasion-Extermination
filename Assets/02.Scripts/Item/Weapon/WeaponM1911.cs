@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+/// <summary>
+/// This is pistol Weapon class only can attack pkayer
+/// </summary>
 public class WeaponM1911 : MonoBehaviour, ImWeapon
 {
 

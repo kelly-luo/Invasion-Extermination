@@ -194,7 +194,7 @@ public class MonsterController : MonoBehaviour, IStateController
         MonsterStats mStats = new MonsterStats();
         if (isBoss)
         {
-            mStats.Health = 2000f;
+            mStats.Health = 5000f;
             mStats.maxHealth = mStats.Health;
         }
         else

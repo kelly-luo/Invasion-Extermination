@@ -2,7 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This is interface for Weapon Item it this object have amount of magnitude for rebound of gun
+/// and others for the Object 
+/// and SetLayers for Set the Layer where the Bullet can hit.
+/// </summary>
 public interface ImWeapon : ImItem
 {
 

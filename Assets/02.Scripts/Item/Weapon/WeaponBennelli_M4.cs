@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This is Bennelli_M4 Weapon class 
+/// </summary>
 public class WeaponBennelli_M4 : MonoBehaviour, ImWeapon
 {
 

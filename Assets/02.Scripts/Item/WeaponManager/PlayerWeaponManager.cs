@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-
+/// <summary>
+///  This class Is for the player so player can use when in any camera view .
+/// </summary>
 public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
 {
 
@@ -54,13 +56,12 @@ public class PlayerWeaponManager : MonoBehaviour, IWeaponManager
     private IUnityServiceManager UnityService = UnityServiceManager.Instance;
 
 
-    public IEnumerator Attack(Vector3 playerPosition, Vector3 shootDirection)
+    public void Attack(Vector3 playerPosition, Vector3 shootDirection)
     {
         if (!IsReloading)
         {
             FirstWeaponClass.Fire(playerPosition, shootDirection);
         }
-        yield return null;
     }
 
     public void StartReload(ref int ammoLeft)

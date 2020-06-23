@@ -59,7 +59,7 @@ public class MonsterController : MonoBehaviour, IStateController
     #region Character Information
     public ObjectStats Stats { get; set; }
     public Transform ObjectTransform { get; set; }
-    public float SelfDestroyDelay { get; set; } = 10f;
+    public float SelfDestroyDelay { get; set; } = 40f;
     #endregion
 
     #region Target Information
@@ -134,7 +134,7 @@ public class MonsterController : MonoBehaviour, IStateController
     }
     #endregion
 
-    public float ItemSelfDestoryDelay { get; set; } = 60f;
+    public float ItemSelfDestoryDelay { get; set; } = 30f;
 
     public float StateUpdateDelayTime { get; set; } = 0.075f;
     private float currentTime = 0f;
@@ -177,7 +177,7 @@ public class MonsterController : MonoBehaviour, IStateController
         MonsterStats mStats = new MonsterStats();
         if (isBoss)
         {
-            mStats.Health = 5000f;
+            mStats.Health = 2000f;
             mStats.maxHealth = mStats.Health;
         }
         else
@@ -544,7 +544,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 moneyBillObject.transform.position = transform.position;
                 moneyBillObject.transform.rotation = transform.rotation;
                 moneyBillObject.SetActive(true);
-                StartCoroutine(SelfDeActiveWithDelay(moneyBillObject, ItemSelfDestoryDelay));
+                this.StartCoroutine(SelfDeActiveWithDelay(moneyBillObject, ItemSelfDestoryDelay));
             }
         }
 
@@ -564,7 +564,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 ammoObject.transform.position = transform.position;
                 ammoObject.transform.rotation = transform.rotation;
                 ammoObject.SetActive(true);
-                StartCoroutine(SelfDeActiveWithDelay(ammoObject, ItemSelfDestoryDelay));
+                this.StartCoroutine(SelfDeActiveWithDelay(ammoObject, ItemSelfDestoryDelay));
             }
         }
     }
@@ -584,7 +584,7 @@ public class MonsterController : MonoBehaviour, IStateController
                 healthObject.transform.position = transform.position;
                 healthObject.transform.rotation = transform.rotation;
                 healthObject.SetActive(true);
-                StartCoroutine(SelfDeActiveWithDelay(healthObject, ItemSelfDestoryDelay));
+                this.StartCoroutine(SelfDeActiveWithDelay(healthObject, ItemSelfDestoryDelay));
             }
         }
     }

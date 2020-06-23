@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using UnityEngine;
-
+/// <summary>
+/// This is  class to use the Service that Unity provided for us
+/// This is Singleton.
+/// </summary>
 public class UnityServiceManager : IUnityServiceManager
 {
     private static UnityServiceManager instance;

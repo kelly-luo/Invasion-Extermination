@@ -31,7 +31,7 @@ public interface IWeaponManager
 
     void SetThirdPersonWeaponVisible(bool boolValue);
 
-    IEnumerator Attack(Vector3 playerPosition, Vector3 shootDirection);
+    void Attack(Vector3 playerPosition, Vector3 shootDirection);
 
     void AddOnShootFireEvent(Action eventMethod);
 

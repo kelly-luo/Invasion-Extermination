@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This is M4_8 Weapon class 
+/// </summary>
 public class WeaponM4_8 : MonoBehaviour, ImWeapon
 {
 

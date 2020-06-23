@@ -1,5 +1,22 @@
-﻿using System.Collections;
+﻿//
+// MonsterController CONTROLLER FOR HUMANS AND MONSTERS
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This class controls the information related to the monster/human e.g. stats, animations, weapons etc
+// 
+// AUT University - 2020 - Dan Yoo, Yuki Liyanage, Kelly Luo
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 02.06.2020 Creation date
+
+//
+// .NET support packages
+// ~~~~~~~~~~~~~~~~~~~~~
+using System.Collections;
 using System.Collections.Generic;
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
 using UnityEngine;
 using IEGame.FiniteStateMachine;
 using UnityEngine.AI;
@@ -569,6 +586,12 @@ public class MonsterController : MonoBehaviour, IStateController
         }
     }
 
+    //
+    // LootHealthPopUp()
+    // ~~~~~~~~~~~~~~~~~
+    // This method decides how many health drops as well as how much the health it will each give the player
+    // Then setting them active.
+    //
     private void LootHealthPopUp()
     {
         if (GameManager.Instance == null) return;
@@ -600,8 +623,5 @@ public class MonsterController : MonoBehaviour, IStateController
         isHoldingWeapon = false;
         Animator.SetBool(hashIsHoldingWeapon, false);
     }
-
-
-
 
 }

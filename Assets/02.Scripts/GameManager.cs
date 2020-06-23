@@ -1,12 +1,26 @@
-﻿//This is GameManager Class which spawn enemy and boss at beginning of each around and create pool of prefabs
-//this class is Unity Singleton
+﻿//
+// HealthDrop HEALTH ITEM DROP FROM ENEMIES AND HUMANS
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This is GameManager Class which spawn enemy and boss at beginning of each around and create pool of prefabs
+// This class is Unity Singleton.
+// 
+// AUT University - 2020 - Dan Yoo, Yuki Liyanage, Kelly Luo
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 20.05.2020 Creation date
+
+//
+// .NET support packages
+// ~~~~~~~~~~~~~~~~~~~~~
 using IEGame.FiniteStateMachine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -432,6 +446,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //
+    // GetHealthObject()
+    // ~~~~~~~~~~~~~~~~~
+    // This method loops through the pool of health drops and returns the first not active object
+    //
+    // returns      the first available health drop object that is not set active yet
+    //
     public GameObject GetHealthObject()
     {
         for (int i = 0; i < healthPool.Count; i++)
@@ -444,6 +465,11 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    //
+    // CreateHealthPooling()
+    // ~~~~~~~~~~~~~~~~~~~~~
+    // This method instantiates the pool of health objects and sets them not active by default
+    //
     public void CreateHealthPooling()
     {
         GameObject healthPools = new GameObject("HealthPools");

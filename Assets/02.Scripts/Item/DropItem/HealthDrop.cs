@@ -1,4 +1,19 @@
-﻿using UnityEngine;
+﻿//
+// HealthDrop HEALTH ITEM DROP FROM ENEMIES AND HUMANS
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// This class controls the health drop prefab by enabling, disabling, collision with player as well as spawn pop up effect.
+// This is done by keeping track of the transform and rigidbody of the health drop prefab object.
+// 
+// AUT University - 2020 - Kelly Luo
+// 
+// Revision History
+// ~~~~~~~~~~~~~~~~
+// 20.05.2020 Creation date
+
+//
+// Unity support packages
+// ~~~~~~~~~~~~~~~~~~~~~
+using UnityEngine;
 
 public class HealthDrop : MonoBehaviour, ImDropableItem
 {
@@ -34,6 +49,14 @@ public class HealthDrop : MonoBehaviour, ImDropableItem
         gameObject.transform.localScale = new Vector3(0f, 0f, 0f);
     }
 
+    //
+    // OnCollisionEnter()
+    // ~~~~~~~~~~~~~~~~~~
+    // It is checked if the Player was the one that collided (walked on) with the health drop prefab.
+    // If the player is the one that collided with the health drop prefab then it will disable active state of prefab object.
+    //
+    // coll   Incoming object that has collided with the prefab
+    //
     void OnCollisionEnter(Collision coll)
     {
         if (coll.collider.CompareTag("Player"))
@@ -44,6 +67,11 @@ public class HealthDrop : MonoBehaviour, ImDropableItem
         }
     }
 
+    //
+    // InitialSpawnLootPopUpEffect()
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // This method adds force to the rigidbody and allowing to pop up when spawned
+    //
     public void InitialSpawnLootPopUpEffect()
     {
         var yAmountOfForceVector = new Vector3(0f, 1f, 0f);
@@ -55,6 +83,13 @@ public class HealthDrop : MonoBehaviour, ImDropableItem
         rigidbody.AddForce(totalUnitVector * 15);
     }
 
+    //
+    // OnCollisionAddHealth()
+    // ~~~~~~~~~~~~~~~~~~~~~~
+    // On collision with player, add health to the player stats
+    //
+    // player   player object
+    //
     public void OnCollisionWithPlayer(GameObject Player)
     {
         Debug.Log($"PLayer hp: {Player.GetComponent<PlayerInformation>().Health}");
